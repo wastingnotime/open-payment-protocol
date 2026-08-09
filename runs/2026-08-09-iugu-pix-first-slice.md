@@ -5,7 +5,7 @@
 - Command: `pytest -q sandboxes/simulation/tests`
 - Result: 5 tests passed
 - Report command: `python3 sandboxes/simulation/tools/run_iugu_pix.py`
-- Scenario count: 6
+- Scenario count: 7
 - Evidence mode: documentation-derived deterministic simulation; not sandbox-observed
 
 ## Scenario Receipt
@@ -18,6 +18,7 @@
 | IUGU-PIX-004 | Passed | documented reused idempotency-key conflict |
 | IUGU-PIX-005 | Passed | external-reference and order-ID lookup paths |
 | IUGU-PIX-006 | Passed | canonical replay equality |
+| IUGU-PIX-007 | Passed | documented invoice and Pix success transition |
 
 The generated report is intentionally not checked in; it contains deterministic
 derived output and can be regenerated with the documented command.

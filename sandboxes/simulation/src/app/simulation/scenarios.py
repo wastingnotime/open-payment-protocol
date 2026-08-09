@@ -95,6 +95,16 @@ def caller_reference_lookup() -> ScenarioResult:
     return _finish("IUGU-PIX-005", provider, log)
 
 
+def successful_pix_transition() -> ScenarioResult:
+    provider, log = IuguPixProvider(), []
+    created = provider.create_invoice(deepcopy(BASE_REQUEST))
+    paid = provider.mark_pix_paid(created["id"], end_to_end_id="E2E_DOCUMENTATION_FIXTURE")
+    _observation(log, "native_status_changed", {"invoice_id": paid["id"], "invoice_status": paid["status"], "pix_status": paid["pix"]["status"], "end_to_end_id": paid["pix"]["end_to_end_id"]})
+    retrieved = provider.retrieve_invoice(created["id"])
+    _observation(log, "native_paid_invoice_retrieved", {"invoice_id": retrieved["id"], "status": retrieved["status"]})
+    return _finish("IUGU-PIX-007", provider, log)
+
+
 def deterministic_replay() -> ScenarioResult:
     first = create_and_retrieve()
     second = create_and_retrieve()
@@ -112,6 +122,7 @@ SCENARIOS: dict[str, Callable[[], ScenarioResult]] = {
     "IUGU-PIX-004": repeat_idempotency_key,
     "IUGU-PIX-005": caller_reference_lookup,
     "IUGU-PIX-006": deterministic_replay,
+    "IUGU-PIX-007": successful_pix_transition,
 }
 
 

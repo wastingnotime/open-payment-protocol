@@ -71,3 +71,12 @@ establish their behavior.
 - No raw PAN, CVV, credential, real customer data, or real tax identifier appears.
 - Unsupported and unknown behaviors are explicit.
 - Replaying a scenario never depends on wall-clock time.
+
+### IUGU-PIX-007 — Documented successful Pix transition
+
+Create a pending invoice, apply the documented `pending -> paid` invoice and
+`qr_code_created -> paid` Pix transitions, attach a sanitized end-to-end ID,
+and retrieve the paid invoice. Keep invoice and embedded Pix statuses distinct
+and emit the native `invoice.status_changed` event.
+
+Expiry, refunds, webhook delivery, and test-mode timing remain deferred.

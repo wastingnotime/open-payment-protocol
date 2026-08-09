@@ -45,3 +45,13 @@ def test_cardholder_data_is_not_in_fixture_or_projection():
     serialized = " ".join(result.canonical_json() for result in results.values()).lower()
     assert "pan" not in serialized
     assert "cvv" not in serialized
+
+
+def test_documented_pix_success_transition_preserves_distinct_statuses():
+    provider = IuguPixProvider()
+    invoice = provider.create_invoice(deepcopy(BASE_REQUEST))
+    paid = provider.mark_pix_paid(invoice["id"], end_to_end_id="E2E_DOCUMENTATION_FIXTURE")
+    assert paid["status"] == "paid"
+    assert paid["pix"]["status"] == "paid"
+    assert paid["pix"]["payment_method"] == "iugu_pix"
+    assert paid["total_paid_cents"] == 1000

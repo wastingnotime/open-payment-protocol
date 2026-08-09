@@ -1,6 +1,6 @@
 # Iugu Pix Invoice Creation and Retrieval
 
-Status: first build complete; refinement check pending model-wide EGD.
+Status: first build complete; successful transition increment built.
 
 ## Selected Shape
 
@@ -49,7 +49,7 @@ Repeated commands follow Iugu evidence rather than a generic idempotency model.
 ## Scenario Plan
 
 The executable scenario identifiers and acceptance expectations are defined in
-`simulators/iugu/scenarios.md`: IUGU-PIX-001 through IUGU-PIX-006.
+`simulators/iugu/scenarios.md`: IUGU-PIX-001 through IUGU-PIX-007.
 
 Runtime observations must cover actor intention, command, native event, query,
 response, and invariant result. The runtime adapter will expose the shared
@@ -58,7 +58,7 @@ becomes runnable.
 
 ## Done Criteria
 
-- Six selected scenarios have deterministic tests and a canonical JSON report.
+- Seven selected scenarios have deterministic tests and a canonical JSON report.
 - Native event history, invoice projection, observations, and invariants are inspectable.
 - Each material branch is linked to documented or explicit unknown evidence.
 - The common runtime adapter returns one repository Scenario and emits
@@ -68,6 +68,6 @@ becomes runnable.
 
 ## Out of Scope
 
-Successful payment transition, expiration, cancellation, webhook delivery,
+Expiration, cancellation, webhook delivery,
 refunds, cards, subscriptions, split, live Iugu calls, other providers, common
 adapters, OPP schemas, and conformance behavior.

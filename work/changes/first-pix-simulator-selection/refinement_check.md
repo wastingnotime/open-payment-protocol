@@ -2,7 +2,7 @@
 
 ## Evidence
 
-The implementation passes five deterministic tests and produces six scenario
+The implementation passes six deterministic tests and produces seven scenario
 results. The provider projection preserves invoice identity, integer-cent
 amounts, `pix` output, native `pending`/`qr_code_created` statuses, caller
 references, and the documented 409 idempotency conflict.
@@ -16,6 +16,8 @@ references, and the documented 409 idempotency conflict.
 - Retrieval by provider ID and caller-reference lookup are separate queries.
 - The first slice can be deterministic without modeling payment success,
   expiration, webhooks, or a normalized payment aggregate.
+- The documented success transition can be added without normalizing invoice
+  and embedded Pix statuses: both move to `paid` and retain native fields.
 
 ## Discrepancies and Unknowns
 
@@ -25,8 +27,8 @@ references, and the documented 409 idempotency conflict.
   lacked scenario correlation; scenario IDs are now present in each semantic
   observation payload.
 - Iugu's conflicting payer requirements remain unsupported/unknown combinations.
-- Exact provider error bodies, idempotency retention, and lifecycle transitions
-  remain deferred as documented in the slice plan.
+- Exact provider error bodies, idempotency retention, expiry, refunds, and
+  webhook delivery remain deferred as documented in the slice plan.
 
 ## Decision
 
