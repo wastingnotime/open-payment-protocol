@@ -5,6 +5,9 @@
 Two deterministic scenarios pass. Creation preserves separate order, charge,
 and Pix transaction identifiers, pending status, integer amount, and embedded
 `qr_code`/`qr_code_url` fields. Invalid creation remains provider-native.
+Combined runtime inspection emitted 39 observations and preserved both
+Pagar.me scenario IDs. The `PG-PIX-001` trace exposes distinct order, charge,
+and transaction IDs plus the charge's Pix `last_transaction` QR value.
 
 ## Model Pressure
 
@@ -13,6 +16,8 @@ and Pix transaction identifiers, pending status, integer amount, and embedded
 - The charge's `last_transaction` is the native Pix output boundary.
 - No create idempotency guarantee is invented because the reviewed evidence is
   unknown.
+- Runtime observations must retain all three provider identifiers so later
+  adapter experiments cannot accidentally collapse the hierarchy.
 
 ## Remaining Questions
 
