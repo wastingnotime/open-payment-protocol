@@ -1,0 +1,28 @@
+{
+  "id": "ORD_DOCUMENTATION_FIXTURE",
+  "type": "online",
+  "total_amount": "50.00",
+  "external_reference": "opp_documentation_fixture",
+  "country_code": "BRA",
+  "status": "action_required",
+  "status_detail": "waiting_transfer",
+  "processing_mode": "automatic",
+  "transactions": {
+    "payments": [
+      {
+        "id": "PAY_DOCUMENTATION_FIXTURE",
+        "reference_id": "reference_fixture",
+        "status": "action_required",
+        "status_detail": "waiting_transfer",
+        "amount": "50.00",
+        "payment_method": {
+          "id": "pix",
+          "type": "bank_transfer",
+          "ticket_url": "https://example.invalid/pix/documentation-fixture",
+          "qr_code": "SANITIZED_PIX_COPY_AND_PASTE_VALUE",
+          "qr_code_base64": "SANITIZED_BASE64_VALUE"
+        }
+      }
+    ]
+  }
+}

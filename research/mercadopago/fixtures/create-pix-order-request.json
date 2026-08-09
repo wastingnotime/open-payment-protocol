@@ -1,0 +1,21 @@
+{
+  "type": "online",
+  "total_amount": "50.00",
+  "external_reference": "opp_documentation_fixture",
+  "processing_mode": "automatic",
+  "transactions": {
+    "payments": [
+      {
+        "amount": "50.00",
+        "payment_method": {
+          "id": "pix",
+          "type": "bank_transfer"
+        },
+        "expiration_time": "PT1H"
+      }
+    ]
+  },
+  "payer": {
+    "email": "payer@example.invalid"
+  }
+}
