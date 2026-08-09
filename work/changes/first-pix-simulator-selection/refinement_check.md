@@ -28,6 +28,9 @@ references, and the documented 409 idempotency conflict.
 - Runtime inspection emitted 17 observations. The combined stream initially
   lacked scenario correlation; scenario IDs are now present in each semantic
   observation payload.
+- The combined runtime now emits 53 observations. `IUGU-PIX-008` confirms the
+  cancellation event and keeps invoice `canceled` distinct from Pix
+  `qr_code_created`.
 - Iugu's conflicting payer requirements remain unsupported/unknown combinations.
 - Exact provider error bodies, idempotency retention, expiry, refunds, and
   webhook delivery remain deferred as documented in the slice plan.
