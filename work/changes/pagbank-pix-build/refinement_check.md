@@ -5,6 +5,9 @@
 Three deterministic scenarios pass. Creation projects a single QR Code with
 integer-cent amount and an empty `charges` array; retrieval preserves the QR
 copy text and image/base64 links. Reused keys produce the documented conflict.
+Combined runtime inspection emitted 35 observations and preserved all three
+PagBank scenario IDs. The `PB-PIX-001` observation proves the QR-first boundary
+with `charges: []` at creation.
 
 ## Model Pressure
 
@@ -13,6 +16,8 @@ copy text and image/base64 links. Reused keys produce the documented conflict.
 - QR Code is single-use and attached directly to the order.
 - Integer-cent money and order `reference_id` differ from the other built
   providers' representations.
+- Runtime evidence must not create a synthetic charge merely because other
+  providers expose a payment resource at creation.
 
 ## Remaining Questions
 
