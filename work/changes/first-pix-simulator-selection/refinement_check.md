@@ -2,7 +2,7 @@
 
 ## Evidence
 
-The implementation passes six deterministic tests and produces seven scenario
+The implementation passes eight deterministic tests and produces eight scenario
 results. The provider projection preserves invoice identity, integer-cent
 amounts, `pix` output, native `pending`/`qr_code_created` statuses, caller
 references, and the documented 409 idempotency conflict.
@@ -14,10 +14,12 @@ references, and the documented 409 idempotency conflict.
 - Idempotency conflict is represented as a native error, not a shared retry
   policy.
 - Retrieval by provider ID and caller-reference lookup are separate queries.
-- The first slice can be deterministic without modeling payment success,
-  expiration, webhooks, or a normalized payment aggregate.
+- The slice can be deterministic without modeling expiration, webhooks, or a
+  normalized payment aggregate.
 - The documented success transition can be added without normalizing invoice
   and embedded Pix statuses: both move to `paid` and retain native fields.
+- The documented cancellation transition changes invoice status to `canceled`
+  while embedded Pix status remains an explicitly native field.
 
 ## Discrepancies and Unknowns
 

@@ -80,3 +80,9 @@ and retrieve the paid invoice. Keep invoice and embedded Pix statuses distinct
 and emit the native `invoice.status_changed` event.
 
 Expiry, refunds, webhook delivery, and test-mode timing remain deferred.
+
+### IUGU-PIX-008 — Documented cancellation transition
+
+Create a pending invoice, apply the documented `pending -> canceled` invoice
+transition, and retain the embedded Pix status as provider-native state. This
+does not claim that the QR status or cancellation timing is fully documented.

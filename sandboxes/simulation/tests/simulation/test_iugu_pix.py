@@ -74,3 +74,10 @@ def test_success_scenario_exposes_native_status_changed_event():
             },
         }
     ]
+
+
+def test_documented_pending_to_canceled_transition_preserves_pix_state():
+    result = SCENARIOS["IUGU-PIX-008"]()
+    transition = next(item for item in result.observations if item["name"] == "native_transition")
+    assert transition["payload"]["invoice_status"] == "canceled"
+    assert transition["payload"]["pix_status"] == "qr_code_created"
