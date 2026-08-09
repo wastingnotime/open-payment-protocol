@@ -57,7 +57,15 @@ def idempotency_conflict() -> dict[str, Any]:
     return _result("MP-PIX-003", provider, observations)
 
 
-SCENARIOS = {"MP-PIX-001": create_and_retrieve, "MP-PIX-002": invalid_total, "MP-PIX-003": idempotency_conflict}
+def asynchronous_processing_variant() -> dict[str, Any]:
+    provider, observations = MercadoPagoPixProvider(), []
+    order = provider.create_async_order_variant(deepcopy(BASE_REQUEST))
+    observations.append({"type": "semantic_observation", "name": "native_event", "source": "mercadopago", "payload": {"type": "order.processing", "order_id": order["id"], "evidence": "research/mercadopago/contract.md"}})
+    observations.append({"type": "semantic_observation", "name": "native_async_result", "source": "mercadopago", "payload": {"order_id": order["id"], "status": order["status"], "payments_present": bool(order["transactions"]["payments"]), "reconciliation": "webhook_or_get"}})
+    return _result("MP-PIX-004", provider, observations)
+
+
+SCENARIOS = {"MP-PIX-001": create_and_retrieve, "MP-PIX-002": invalid_total, "MP-PIX-003": idempotency_conflict, "MP-PIX-004": asynchronous_processing_variant}
 
 
 def run_all() -> dict[str, dict[str, Any]]:

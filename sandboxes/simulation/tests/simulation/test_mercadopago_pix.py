@@ -6,7 +6,7 @@ from app.simulation.mercadopago_scenarios import BASE_REQUEST, run_all
 
 def test_mercado_pago_scenarios_complete():
     results = run_all()
-    assert set(results) == {"MP-PIX-001", "MP-PIX-002", "MP-PIX-003"}
+    assert set(results) == {"MP-PIX-001", "MP-PIX-002", "MP-PIX-003", "MP-PIX-004"}
     assert results["MP-PIX-001"]["projection"]
 
 
@@ -36,3 +36,10 @@ def test_mercado_pago_scenarios_expose_native_events():
     assert results["MP-PIX-001"]["observations"][0]["payload"]["type"] == "order.created"
     assert results["MP-PIX-002"]["observations"][0]["payload"]["type"] == "order.rejected"
     assert results["MP-PIX-003"]["observations"][0]["payload"]["type"] == "order.idempotency_conflict"
+
+
+def test_documented_async_variant_preserves_processing_without_payments():
+    result = run_all()["MP-PIX-004"]
+    observation = next(item for item in result["observations"] if item["name"] == "native_async_result")
+    assert observation["payload"]["status"] == "processing"
+    assert observation["payload"]["payments_present"] is False

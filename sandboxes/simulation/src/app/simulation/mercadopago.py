@@ -83,6 +83,16 @@ class MercadoPagoPixProvider:
         self._event("order_retrieved", {"order_id": order_id})
         return deepcopy(order)
 
+    def create_async_order_variant(self, request: dict[str, Any]) -> dict[str, Any]:
+        """Represent the documented asynchronous creation result variant."""
+        self._validate(request)
+        order_id = f"ORD_ASYNC_DOCUMENTATION_{self.store.next_id:06d}"
+        self.store.next_id += 1
+        order = {"id": order_id, "type": "online", "total_amount": request["total_amount"], "external_reference": request["external_reference"], "status": "processing", "transactions": {"payments": []}}
+        self.store.orders[order_id] = deepcopy(order)
+        self._event("order_processing", {"order_id": order_id})
+        return deepcopy(order)
+
     def _validate(self, request: dict[str, Any]) -> None:
         required = ("type", "total_amount", "external_reference", "processing_mode", "transactions", "payer")
         missing = [key for key in required if not request.get(key)]

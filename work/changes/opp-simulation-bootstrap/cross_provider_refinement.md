@@ -2,9 +2,9 @@
 
 ## Evidence
 
-The shared runtime now executes 17 provider-native scenarios across Asaas,
+The shared runtime now executes 24 provider-native scenarios across Asaas,
 Iugu, Mercado Pago, PagBank, and Pagar.me. The five create/retrieve increments
-pass 18 deterministic tests and emit 44 runtime observations.
+pass 25 deterministic tests and emit 61 runtime observations.
 
 ## Resource Boundaries
 
