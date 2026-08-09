@@ -1,0 +1,28 @@
+{
+  "id": "or_documentation_fixture",
+  "code": "opp-documentation-fixture",
+  "amount": 1000,
+  "currency": "BRL",
+  "closed": true,
+  "status": "pending",
+  "charges": [
+    {
+      "id": "ch_documentation_fixture",
+      "code": "opp-documentation-fixture",
+      "amount": 1000,
+      "status": "pending",
+      "currency": "BRL",
+      "payment_method": "pix",
+      "last_transaction": {
+        "id": "tran_documentation_fixture",
+        "transaction_type": "pix",
+        "amount": 1000,
+        "status": "waiting_payment",
+        "success": true,
+        "qr_code": "PIX_COPY_AND_PASTE_DOCUMENTATION_FIXTURE",
+        "qr_code_url": "https://api.pagar.me/core/v1/transactions/tran_documentation_fixture/qrcode.png",
+        "expires_at": "2099-12-31T23:59:59Z"
+      }
+    }
+  ]
+}

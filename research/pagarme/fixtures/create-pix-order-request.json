@@ -1,0 +1,23 @@
+{
+  "code": "opp-documentation-fixture",
+  "items": [
+    {
+      "amount": 1000,
+      "description": "OPP documentation fixture",
+      "quantity": 1,
+      "code": "item-documentation-fixture"
+    }
+  ],
+  "customer": {
+    "name": "Documentation Fixture",
+    "email": "payer@example.invalid"
+  },
+  "payments": [
+    {
+      "payment_method": "pix",
+      "pix": {
+        "expires_in": 3600
+      }
+    }
+  ]
+}
