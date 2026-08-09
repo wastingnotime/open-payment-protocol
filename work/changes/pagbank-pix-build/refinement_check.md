@@ -10,6 +10,9 @@ PagBank scenario IDs. The `PB-PIX-001` observation proves the QR-first boundary
 with `charges: []` at creation.
 The paid-transition increment now emits 50 combined observations and shows a
 `PAID` Pix charge emerging while the original QR Code remains on the order.
+Runtime inspection confirms the `charge.created` observation carries a
+sanitized end-to-end ID and keeps the QR present, preserving PagBank's native
+post-payment resource shape.
 
 ## Model Pressure
 
@@ -22,6 +25,7 @@ The paid-transition increment now emits 50 combined observations and shows a
   providers expose a payment resource at creation.
 - Charge emergence is a documented PagBank lifecycle event and remains distinct
   from initial QR creation.
+- The charge and QR must remain independently observable after payment.
 
 ## Remaining Questions
 
