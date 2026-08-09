@@ -2,8 +2,9 @@
 
 ## Outcome
 
-The OpenAPI-evidence portion of Iugu Pix invoice creation and retrieval is
-captured. The first simulation slice remains in evidence refinement.
+The OpenAPI and official-Markdown evidence for Iugu Pix invoice creation and
+retrieval is captured. The first simulation slice remains in evidence
+refinement.
 
 ## Model Pressure Observed
 
@@ -16,14 +17,16 @@ captured. The first simulation slice remains in evidence refinement.
   documented purposes; none should be relabeled as idempotency.
 - Iugu names webhook configuration a trigger and supports optional Basic
   Authentication material on that configuration.
+- Invoice creation supports `Idempotency-Key`; reuse returns HTTP 409.
+- Official prose and OpenAPI disagree on required email/customer and Pix payer
+  fields, requiring test-mode observation before fixing a minimal contract.
 
 ## Remaining Iugu Evidence
 
-- exact required payer fields for Pix;
-- complete invoice/Pix lifecycle and error contracts;
-- authentication guidance beyond the OpenAPI query-key scheme;
+- resolution of the email/customer and Pix payer documentation conflicts;
+- complete embedded Pix lifecycle and stable serialized error contract;
 - test-mode behavior and sanitized observations;
-- repetition, timeout, `order_id`, and external-reference semantics;
+- idempotency retention/replay, timeout, `order_id`, and external-reference semantics;
 - trigger payload, ordering, duplicate, retry, and acknowledgement behavior.
 
 These gaps prevent a claim that an Iugu simulator is already faithful, but the

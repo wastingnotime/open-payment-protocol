@@ -3,41 +3,39 @@
 ## Metadata
 
 - Research date: 2026-08-09
-- Source interface: official Iugu developer MCP
-- Evidence level: documented OpenAPI only; not test-mode observed
+- Sources: official Iugu MCP and Markdown documentation
+- Evidence level: documented; not test-mode observed
 
-## Native Concept
+## Native Concept and Transport
 
-Iugu names its webhook configuration resource a `web_hook` and describes
-creation as creating a `gatilho` (trigger). `POST /web_hooks` requires:
+Iugu names webhook configuration a `web_hook` and calls it a `gatilho`
+(trigger). `POST /web_hooks` requires `event` and `url`; optional
+`authorization` configures a key for Basic Authentication.
 
-- `event`: desired event name;
-- `url`: receiving endpoint;
-- optional `authorization`: a key used as Basic Authentication when validating
-  received triggers.
+Deliveries use `Content-Type: application/x-www-form-urlencoded`, not JSON.
+The guide identifies outbound IP `98.82.243.132` for firewall allowlists. This
+operational value is time-sensitive and must be rechecked before use.
 
-The response includes `id`, `url`, `authorization`, `event`, and `active`.
+## Invoice Events and Payload
 
-## First-Slice Events
+Relevant events include `invoice.created`, `invoice.status_changed`,
+`invoice.payment_failed`, `invoice.due`, `invoice.refund`,
+`invoice.partially_refunded`, `invoice.refund_reverted`, and
+`invoice.rejected`.
 
-The supported-events endpoint documents these directly relevant names:
-
-- `invoice.created`;
-- `invoice.status_changed`;
-- `invoice.payment_failed`;
-- `invoice.due`;
-- `invoice.refund`;
-- `invoice.partially_refunded`;
-- `invoice.refund_reverted`;
-- `invoice.rejected`.
+The invoice guide documents form fields for `invoice.created` and
+`invoice.status_changed`, including invoice ID, account ID, native status,
+source, order ID, external reference, payment method, paid time/value, and Pix
+end-to-end ID where relevant. `invoice.status_changed` fires whenever an invoice
+status changes.
 
 ## Unknown Delivery Semantics
 
-The MCP definitions reviewed here do not establish event payload shape,
-delivery ordering, duplicate delivery, retry schedule, acknowledgement rules,
-timeout behavior, event identifiers, timestamps, or signature mechanisms. The
-optional Basic Authentication key is configuration evidence, not proof that no
-other verification mechanism exists.
+The reviewed pages do not establish ordering, duplicate delivery, automatic
+retry schedule, acknowledgement rules, timeout behavior, unique event/delivery
+ID, or signatures. Optional Basic Authentication is not proof that no other
+verification mechanism exists.
 
 [create]: https://dev.iugu.com/reference/criar-gatilho
-[events]: https://dev.iugu.com/mcp
+[guide]: https://dev.iugu.com/docs/gatilhos
+[invoice-events]: https://dev.iugu.com/docs/gatilhos-fatura

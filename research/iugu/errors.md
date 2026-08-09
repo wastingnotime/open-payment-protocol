@@ -3,33 +3,41 @@
 ## Metadata
 
 - Research date: 2026-08-09
-- Source interface: official Iugu developer MCP
-- Evidence level: documented OpenAPI only; not test-mode observed
+- Sources: official Iugu MCP and Markdown documentation
+- Evidence level: documented; not test-mode observed
 
-## Current Evidence
+## Authentication Errors
 
-The `POST /invoices`, `GET /invoices/{id}`, and `GET /resource_search`
-definitions document an HTTP 400 response, but their examples and schemas are
-empty JSON objects. The MCP output reviewed in this pass does not define:
+HTTP 401 is documented for an unverified subaccount, missing or wrong-account
+token, use of `api_token` where `user_token` is required, a token awaiting
+administrator approval, or a disallowed source IP.
 
-- provider error codes or message fields;
-- authentication failure responses;
-- not-found behavior;
-- rate-limit responses or headers;
-- retryability;
-- conflict semantics for caller references;
-- server-error or unknown-result semantics.
+## Create-Invoice Validation
 
-All of these behaviors remain `Unknown`. A faithful simulator must not copy the
-Asaas error envelope or invent a canonical error at the Iugu boundary.
+For `POST /v1/invoices`, the error reference distinguishes:
 
-## Unknown Result Boundary
+- HTTP 400, including missing `due_date`;
+- HTTP 422, including blank email when `customer_id` is null, invalid email,
+  invalid or past due date, missing items, invalid customer, invalid
+  `payable_with`, non-integer item price/quantity, and daily invoice limit.
 
-No create-request idempotency key was documented. `order_id` is described as
-helping avoid payment of the same invoice, which is not evidence that invoice
-creation is idempotent. Transport timeouts and 5xx results must be treated as
-unknown until documentation or test-mode observations establish otherwise.
+The documented payer-validation rows specifically mention boleto, not Pix,
+reinforcing the unresolved Pix payer conflict.
 
-[create]: https://dev.iugu.com/reference/criar-fatura
-[retrieve]: https://dev.iugu.com/mcp
-[search]: https://dev.iugu.com/reference/buscar-fatura-por-ids-externos
+## Idempotency Conflict
+
+The idempotency guide says a repeated `Idempotency-Key` returns HTTP 409 after
+one request is processed. Its error body is shown only as an image.
+
+## Remaining Unknowns
+
+MCP response examples use empty objects for HTTP 400 and define no consistent
+machine-readable error schema. Not-found retrieval, rate limits, retryability,
+stable error codes, server failures, and unknown-result semantics remain open.
+
+Invoice creation supports idempotency, but retention, concurrent requests,
+replay response, and payload mismatch remain unspecified. Transport timeouts
+and 5xx outcomes still require test-mode evidence.
+
+[errors]: https://dev.iugu.com/reference/erros
+[idempotency]: https://dev.iugu.com/docs/chave-de-idempot%C3%AAncia-1
