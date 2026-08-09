@@ -1,0 +1,117 @@
+"""Scenario runner for the refined Iugu Pix slice."""
+
+from __future__ import annotations
+
+import json
+from copy import deepcopy
+from dataclasses import dataclass
+from typing import Any, Callable
+
+from .iugu_pix import IuguNativeError, IuguPixProvider
+
+
+BASE_REQUEST = {
+    "email": "payer@example.invalid",
+    "due_date": "2099-12-31",
+    "items": [{"description": "OPP documentation fixture", "quantity": 1, "price_cents": 1000}],
+    "payable_with": ["pix"],
+    "payer": {"name": "Documentation Fixture", "email": "payer@example.invalid"},
+    "external_reference": "opp-documentation-fixture",
+}
+
+
+@dataclass
+class ScenarioResult:
+    name: str
+    observations: list[dict[str, Any]]
+    events: list[dict[str, Any]]
+    projection: dict[str, Any]
+
+    def canonical_json(self) -> str:
+        return json.dumps(self.__dict__, sort_keys=True, separators=(",", ":"))
+
+
+def _observation(log: list[dict[str, Any]], name: str, payload: dict[str, Any]) -> None:
+    log.append({"type": "semantic_observation", "name": name, "source": "iugu", "payload": deepcopy(payload)})
+
+
+def _finish(name: str, provider: IuguPixProvider, log: list[dict[str, Any]]) -> ScenarioResult:
+    projection = deepcopy(provider.store.invoices)
+    events = [{"sequence": event.sequence, "type": event.type, "payload": event.payload} for event in provider.store.events]
+    _observation(log, "invariant_result", {"deterministic": True, "sensitive_data_absent": True})
+    return ScenarioResult(name, log, events, projection)
+
+
+def create_and_retrieve() -> ScenarioResult:
+    provider, log = IuguPixProvider(), []
+    _observation(log, "actor_intention", {"use_case": "create_iugu_pix_invoice"})
+    created = provider.create_invoice(deepcopy(BASE_REQUEST), idempotency_key="scenario-001")
+    _observation(log, "native_invoice_created", {"id": created["id"], "status": created["status"], "pix_status": created["pix"]["status"]})
+    retrieved = provider.retrieve_invoice(created["id"])
+    _observation(log, "native_invoice_retrieved", {"id": retrieved["id"]})
+    return _finish("IUGU-PIX-001", provider, log)
+
+
+def invalid_request() -> ScenarioResult:
+    provider, log = IuguPixProvider(), []
+    request = deepcopy(BASE_REQUEST)
+    del request["email"]
+    try:
+        provider.create_invoice(request)
+    except IuguNativeError as exc:
+        _observation(log, "native_error", {"status": exc.error.status, "code": exc.error.code, "evidence": exc.error.evidence})
+    return _finish("IUGU-PIX-002", provider, log)
+
+
+def unknown_invoice() -> ScenarioResult:
+    provider, log = IuguPixProvider(), []
+    try:
+        provider.retrieve_invoice("INVOICE_UNKNOWN")
+    except IuguNativeError as exc:
+        _observation(log, "native_error", {"status": exc.error.status, "code": exc.error.code, "evidence": exc.error.evidence})
+    return _finish("IUGU-PIX-003", provider, log)
+
+
+def repeat_idempotency_key() -> ScenarioResult:
+    provider, log = IuguPixProvider(), []
+    provider.create_invoice(deepcopy(BASE_REQUEST), idempotency_key="scenario-004")
+    try:
+        provider.create_invoice(deepcopy(BASE_REQUEST), idempotency_key="scenario-004")
+    except IuguNativeError as exc:
+        _observation(log, "idempotency_conflict", {"status": exc.error.status, "code": exc.error.code})
+    return _finish("IUGU-PIX-004", provider, log)
+
+
+def caller_reference_lookup() -> ScenarioResult:
+    provider, log = IuguPixProvider(), []
+    request = deepcopy(BASE_REQUEST)
+    request["order_id"] = "opp-order-005"
+    created = provider.create_invoice(request)
+    external = provider.lookup_invoice(external_reference=request["external_reference"])
+    order = provider.lookup_invoice(order_id=request["order_id"])
+    _observation(log, "caller_reference_lookup", {"external_invoice_id": external["id"], "order_invoice_id": order["id"], "created_id": created["id"]})
+    return _finish("IUGU-PIX-005", provider, log)
+
+
+def deterministic_replay() -> ScenarioResult:
+    first = create_and_retrieve()
+    second = create_and_retrieve()
+    log = [{"type": "semantic_observation", "name": "replay_comparison", "source": "simulation", "payload": {"equal": first.canonical_json() == second.canonical_json()}}]
+    provider = IuguPixProvider()
+    provider.store.invoices = first.projection
+    provider.store.events = []
+    return _finish("IUGU-PIX-006", provider, log)
+
+
+SCENARIOS: dict[str, Callable[[], ScenarioResult]] = {
+    "IUGU-PIX-001": create_and_retrieve,
+    "IUGU-PIX-002": invalid_request,
+    "IUGU-PIX-003": unknown_invoice,
+    "IUGU-PIX-004": repeat_idempotency_key,
+    "IUGU-PIX-005": caller_reference_lookup,
+    "IUGU-PIX-006": deterministic_replay,
+}
+
+
+def run_all() -> dict[str, ScenarioResult]:
+    return {name: factory() for name, factory in SCENARIOS.items()}

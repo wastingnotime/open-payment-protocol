@@ -1,6 +1,6 @@
 # Iugu Pix Invoice Creation and Retrieval
 
-Status: refined and selected for first build.
+Status: first build complete; refinement check pending model-wide EGD.
 
 ## Selected Shape
 
@@ -58,7 +58,7 @@ becomes runnable.
 
 ## Done Criteria
 
-- Six selected scenarios have deterministic tests.
+- Six selected scenarios have deterministic tests and a canonical JSON report.
 - Native event history, invoice projection, observations, and invariants are inspectable.
 - Each material branch is linked to documented or explicit unknown evidence.
 - The common runtime adapter returns one repository Scenario and emits

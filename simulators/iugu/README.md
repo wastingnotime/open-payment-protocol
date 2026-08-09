@@ -1,6 +1,6 @@
 # Iugu Provider Simulator
 
-Status: selected for the first provider-native implementation; not yet runnable.
+Status: selected and runnable through the shared simulation environment.
 
 This internal simulator will reproduce the documented Iugu Pix invoice
 creation and retrieval contract. It is a discovery tool and does not implement
@@ -13,3 +13,7 @@ project or protocol authority.
 
 See [scenarios.md](scenarios.md) and the refined
 [simulation slice](../../sandboxes/simulation/docs/slices/iugu_pix_creation.md).
+
+The executable implementation is under
+`../../sandboxes/simulation/src/app/simulation/`; this directory remains a
+provider-native contract boundary, not a second implementation surface.

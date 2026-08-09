@@ -12,13 +12,18 @@ pressure, and an explicit model release.
 ## Current Phase
 
 The five-provider documentation baseline is complete. The project has moved
-from mapping into refinement and selected Iugu Pix invoice creation/retrieval
-as the first build increment. It is not runnable yet.
+from mapping into refinement and the Iugu Pix invoice creation/retrieval
+increment is runnable with deterministic tests and scenario reports.
 
 The selection evidence is recorded in
 [`research/pix-simulator-selection.md`](../../research/pix-simulator-selection.md)
 and the refined slice in
 [`docs/slices/iugu_pix_creation.md`](docs/slices/iugu_pix_creation.md).
+
+Run the pure scenario suite with `pytest -q sandboxes/simulation/tests` or
+emit a canonical report with
+`python3 sandboxes/simulation/tools/run_iugu_pix.py`. WNT MRL Runtime
+supervision additionally requires the user-space runtime installation.
 
 ## Layout
 
