@@ -7,6 +7,8 @@ Runtime is not installed, instead of shipping a second incompatible runtime.
 
 from __future__ import annotations
 
+from datetime import datetime, timezone
+
 from .scenarios import run_all
 
 
@@ -19,19 +21,34 @@ def create_simulation():
             "wnt install --target mrl_runtime_user --target mrl_user_bin --user --force"
         ) from exc
 
-    results = run_all()
-    observations = []
-    for result in results.values():
-        observations.extend(result.observations)
-    try:
-        return Scenario(
-            name="opp-iugu-pix",
-            run_id="iugu-pix-first-slice",
-            seed=1,
-            observations=observations,
-        )
-    except TypeError as exc:
-        raise RuntimeError(
-            "The installed MRL Runtime Scenario constructor differs from this adapter; "
-            "inspect the local runtime contract before supervision."
-        ) from exc
+    from mrl_simulation_runtime.actors import Actor
+    from mrl_simulation_runtime.scenario import InitialScheduledAction
+
+    initial_time = datetime(2026, 8, 9, 12, 0, tzinfo=timezone.utc)
+
+    def emit_slice_results(context) -> None:
+        for result in run_all().values():
+            for observation in result.observations:
+                context.emit(
+                    observation["type"],
+                    observation["name"],
+                    source=observation.get("source"),
+                    payload=observation.get("payload", {}),
+                )
+
+    return Scenario(
+        name="opp-iugu-pix",
+        run_id="iugu-pix-first-slice",
+        seed=1,
+        initial_time=initial_time,
+        actors=[Actor("IuguScenarioActor")],
+        scheduled_actions=[
+            InitialScheduledAction(
+                when=initial_time,
+                action=emit_slice_results,
+                name="RunIuguPixScenarios",
+                source="IuguScenarioActor",
+                correlation_id="iugu-pix-first-slice",
+            )
+        ],
+    )

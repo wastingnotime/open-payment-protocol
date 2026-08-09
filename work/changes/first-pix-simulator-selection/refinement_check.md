@@ -19,14 +19,13 @@ references, and the documented 409 idempotency conflict.
 
 ## Discrepancies and Unknowns
 
-- The optional runtime package is not installed in this environment, so the
-  adapter factory is present but supervision requires the WNT runtime install.
+- The WNT MRL Runtime was installed from the local toolkit checkout and the
+  adapter was verified with `mrl-simulation supervise --once`.
 - Iugu's conflicting payer requirements remain unsupported/unknown combinations.
 - Exact provider error bodies, idempotency retention, and lifecycle transitions
   remain deferred as documented in the slice plan.
 
 ## Decision
 
-Keep the current slice boundary. Proceed to sandbox-observed validation or
-install the WNT runtime for supervised observation before adding lifecycle and
-webhook behavior.
+Keep the current slice boundary. Proceed to sandbox-observed validation before
+adding lifecycle and webhook behavior.
