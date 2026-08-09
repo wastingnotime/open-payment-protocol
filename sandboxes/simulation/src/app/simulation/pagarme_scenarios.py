@@ -37,7 +37,27 @@ def invalid_request() -> dict[str, Any]:
     return _result("PG-PIX-002", provider, observations)
 
 
-SCENARIOS = {"PG-PIX-001": create_and_retrieve_charge, "PG-PIX-002": invalid_request}
+def simulator_success() -> dict[str, Any]:
+    provider, observations = PagarmePixProvider(), []
+    order = provider.create_order(deepcopy(BASE_REQUEST))
+    charge = provider.simulate_pix_outcome(order["charges"][0]["id"])
+    observations.append({"type": "semantic_observation", "name": "native_event", "source": "pagarme", "payload": {"type": "charge.paid", "charge_id": charge["id"], "evidence": "research/pagarme/lifecycle.md"}})
+    observations.append({"type": "semantic_observation", "name": "native_transition", "source": "pagarme", "payload": {"order_status": provider.store.orders[order["id"]]["status"], "charge_status": charge["status"], "transaction_status": charge["last_transaction"]["status"]}})
+    return _result("PG-PIX-003", provider, observations)
+
+
+def simulator_failure() -> dict[str, Any]:
+    provider, observations = PagarmePixProvider(), []
+    request = deepcopy(BASE_REQUEST)
+    request["items"][0]["amount"] = 60000
+    order = provider.create_order(request)
+    charge = provider.simulate_pix_outcome(order["charges"][0]["id"])
+    observations.append({"type": "semantic_observation", "name": "native_event", "source": "pagarme", "payload": {"type": "charge.payment_failed", "charge_id": charge["id"], "evidence": "research/pagarme/lifecycle.md"}})
+    observations.append({"type": "semantic_observation", "name": "native_transition", "source": "pagarme", "payload": {"order_status": provider.store.orders[order["id"]]["status"], "charge_status": charge["status"], "transaction_status": charge["last_transaction"]["status"]}})
+    return _result("PG-PIX-004", provider, observations)
+
+
+SCENARIOS = {"PG-PIX-001": create_and_retrieve_charge, "PG-PIX-002": invalid_request, "PG-PIX-003": simulator_success, "PG-PIX-004": simulator_failure}
 
 
 def run_all() -> dict[str, dict[str, Any]]:

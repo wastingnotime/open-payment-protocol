@@ -61,6 +61,23 @@ class PagarmePixProvider:
         self.store.events.append({"type": "charge_retrieved", "payload": {"charge_id": charge_id}})
         return deepcopy(charge)
 
+    def simulate_pix_outcome(self, charge_id: str) -> dict[str, Any]:
+        """Apply the documented Pix simulator amount threshold."""
+        charge = self.store.charges.get(charge_id)
+        if charge is None:
+            raise PagarmeNativeError(PagarmeError(404, "charge_not_found", "The charge was not found."))
+        amount = int(charge["amount"])
+        outcome = "paid" if amount <= 50000 else "failed"
+        charge["status"] = outcome
+        charge["last_transaction"]["status"] = outcome
+        for order in self.store.orders.values():
+            for index, item in enumerate(order["charges"]):
+                if item["id"] == charge_id:
+                    order["status"] = outcome
+                    order["charges"][index] = deepcopy(charge)
+        self.store.events.append({"type": "charge_status_changed", "payload": {"charge_id": charge_id, "status": outcome, "evidence": "research/pagarme/lifecycle.md"}})
+        return deepcopy(charge)
+
     def _validate(self, request: dict[str, Any]) -> None:
         if not request.get("items") or not request.get("payments"):
             raise PagarmeNativeError(PagarmeError(400, "required_parameter", "items and payments are required."))

@@ -6,7 +6,7 @@ from app.simulation.pagarme_scenarios import BASE_REQUEST, run_all
 
 def test_pagarme_scenarios_complete():
     results = run_all()
-    assert set(results) == {"PG-PIX-001", "PG-PIX-002"}
+    assert set(results) == {"PG-PIX-001", "PG-PIX-002", "PG-PIX-003", "PG-PIX-004"}
 
 
 def test_order_charge_transaction_hierarchy_is_preserved():
@@ -16,3 +16,16 @@ def test_order_charge_transaction_hierarchy_is_preserved():
     assert charge["id"].startswith("ch_")
     assert charge["last_transaction"]["id"].startswith("txn_")
     assert charge["last_transaction"]["qr_code"]
+
+
+def test_documented_simulator_success_updates_all_native_levels():
+    result = run_all()["PG-PIX-003"]
+    order = next(iter(result["projection"].values()))
+    charge = order["charges"][0]
+    assert order["status"] == charge["status"] == charge["last_transaction"]["status"] == "paid"
+
+
+def test_documented_simulator_failure_is_distinct_outcome():
+    result = run_all()["PG-PIX-004"]
+    order = next(iter(result["projection"].values()))
+    assert order["status"] == "failed"
