@@ -31,6 +31,8 @@ references, and the documented 409 idempotency conflict.
 - The combined runtime now emits 53 observations. `IUGU-PIX-008` confirms the
   cancellation event and keeps invoice `canceled` distinct from Pix
   `qr_code_created`.
+- `IUGU-PIX-009` confirms the documented invoice `expired` outcome while
+  preserving the unknown Pix expiry behavior.
 - Iugu's conflicting payer requirements remain unsupported/unknown combinations.
 - Exact provider error bodies, idempotency retention, expiry, refunds, and
   webhook delivery remain deferred as documented in the slice plan.

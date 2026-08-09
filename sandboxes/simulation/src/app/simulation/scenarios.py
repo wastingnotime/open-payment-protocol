@@ -115,6 +115,15 @@ def canceled_invoice_transition() -> ScenarioResult:
     return _finish("IUGU-PIX-008", provider, log)
 
 
+def expired_invoice_transition() -> ScenarioResult:
+    provider, log = IuguPixProvider(), []
+    created = provider.create_invoice(deepcopy(BASE_REQUEST))
+    expired = provider.expire_invoice(created["id"])
+    _observation(log, "native_event", {"type": "invoice.status_changed", "invoice_id": expired["id"], "from": "pending", "to": "expired"})
+    _observation(log, "native_transition", {"invoice_status": expired["status"], "pix_status": expired["pix"]["status"], "pix_expiry_behavior": "unknown"})
+    return _finish("IUGU-PIX-009", provider, log)
+
+
 def deterministic_replay() -> ScenarioResult:
     first = create_and_retrieve()
     second = create_and_retrieve()
@@ -134,6 +143,7 @@ SCENARIOS: dict[str, Callable[[], ScenarioResult]] = {
     "IUGU-PIX-006": deterministic_replay,
     "IUGU-PIX-007": successful_pix_transition,
     "IUGU-PIX-008": canceled_invoice_transition,
+    "IUGU-PIX-009": expired_invoice_transition,
 }
 
 

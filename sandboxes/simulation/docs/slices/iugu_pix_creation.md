@@ -49,7 +49,7 @@ Repeated commands follow Iugu evidence rather than a generic idempotency model.
 ## Scenario Plan
 
 The executable scenario identifiers and acceptance expectations are defined in
-`simulators/iugu/scenarios.md`: IUGU-PIX-001 through IUGU-PIX-008.
+`simulators/iugu/scenarios.md`: IUGU-PIX-001 through IUGU-PIX-009.
 
 Runtime observations must cover actor intention, command, native event, query,
 response, and invariant result. The runtime adapter will expose the shared

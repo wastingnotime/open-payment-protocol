@@ -86,3 +86,9 @@ Expiry, refunds, webhook delivery, and test-mode timing remain deferred.
 Create a pending invoice, apply the documented `pending -> canceled` invoice
 transition, and retain the embedded Pix status as provider-native state. This
 does not claim that the QR status or cancellation timing is fully documented.
+
+### IUGU-PIX-009 — Documented expiration outcome
+
+Apply the documented `pending -> expired` invoice outcome. Keep embedded Pix
+expiration behavior explicitly unknown because the source does not establish a
+complete Pix status transition or timing rule.

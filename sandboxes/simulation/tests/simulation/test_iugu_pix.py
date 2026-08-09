@@ -81,3 +81,10 @@ def test_documented_pending_to_canceled_transition_preserves_pix_state():
     transition = next(item for item in result.observations if item["name"] == "native_transition")
     assert transition["payload"]["invoice_status"] == "canceled"
     assert transition["payload"]["pix_status"] == "qr_code_created"
+
+
+def test_documented_pending_to_expired_keeps_pix_expiry_unknown():
+    result = SCENARIOS["IUGU-PIX-009"]()
+    transition = next(item for item in result.observations if item["name"] == "native_transition")
+    assert transition["payload"]["invoice_status"] == "expired"
+    assert transition["payload"]["pix_expiry_behavior"] == "unknown"
