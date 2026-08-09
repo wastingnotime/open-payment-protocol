@@ -1,0 +1,26 @@
+{
+  "reference_id": "opp-documentation-fixture",
+  "customer": {
+    "name": "Documentation Fixture",
+    "email": "payer@example.invalid",
+    "tax_id": "00000000000"
+  },
+  "items": [
+    {
+      "name": "OPP documentation fixture",
+      "quantity": 1,
+      "unit_amount": 1000
+    }
+  ],
+  "qr_codes": [
+    {
+      "amount": {
+        "value": 1000
+      },
+      "expiration_date": "2030-01-01T12:00:00-03:00"
+    }
+  ],
+  "notification_urls": [
+    "https://example.invalid/webhooks/pagbank"
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "id": "ORDE_DOCUMENTATION_FIXTURE",
+  "reference_id": "opp-documentation-fixture",
+  "qr_codes": [
+    {
+      "id": "QRCO_DOCUMENTATION_FIXTURE",
+      "expiration_date": "2030-01-01T12:00:00-03:00",
+      "amount": {
+        "value": 1000
+      },
+      "text": "SANITIZED_PIX_COPY_AND_PASTE_VALUE",
+      "links": [
+        {
+          "rel": "QRCODE.PNG",
+          "href": "https://example.invalid/qrcode/documentation-fixture/png",
+          "media": "image/png",
+          "type": "GET"
+        },
+        {
+          "rel": "QRCODE.BASE64",
+          "href": "https://example.invalid/qrcode/documentation-fixture/base64",
+          "media": "text/plain",
+          "type": "GET"
+        }
+      ]
+    }
+  ],
+  "charges": []
+}
