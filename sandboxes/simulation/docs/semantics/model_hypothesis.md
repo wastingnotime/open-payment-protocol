@@ -86,7 +86,7 @@ simulation evidence, not provider API fields.
    repetition and reconciliation behavior (built; refinement-checked).
 2. Incremental create/retrieve slices for Mercado Pago, PagBank, Pagar.me, and
    Asaas, ordered by evidence readiness and semantic pressure (Mercado Pago
-   PagBank, and Pagar.me create/retrieve built).
+   PagBank, Pagar.me, and Asaas create/retrieve built).
 3. Successful provider-native lifecycle transition and event delivery, with
    Pagar.me as the leading deterministic candidate.
 4. Failed or expired transition and error/result certainty.
