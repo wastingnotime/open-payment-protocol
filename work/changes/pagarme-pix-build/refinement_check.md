@@ -11,6 +11,9 @@ and transaction IDs plus the charge's Pix `last_transaction` QR value.
 The documented Pix simulator threshold is now exercised: amounts up to BRL
 500 become `paid`, while larger amounts become `failed`, with order, charge,
 and transaction statuses updated independently but consistently.
+Runtime inspection emitted 48 observations and preserved all four Pagar.me
+scenario IDs. The transition traces confirm the three native status levels are
+visible together without introducing a normalized status enum.
 
 ## Model Pressure
 
@@ -22,6 +25,8 @@ and transaction statuses updated independently but consistently.
 - Runtime observations must retain all three provider identifiers so later
   adapter experiments cannot accidentally collapse the hierarchy.
 - Simulator thresholds are sandbox rules, not production lifecycle guarantees.
+- The success/failure threshold is now an explicit provider simulator rule with
+  a source link, not an inferred production behavior.
 
 ## Remaining Questions
 
