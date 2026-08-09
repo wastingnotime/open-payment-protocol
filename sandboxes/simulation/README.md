@@ -11,13 +11,14 @@ pressure, and an explicit model release.
 
 ## Current Phase
 
-The project is in `extract -> map candidate slices`. There is no runnable slice
-yet because the five-provider evidence baseline has not been completed.
+The five-provider documentation baseline is complete. The project has moved
+from mapping into refinement and selected Iugu Pix invoice creation/retrieval
+as the first build increment. It is not runnable yet.
 
-The next candidate is documented in
-[`docs/slices/provider_native_pix_creation.md`](docs/slices/provider_native_pix_creation.md).
-Its refinement gate requires documented create and retrieve behavior for each
-selected provider. Building before that gate would create circular validation.
+The selection evidence is recorded in
+[`research/pix-simulator-selection.md`](../../research/pix-simulator-selection.md)
+and the refined slice in
+[`docs/slices/iugu_pix_creation.md`](docs/slices/iugu_pix_creation.md).
 
 ## Layout
 

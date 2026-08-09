@@ -1,17 +1,21 @@
 # Candidate Model Slice Map
 
-Status: initial mapping; no slice has entered build.
+Status: five-provider evidence review complete; first slice refined.
 
 | Order | Candidate slice | Primary uncertainty | Entry condition |
 | --- | --- | --- | --- |
-| 1 | Provider-native Pix creation and retrieval | Resource, validation, identifiers, initial state | Five-provider official-source research and sanitized fixtures |
-| 2 | Successful transition and native event | Timing, finality, event payload and delivery | Slice 1 refinement plus lifecycle/webhook evidence |
-| 3 | Failed or expired transition | Failure state, finality, error/result certainty | Provider lifecycle and error evidence |
-| 4 | Repetition and reconciliation | Idempotency, timeout ambiguity, caller-reference lookup | Provider idempotency evidence |
+| 1 | Iugu-native Pix invoice creation and retrieval | Validation, identifiers, native initial representation | Refined; selected for build |
+| 2 | Mercado Pago, PagBank, Pagar.me, and Asaas create/retrieve increments | Resource hierarchy and provider differences | Refine one provider at a time from current evidence |
+| 3 | Successful transition and native event | Timing, finality, event payload and delivery | Runnable creation slice plus lifecycle evidence; Pagar.me leads |
+| 4 | Failed or expired transition and result certainty | Failure state, finality, timeout ambiguity | Provider lifecycle and error evidence |
 | 5 | Thin adapter comparison | Smallest faithful shared semantics | Runnable native slices across all five providers |
 
 ## Selection Decision
 
-Slice 1 is selected for evidence refinement. It is not ready to build. The next
-action is provider research using current official documentation, with claims
-labeled documented, sandbox-observed, inferred, or unknown.
+Iugu is selected for the first build because its bounded create/retrieve path
+has the strongest combined evidence for resource identity, integer-cent money,
+embedded Pix output, native status, idempotency, caller-reference lookup, and
+errors. This is an implementation-risk decision, not protocol authority.
+
+See `research/pix-simulator-selection.md` and
+`sandboxes/simulation/docs/slices/iugu_pix_creation.md`.

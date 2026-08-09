@@ -69,7 +69,8 @@ simulation evidence, not provider API fields.
 
 ## Open Questions
 
-- What resource does each provider create for the first Pix path?
+- How should later adapter experiments relate invoice, payment, order, QR Code,
+  charge, and transaction without erasing their boundaries?
 - Is customer creation or association required for that path?
 - What money representation and currency behavior does each provider expose?
 - Which providers support native idempotency, caller references, or lookup by
@@ -81,10 +82,13 @@ simulation evidence, not provider API fields.
 
 ## Candidate Slice Map
 
-1. Provider-native Pix creation and retrieval.
-2. Successful provider-native lifecycle transition and event delivery.
-3. Failed or expired transition and error/result certainty.
-4. Idempotent repetition, timeout ambiguity, and reconciliation lookup.
+1. Iugu-native Pix invoice creation and retrieval, including evidenced
+   repetition and reconciliation behavior.
+2. Incremental create/retrieve slices for Mercado Pago, PagBank, Pagar.me, and
+   Asaas, ordered by evidence readiness and semantic pressure.
+3. Successful provider-native lifecycle transition and event delivery, with
+   Pagar.me as the leading deterministic candidate.
+4. Failed or expired transition and error/result certainty.
 5. Thin adapter comparison across all five providers.
 
 The map is provisional and must be updated after every refinement check.

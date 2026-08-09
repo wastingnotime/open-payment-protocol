@@ -1,6 +1,6 @@
 # Provider-Native Pix Creation and Retrieval
 
-Status: candidate awaiting evidence refinement.
+Status: umbrella candidate; split into incremental provider-native builds.
 
 ## Selected Shape
 
@@ -11,18 +11,18 @@ Status: candidate awaiting evidence refinement.
 
 ## Discovery Scope
 
-For Asaas, Iugu, Mercado Pago, PagBank, and Pagar.me, simulate the smallest
-documented Pix creation path and retrieval by provider reference. Preserve each
-provider's resource name, request/response shape, identifiers, validation,
-initial status, and error shape.
+Across Asaas, Iugu, Mercado Pago, PagBank, and Pagar.me, incrementally simulate
+the smallest documented Pix creation path and retrieval by provider reference.
+Preserve each provider's resource name, request/response shape, identifiers,
+validation, initial status, and error shape. Iugu is selected as the first
+increment in [`iugu_pix_creation.md`](iugu_pix_creation.md).
 
 ## Refinement Gate
 
-Before implementation, every provider must have dated official-source evidence
-for creation and retrieval, sanitized documentation fixtures, explicit unknowns,
-and a documented security assessment of the request shape. If one provider has
-no comparable documented path, retain that difference rather than fabricating
-support.
+The five-provider documentation baseline is complete. Each provider enters
+build only when its own bounded increment has dated official-source evidence,
+sanitized fixtures, explicit unknowns, a security assessment, and a refined
+slice document. One provider's gap does not block faithful work on another.
 
 ## Use-Case Contract
 
