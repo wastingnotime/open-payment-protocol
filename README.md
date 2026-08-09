@@ -37,7 +37,13 @@ provider contracts
 - `conformance/`: reusable compatibility behavior
 - `sdk/go/`: first language binding
 - `providers/go/`: initial provider implementations
+- `sandboxes/simulation/`: deterministic domain simulation used to refine the model
 - `contracts/`: repository boundary and export status
+
+The simulation is an internal discovery environment. It preserves provider
+differences and produces evidence for later protocol extraction; it is not an
+authoritative OPP implementation. See
+[`sandboxes/simulation/README.md`](sandboxes/simulation/README.md).
 
 The specification, schemas, and conformance behavior will be authoritative.
 Language bindings and provider implementations will not define OPP semantics.
