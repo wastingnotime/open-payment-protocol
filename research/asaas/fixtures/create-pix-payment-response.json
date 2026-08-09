@@ -1,0 +1,14 @@
+{
+  "object": "payment",
+  "id": "pay_documentation_fixture",
+  "dateCreated": "2099-12-01",
+  "customer": "cus_documentation_fixture",
+  "value": 100.90,
+  "netValue": 95.90,
+  "billingType": "PIX",
+  "status": "PENDING",
+  "dueDate": "2099-12-31",
+  "originalDueDate": "2099-12-31",
+  "externalReference": "opp-documentation-fixture",
+  "deleted": false
+}

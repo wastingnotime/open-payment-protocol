@@ -1,0 +1,6 @@
+{
+  "customer": "cus_documentation_fixture",
+  "billingType": "PIX",
+  "value": 100.90,
+  "dueDate": "2099-12-31"
+}
