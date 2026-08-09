@@ -37,6 +37,8 @@ references, and the documented 409 idempotency conflict.
   unknown Pix expiry marker in the same correlated scenario.
 - `IUGU-PIX-010` preserves the documented `canceled → paid` recovery path,
   proving Iugu cancellation is not universally final.
+- Runtime inspection emits 59 observations and confirms the recovery event,
+  paid Pix state, and explicit recovery marker together.
 - Iugu's conflicting payer requirements remain unsupported/unknown combinations.
 - Exact provider error bodies, idempotency retention, expiry, refunds, and
   webhook delivery remain deferred as documented in the slice plan.
