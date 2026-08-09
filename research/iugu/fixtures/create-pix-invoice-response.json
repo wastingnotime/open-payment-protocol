@@ -1,0 +1,32 @@
+{
+  "id": "INVOICE_DOCUMENTATION_FIXTURE",
+  "due_date": "2099-12-31",
+  "currency": "BRL",
+  "email": "payer@example.invalid",
+  "items_total_cents": 1000,
+  "status": "pending",
+  "total_cents": 1000,
+  "total_paid_cents": 0,
+  "payable_with": "pix",
+  "external_reference": "opp-documentation-fixture",
+  "secure_id": "invoice-documentation-fixture-secure-id",
+  "secure_url": "https://checkout.iugu.com/invoices/documentation-fixture",
+  "pix": {
+    "qrcode": "https://faturas.iugu.com/qr_code/documentation-fixture",
+    "qrcode_text": "PIX_COPY_AND_PASTE_DOCUMENTATION_FIXTURE",
+    "status": "qr_code_created",
+    "payer_cpf_cnpj": null,
+    "payer_name": null,
+    "end_to_end_id": null,
+    "end_to_end_refund_id": null,
+    "account_number_last_digits": null
+  },
+  "items": [
+    {
+      "id": "ITEM_DOCUMENTATION_FIXTURE",
+      "description": "OPP documentation fixture",
+      "price_cents": 1000,
+      "quantity": 1
+    }
+  ]
+}

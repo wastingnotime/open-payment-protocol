@@ -1,3 +1,7 @@
 [mcp_servers.asaas]
 type = "http"
 url = "https://docs.asaas.com/mcp"
+
+[mcp_servers.iugu-dev]
+type = "http"
+url = "https://dev.iugu.com/mcp"

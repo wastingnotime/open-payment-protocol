@@ -1,0 +1,19 @@
+{
+  "email": "payer@example.invalid",
+  "due_date": "2099-12-31",
+  "items": [
+    {
+      "description": "OPP documentation fixture",
+      "quantity": 1,
+      "price_cents": 1000
+    }
+  ],
+  "payable_with": [
+    "pix"
+  ],
+  "payer": {
+    "name": "Documentation Fixture",
+    "email": "payer@example.invalid"
+  },
+  "external_reference": "opp-documentation-fixture"
+}
