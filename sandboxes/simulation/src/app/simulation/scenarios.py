@@ -39,6 +39,8 @@ def _finish(name: str, provider: IuguPixProvider, log: list[dict[str, Any]]) -> 
     projection = deepcopy(provider.store.invoices)
     events = [{"sequence": event.sequence, "type": event.type, "payload": event.payload} for event in provider.store.events]
     _observation(log, "invariant_result", {"deterministic": True, "sensitive_data_absent": True})
+    for observation in log:
+        observation.setdefault("payload", {})["scenario"] = name
     return ScenarioResult(name, log, events, projection)
 
 

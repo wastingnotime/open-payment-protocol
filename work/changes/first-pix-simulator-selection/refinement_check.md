@@ -21,6 +21,9 @@ references, and the documented 409 idempotency conflict.
 
 - The WNT MRL Runtime was installed from the local toolkit checkout and the
   adapter was verified with `mrl-simulation supervise --once`.
+- Runtime inspection emitted 17 observations. The combined stream initially
+  lacked scenario correlation; scenario IDs are now present in each semantic
+  observation payload.
 - Iugu's conflicting payer requirements remain unsupported/unknown combinations.
 - Exact provider error bodies, idempotency retention, and lifecycle transitions
   remain deferred as documented in the slice plan.
