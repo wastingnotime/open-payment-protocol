@@ -11,9 +11,9 @@ pressure, and an explicit model release.
 
 ## Current Phase
 
-The five-provider documentation baseline is complete. The project has moved
-from mapping into refinement and the Iugu Pix invoice creation/retrieval
-increment is runnable with deterministic tests and scenario reports.
+The five-provider documentation baseline is complete. All five native
+create/retrieve increments are runnable with deterministic tests and scenario
+reports. The project is now refining cross-provider lifecycle pressure.
 
 The selection evidence is recorded in
 [`research/pix-simulator-selection.md`](../../research/pix-simulator-selection.md)
