@@ -55,3 +55,22 @@ def test_documented_pix_success_transition_preserves_distinct_statuses():
     assert paid["pix"]["status"] == "paid"
     assert paid["pix"]["payment_method"] == "iugu_pix"
     assert paid["total_paid_cents"] == 1000
+
+
+def test_success_scenario_exposes_native_status_changed_event():
+    result = SCENARIOS["IUGU-PIX-007"]()
+    events = [item for item in result.observations if item["name"] == "native_event"]
+    assert events == [
+        {
+            "type": "semantic_observation",
+            "name": "native_event",
+            "source": "iugu",
+            "payload": {
+                "type": "invoice.status_changed",
+                "invoice_id": "INVOICE_000001",
+                "from": "pending",
+                "to": "paid",
+                "scenario": "IUGU-PIX-007",
+            },
+        }
+    ]
