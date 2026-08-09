@@ -83,7 +83,7 @@ simulation evidence, not provider API fields.
 ## Candidate Slice Map
 
 1. Iugu-native Pix invoice creation and retrieval, including evidenced
-   repetition and reconciliation behavior.
+   repetition and reconciliation behavior (built; refinement-checked).
 2. Incremental create/retrieve slices for Mercado Pago, PagBank, Pagar.me, and
    Asaas, ordered by evidence readiness and semantic pressure.
 3. Successful provider-native lifecycle transition and event delivery, with
