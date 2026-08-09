@@ -6,7 +6,7 @@ from app.simulation.pagbank_scenarios import BASE_REQUEST, run_all
 
 def test_pagbank_scenarios_complete():
     results = run_all()
-    assert set(results) == {"PB-PIX-001", "PB-PIX-002", "PB-PIX-003"}
+    assert set(results) == {"PB-PIX-001", "PB-PIX-002", "PB-PIX-003", "PB-PIX-004"}
     assert results["PB-PIX-001"]["projection"]
 
 
@@ -28,3 +28,11 @@ def test_reused_key_is_documented_conflict():
         assert exc.error.code == "idempotency_key_in_use"
     else:
         raise AssertionError("expected PagBank idempotency conflict")
+
+
+def test_paid_pix_creates_charge_while_qr_remains_on_order():
+    result = run_all()["PB-PIX-004"]
+    order = next(iter(result["projection"].values()))
+    assert order["charges"][0]["status"] == "PAID"
+    assert order["charges"][0]["payment_method"]["pix"]["end_to_end_id"]
+    assert order["qr_codes"]

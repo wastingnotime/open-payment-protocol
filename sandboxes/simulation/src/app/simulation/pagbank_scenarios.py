@@ -55,7 +55,17 @@ def idempotency_conflict() -> dict[str, Any]:
     return _result("PB-PIX-003", provider, observations)
 
 
-SCENARIOS = {"PB-PIX-001": create_and_retrieve, "PB-PIX-002": invalid_amount, "PB-PIX-003": idempotency_conflict}
+def charge_emerges_after_pix_payment() -> dict[str, Any]:
+    provider, observations = PagBankPixProvider(), []
+    order = provider.create_order(deepcopy(BASE_REQUEST), idempotency_key="pagbank-scenario-004")
+    paid = provider.mark_pix_paid(order["id"], end_to_end_id="E2E_DOCUMENTATION_FIXTURE")
+    charge = paid["charges"][0]
+    observations.append({"type": "semantic_observation", "name": "native_event", "source": "pagbank", "payload": {"type": "charge.created", "order_id": paid["id"], "charge_id": charge["id"]}})
+    observations.append({"type": "semantic_observation", "name": "native_charge_emerged", "source": "pagbank", "payload": {"charge_id": charge["id"], "status": charge["status"], "pix_end_to_end_id": charge["payment_method"]["pix"]["end_to_end_id"], "qr_still_present": bool(paid["qr_codes"])}})
+    return _result("PB-PIX-004", provider, observations)
+
+
+SCENARIOS = {"PB-PIX-001": create_and_retrieve, "PB-PIX-002": invalid_amount, "PB-PIX-003": idempotency_conflict, "PB-PIX-004": charge_emerges_after_pix_payment}
 
 
 def run_all() -> dict[str, dict[str, Any]]:

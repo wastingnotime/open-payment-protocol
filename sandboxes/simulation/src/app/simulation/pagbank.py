@@ -74,6 +74,20 @@ class PagBankPixProvider:
         self._event("order_retrieved", {"order_id": order_id})
         return deepcopy(order)
 
+    def mark_pix_paid(self, order_id: str, *, end_to_end_id: str) -> dict[str, Any]:
+        order = self.store.orders.get(order_id)
+        if order is None:
+            raise PagBankNativeError(PagBankError(404, "order_not_found", "The order was not found."))
+        if order["charges"]:
+            raise PagBankNativeError(PagBankError(400, "invalid_status", "The order already has a charge."))
+        charge_id = f"CHAR_DOCUMENTATION_{self.store.next_id:06d}"
+        self.store.next_id += 1
+        amount = order["qr_codes"][0]["amount"]["value"]
+        charge = {"id": charge_id, "status": "PAID", "amount": {"value": amount, "currency": "BRL", "summary": {"total": amount, "paid": amount, "refunded": 0}}, "payment_method": {"type": "PIX", "pix": {"end_to_end_id": end_to_end_id}}}
+        order["charges"] = [deepcopy(charge)]
+        self.store.events.append({"type": "charge_created", "payload": {"order_id": order_id, "charge_id": charge_id, "status": "PAID"}})
+        return deepcopy(order)
+
     def _validate(self, request: dict[str, Any]) -> None:
         required = ("reference_id", "items", "qr_codes")
         missing = [key for key in required if not request.get(key)]

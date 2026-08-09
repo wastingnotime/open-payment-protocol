@@ -8,6 +8,8 @@ copy text and image/base64 links. Reused keys produce the documented conflict.
 Combined runtime inspection emitted 35 observations and preserved all three
 PagBank scenario IDs. The `PB-PIX-001` observation proves the QR-first boundary
 with `charges: []` at creation.
+The paid-transition increment now emits 50 combined observations and shows a
+`PAID` Pix charge emerging while the original QR Code remains on the order.
 
 ## Model Pressure
 
@@ -18,6 +20,8 @@ with `charges: []` at creation.
   providers' representations.
 - Runtime evidence must not create a synthetic charge merely because other
   providers expose a payment resource at creation.
+- Charge emergence is a documented PagBank lifecycle event and remains distinct
+  from initial QR creation.
 
 ## Remaining Questions
 
