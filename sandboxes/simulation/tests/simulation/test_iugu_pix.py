@@ -88,3 +88,10 @@ def test_documented_pending_to_expired_keeps_pix_expiry_unknown():
     transition = next(item for item in result.observations if item["name"] == "native_transition")
     assert transition["payload"]["invoice_status"] == "expired"
     assert transition["payload"]["pix_expiry_behavior"] == "unknown"
+
+
+def test_documented_canceled_to_paid_recovery_is_preserved():
+    result = SCENARIOS["IUGU-PIX-010"]()
+    transition = next(item for item in result.observations if item["name"] == "native_transition")
+    assert transition["payload"]["invoice_status"] == "paid"
+    assert transition["payload"]["recovery"] is True

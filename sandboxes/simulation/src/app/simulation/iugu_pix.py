@@ -185,6 +185,20 @@ class IuguPixProvider:
         self.store.append("invoice_status_changed", {"invoice_id": invoice_id, "from": "pending", "to": "expired"})
         return deepcopy(response)
 
+    def recover_canceled_invoice(self, invoice_id: str, *, end_to_end_id: str) -> dict[str, Any]:
+        response = self.store.invoices.get(invoice_id)
+        if response is None:
+            raise IuguNativeError(NativeError(404, "invoice_not_found", "The invoice was not found.", self.evidence))
+        if response["status"] != "canceled":
+            raise IuguNativeError(NativeError(422, "invalid_transition", "Invoice is not canceled.", "research/iugu/lifecycle.md"))
+        response["status"] = "paid"
+        response["total_paid_cents"] = response["total_cents"]
+        response["pix"]["status"] = "paid"
+        response["pix"]["payment_method"] = "iugu_pix"
+        response["pix"]["end_to_end_id"] = end_to_end_id
+        self.store.append("invoice_status_changed", {"invoice_id": invoice_id, "from": "canceled", "to": "paid"})
+        return deepcopy(response)
+
     def _validate(self, request: dict[str, Any]) -> None:
         required = ("email", "due_date", "items", "payable_with")
         missing = [key for key in required if not request.get(key)]

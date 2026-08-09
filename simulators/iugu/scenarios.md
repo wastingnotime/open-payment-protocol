@@ -92,3 +92,8 @@ does not claim that the QR status or cancellation timing is fully documented.
 Apply the documented `pending -> expired` invoice outcome. Keep embedded Pix
 expiration behavior explicitly unknown because the source does not establish a
 complete Pix status transition or timing rule.
+
+### IUGU-PIX-010 — Documented cancellation recovery
+
+Apply the documented `canceled -> paid` transition and preserve the paid Pix
+end-to-end ID. This intentionally keeps cancellation non-final for Iugu.
