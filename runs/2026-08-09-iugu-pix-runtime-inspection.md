@@ -3,12 +3,12 @@
 - Date: 2026-08-09
 - Command: `mrl-simulation supervise --once --scenario-factory app.simulation.mrl_runtime_scenario:create_simulation`
 - Direct runner: `SimulationRunner().run(create_simulation())`
-- Result: runtime started successfully; 21 observations emitted
+- Result: runtime started successfully; 25 observations emitted
 - Evidence mode: deterministic documentation-derived simulation; not provider sandbox evidence
 
 ## Observed Runtime Shape
 
-The runtime emitted `scenario_started`, one scheduled action, seven scenario
+The runtime emitted `scenario_started`, one scheduled action, ten scenario
 traces, and `scenario_finished`. Each semantic observation now carries its
 scenario identifier in the payload, allowing the combined runtime stream to be
 partitioned without introducing seven separate simulations.
@@ -26,7 +26,7 @@ only in the internal event store.
 
 ## Remaining Pressure
 
-All seven scenarios currently run at the same simulated timestamp because this
+All ten scenarios currently run at the same simulated timestamp because this
 slice models create/retrieve and deterministic query behavior only. Lifecycle
 time advancement remains intentionally deferred until provider evidence supports
 it.

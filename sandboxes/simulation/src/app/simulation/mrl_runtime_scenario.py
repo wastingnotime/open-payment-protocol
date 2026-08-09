@@ -10,6 +10,7 @@ from __future__ import annotations
 from datetime import datetime, timezone
 
 from .scenarios import run_all
+from .mercadopago_scenarios import run_all as run_mercadopago
 
 
 def create_simulation():
@@ -27,8 +28,10 @@ def create_simulation():
     initial_time = datetime(2026, 8, 9, 12, 0, tzinfo=timezone.utc)
 
     def emit_slice_results(context) -> None:
-        for result in run_all().values():
-            for observation in result.observations:
+        all_results = {**run_all(), **run_mercadopago()}
+        for result in all_results.values():
+            observations = result.observations if hasattr(result, "observations") else result["observations"]
+            for observation in observations:
                 context.emit(
                     observation["type"],
                     observation["name"],

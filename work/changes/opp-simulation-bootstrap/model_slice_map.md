@@ -5,7 +5,7 @@ Status: five-provider evidence review complete; first slice built and refinement
 | Order | Candidate slice | Primary uncertainty | Entry condition |
 | --- | --- | --- | --- |
 | 1 | Iugu-native Pix invoice creation and retrieval | Validation, identifiers, native initial representation | Built; refinement check passed |
-| 2 | Mercado Pago, PagBank, Pagar.me, and Asaas create/retrieve increments | Resource hierarchy and provider differences | Refine one provider at a time from current evidence |
+| 2 | Mercado Pago, PagBank, Pagar.me, and Asaas create/retrieve increments | Resource hierarchy and provider differences | Mercado Pago built; refine remaining providers one at a time |
 | 3 | Successful transition and native event | Timing, finality, event payload and delivery | Runnable creation slice plus lifecycle evidence; Pagar.me leads |
 | 4 | Failed or expired transition and result certainty | Failure state, finality, timeout ambiguity | Provider lifecycle and error evidence |
 | 5 | Thin adapter comparison | Smallest faithful shared semantics | Runnable native slices across all five providers |

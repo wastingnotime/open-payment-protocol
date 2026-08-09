@@ -85,7 +85,8 @@ simulation evidence, not provider API fields.
 1. Iugu-native Pix invoice creation and retrieval, including evidenced
    repetition and reconciliation behavior (built; refinement-checked).
 2. Incremental create/retrieve slices for Mercado Pago, PagBank, Pagar.me, and
-   Asaas, ordered by evidence readiness and semantic pressure.
+   Asaas, ordered by evidence readiness and semantic pressure (Mercado Pago
+   create/retrieve built).
 3. Successful provider-native lifecycle transition and event delivery, with
    Pagar.me as the leading deterministic candidate.
 4. Failed or expired transition and error/result certainty.
