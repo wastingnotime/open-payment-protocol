@@ -15,3 +15,7 @@ OPP is pre-v0.1. Nothing is stable yet.
 Stable releases must identify exact versioned exports. Consumers must not depend
 on research layout, simulator internals, or language-binding implementation
 details.
+
+Licensing is defined separately from export stability. See
+[`licensing.md`](licensing.md) for the license applying to each surface and the
+boundary between copyright licensing and future compatibility claims.

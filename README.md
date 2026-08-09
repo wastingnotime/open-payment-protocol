@@ -66,5 +66,11 @@ secrets, personal data, or cardholder data.
 
 ## License
 
-Licensing has not yet been selected. Until a license is added, copyright law
-applies and no reuse license is granted.
+Implementation artifacts—including schemas, conformance tests, SDKs, provider
+adapters, simulators, and reference implementations—are licensed under the
+[Apache License 2.0](LICENSE). The protocol specification under `spec/` is
+licensed separately under [CC BY 4.0](spec/LICENSE.md).
+
+See the [licensing boundary](contracts/licensing.md) for exact scope. These
+licenses do not grant certification status or permission to make protected
+compatibility claims.

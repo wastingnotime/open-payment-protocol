@@ -20,3 +20,15 @@ provider evidence from which its invariant was extracted.
 
 Keep commits focused and use conventional commit prefixes. Document how a
 simulator was validated and retain relevant receipts under `runs/`.
+
+## Contribution Licensing
+
+By intentionally submitting a contribution for inclusion in this repository,
+you agree to license it under the license applicable to the contributed
+surface: CC BY 4.0 for `spec/`, and Apache-2.0 for other repository content
+unless that content is separately marked. Do not contribute material you do not
+have the right to submit under those terms.
+
+No contributor license agreement, certification program, or compatibility mark
+policy is currently established. Any future policy will be documented
+separately and will not be inferred from acceptance of a contribution.
