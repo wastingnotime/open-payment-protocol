@@ -29,3 +29,10 @@ def test_reused_key_is_documented_conflict():
         assert exc.error.code == "idempotency_key_already_used"
     else:
         raise AssertionError("expected Mercado Pago idempotency conflict")
+
+
+def test_mercado_pago_scenarios_expose_native_events():
+    results = run_all()
+    assert results["MP-PIX-001"]["observations"][0]["payload"]["type"] == "order.created"
+    assert results["MP-PIX-002"]["observations"][0]["payload"]["type"] == "order.rejected"
+    assert results["MP-PIX-003"]["observations"][0]["payload"]["type"] == "order.idempotency_conflict"

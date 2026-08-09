@@ -27,6 +27,7 @@ def _result(name: str, provider: MercadoPagoPixProvider, observations: list[dict
 def create_and_retrieve() -> dict[str, Any]:
     provider, observations = MercadoPagoPixProvider(), []
     order = provider.create_order(deepcopy(BASE_REQUEST), idempotency_key="mp-scenario-001")
+    observations.append({"type": "semantic_observation", "name": "native_event", "source": "mercadopago", "payload": {"type": "order.created", "order_id": order["id"]}})
     observations.append({"type": "semantic_observation", "name": "native_order_created", "source": "mercadopago", "payload": {"id": order["id"], "status": order["status"], "status_detail": order["status_detail"], "amount": order["total_amount"]}})
     retrieved = provider.retrieve_order(order["id"])
     observations.append({"type": "semantic_observation", "name": "native_order_retrieved", "source": "mercadopago", "payload": {"id": retrieved["id"], "payment_id": retrieved["transactions"]["payments"][0]["id"]}})
@@ -40,6 +41,7 @@ def invalid_total() -> dict[str, Any]:
     try:
         provider.create_order(request, idempotency_key="mp-scenario-002")
     except MercadoPagoNativeError as exc:
+        observations.append({"type": "semantic_observation", "name": "native_event", "source": "mercadopago", "payload": {"type": "order.rejected", "code": exc.error.code}})
         observations.append({"type": "semantic_observation", "name": "native_error", "source": "mercadopago", "payload": {"status": exc.error.status, "code": exc.error.code}})
     return _result("MP-PIX-002", provider, observations)
 
@@ -50,6 +52,7 @@ def idempotency_conflict() -> dict[str, Any]:
     try:
         provider.create_order(deepcopy(BASE_REQUEST), idempotency_key="mp-scenario-003")
     except MercadoPagoNativeError as exc:
+        observations.append({"type": "semantic_observation", "name": "native_event", "source": "mercadopago", "payload": {"type": "order.idempotency_conflict", "code": exc.error.code}})
         observations.append({"type": "semantic_observation", "name": "idempotency_conflict", "source": "mercadopago", "payload": {"status": exc.error.status, "code": exc.error.code}})
     return _result("MP-PIX-003", provider, observations)
 

@@ -3,7 +3,7 @@
 - Date: 2026-08-09
 - Command: `mrl-simulation supervise --once --scenario-factory app.simulation.mrl_runtime_scenario:create_simulation`
 - Direct runner: `SimulationRunner().run(create_simulation())`
-- Result: runtime started successfully; 25 observations emitted
+- Result: runtime started successfully; 28 observations emitted
 - Evidence mode: deterministic documentation-derived simulation; not provider sandbox evidence
 
 ## Observed Runtime Shape
