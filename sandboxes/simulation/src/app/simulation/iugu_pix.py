@@ -229,6 +229,8 @@ class IuguPixProvider:
         authorization_configured: bool = False,
     ) -> dict[str, Any]:
         """Record the documented Iugu trigger configuration boundary."""
+        if not event or not url:
+            raise IuguNativeError(NativeError(422, "required_parameter", "Webhook event and URL are required.", "research/iugu/webhooks.md"))
         configuration = {
             "event": event,
             "url": url,

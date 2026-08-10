@@ -13,7 +13,7 @@ def test_all_selected_scenarios_complete_with_native_observations():
 
 
 def test_iugu_slice_scenario_inventory_is_complete():
-    assert set(SCENARIOS) == {f"IUGU-PIX-{number:03d}" for number in range(1, 17)}
+    assert set(SCENARIOS) == {f"IUGU-PIX-{number:03d}" for number in range(1, 18)}
 
 
 def test_create_and_retrieve_preserves_iugu_invoice_shape():
@@ -145,3 +145,10 @@ def test_iugu_webhook_configuration_preserves_form_transport_and_auth_capability
     configuration = next(item for item in result.observations if item["name"] == "native_webhook_configuration")
     assert configuration["payload"]["content_type"] == "application/x-www-form-urlencoded"
     assert configuration["payload"]["authorization_configured"] is True
+
+
+def test_iugu_webhook_configuration_requires_event_and_url():
+    result = SCENARIOS["IUGU-PIX-017"]()
+    error = next(item for item in result.observations if item["name"] == "native_error")
+    assert error["payload"]["status"] == 422
+    assert error["payload"]["code"] == "required_parameter"

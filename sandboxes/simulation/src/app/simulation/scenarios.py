@@ -194,6 +194,15 @@ def configured_webhook_trigger() -> ScenarioResult:
     return _finish("IUGU-PIX-016", provider, log)
 
 
+def invalid_webhook_configuration() -> ScenarioResult:
+    provider, log = IuguPixProvider(), []
+    try:
+        provider.configure_webhook(event="", url="")
+    except IuguNativeError as exc:
+        _observation(log, "native_error", {"status": exc.error.status, "code": exc.error.code, "evidence": exc.error.evidence})
+    return _finish("IUGU-PIX-017", provider, log)
+
+
 def deterministic_replay() -> ScenarioResult:
     first = create_and_retrieve()
     second = create_and_retrieve()
@@ -221,6 +230,7 @@ SCENARIOS: dict[str, Callable[[], ScenarioResult]] = {
     "IUGU-PIX-014": successful_pix_webhook_event,
     "IUGU-PIX-015": canceled_webhook_event,
     "IUGU-PIX-016": configured_webhook_trigger,
+    "IUGU-PIX-017": invalid_webhook_configuration,
 }
 
 
