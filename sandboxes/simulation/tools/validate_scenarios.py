@@ -13,7 +13,7 @@ from app.simulation.mercadopago_scenarios import run_all as run_mercado_pago
 from app.simulation.pagarme_scenarios import run_all as run_pagarme
 from app.simulation.pagbank_scenarios import run_all as run_pagbank
 from app.simulation.scenarios import run_all as run_iugu
-from app.simulation.report_contract import REPORT_FIELDS, PROVIDER_SCENARIO_COUNTS, canonical_snapshot, field, validate_report
+from app.simulation.report_contract import REPORT_FIELDS, PROVIDER_SCENARIO_COUNTS, SECURITY_MARKERS, canonical_snapshot, field, validate_report
 
 
 def main() -> int:
@@ -41,7 +41,7 @@ def main() -> int:
             total += 1
         print(f"{provider}: {len(reports)} scenarios validated")
     serialized = json.dumps(serialized_reports).lower()
-    for marker in ("pan", "cvv", "card_number", "api_key", "access_token", "secret_key"):
+    for marker in SECURITY_MARKERS:
         assert marker not in serialized
     assert total == 50
     assert {provider: canonical_snapshot(reports) for provider, reports in runners.items()} == {

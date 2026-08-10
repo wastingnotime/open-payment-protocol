@@ -7,12 +7,13 @@ from collections.abc import Mapping
 from typing import Any
 
 
-__all__ = ["REPORT_FIELDS", "PROVIDER_PREFIXES", "PROVIDER_SCENARIO_COUNTS", "allowed_sources", "canonical_snapshot", "field", "validate_report"]
+__all__ = ["REPORT_FIELDS", "PROVIDER_PREFIXES", "PROVIDER_SCENARIO_COUNTS", "SECURITY_MARKERS", "allowed_sources", "canonical_snapshot", "field", "validate_report"]
 
 
 REPORT_FIELDS = ("name", "observations", "events", "projection")
 PROVIDER_PREFIXES = {"asaas": "AS-", "iugu": "IUGU-", "mercadopago": "MP-", "pagarme": "PG-", "pagbank": "PB-"}
 PROVIDER_SCENARIO_COUNTS = {"asaas": 8, "iugu": 13, "mercadopago": 10, "pagarme": 9, "pagbank": 10}
+SECURITY_MARKERS = ("pan", "cvv", "card_number", "api_key", "access_token", "secret_key")
 
 
 def field(report: Any, name: str) -> Any:
