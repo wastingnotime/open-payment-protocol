@@ -33,13 +33,14 @@ def canonical_snapshot(reports: Mapping[str, Any]) -> str:
 
 
 def validate_report(provider: str, scenario_id: str, report: Any) -> None:
-    assert scenario_id.startswith(PROVIDER_PREFIXES[provider])
-    assert field(report, "name") == scenario_id
-    assert isinstance(field(report, "events"), list)
-    assert isinstance(field(report, "projection"), dict)
+    context = f"{provider}/{scenario_id}"
+    assert scenario_id.startswith(PROVIDER_PREFIXES[provider]), f"{context}: invalid provider prefix"
+    assert field(report, "name") == scenario_id, f"{context}: report name mismatch"
+    assert isinstance(field(report, "events"), list), f"{context}: events must be a list"
+    assert isinstance(field(report, "projection"), dict), f"{context}: projection must be a mapping"
     observations = field(report, "observations")
-    assert observations
+    assert observations, f"{context}: observations must not be empty"
     for observation in observations:
-        assert {"type", "name", "source", "payload"} <= observation.keys()
-        assert observation["source"] in allowed_sources(provider)
-        assert observation["payload"]["scenario"] == scenario_id
+        assert {"type", "name", "source", "payload"} <= observation.keys(), f"{context}: incomplete observation envelope"
+        assert observation["source"] in allowed_sources(provider), f"{context}: invalid observation source"
+        assert observation["payload"]["scenario"] == scenario_id, f"{context}: observation attribution mismatch"
