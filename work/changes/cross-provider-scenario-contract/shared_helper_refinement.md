@@ -20,6 +20,7 @@ Pago, Pagar.me, and PagBank.
 That order will be exposed as a shared constant and checked by both
 validation paths.
 Provider-prefix and scenario-count mappings are read-only contract data.
+Allowed observation-source sets are read-only as well.
 The provider runner registry follows the same rule; callers consume
 `run_all_providers()` rather than mutating registration state.
 Regression tests cover both immutability boundaries.
