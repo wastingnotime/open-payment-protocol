@@ -85,6 +85,12 @@ def test_authentication_reports_never_contain_credential_values():
     assert "ACCESS_TOKEN_INVALID_DOCUMENTATION" not in serialized
 
 
+def test_asaas_error_boundary_reports_are_sanitized():
+    serialized = canonical_snapshot(run_all_providers()["asaas"])
+    assert_sanitized(serialized)
+    assert "ACCESS_TOKEN_DOCUMENTATION" not in serialized
+
+
 def test_asaas_authentication_observations_preserve_401_evidence():
     reports = run_all_providers()["asaas"]
     observations = [
