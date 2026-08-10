@@ -28,6 +28,8 @@ append-only event store for runtime inspection and later adapter pressure.
   asynchronous reconciliation of a known processing order.
 - Orders require exactly one Pix payment transaction; non-Pix or ambiguous
   payment shapes remain native property-value validation errors.
+- Order creation also requires the documented payer object; omitted required
+  properties remain a native 400 validation boundary.
 
 ## Remaining Questions
 
