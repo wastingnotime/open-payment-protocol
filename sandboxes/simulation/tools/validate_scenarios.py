@@ -27,14 +27,14 @@ def main() -> int:
             total += 1
         print(f"{provider}: {len(reports)} scenarios validated")
     assert_sanitized(json.dumps(serialized_reports))
-    assert total == 68
+    assert total == 69
     assert {provider: canonical_snapshot(reports) for provider, reports in runners.items()} == {
         provider: canonical_snapshot(reports) for provider, reports in second_run.items()
     }
     print(f"validated {total} scenarios")
     graph = GRAPH.snapshot()
     assert GRAPH.validation_errors() == []
-    assert len(GRAPH.scenario_ids) == 36
+    assert len(GRAPH.scenario_ids) == 37
     print(f"graph: {len(graph['nodes'])} nodes, {len(graph['topology_edges'])} topology edges, {len(graph['known_edges'])} known edges, {len(graph['deferred_edges'])} deferred edges")
     return 0
 

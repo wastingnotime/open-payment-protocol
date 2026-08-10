@@ -6,7 +6,7 @@ from app.simulation.asaas_scenarios import BASE_REQUEST, run_all
 
 def test_asaas_scenarios_complete():
     results = run_all()
-    assert set(results) == {f"AS-PIX-{number:03d}" for number in range(1, 11)}
+    assert set(results) == {f"AS-PIX-{number:03d}" for number in range(1, 12)}
 
 
 def test_payment_and_separate_qr_retrieval_are_preserved():
@@ -73,3 +73,10 @@ def test_asaas_redelivery_preserves_same_event_identity():
     notification = result["observations"][0]["payload"]
     assert notification["same_event_id"] is True
     assert notification["delivery_count"] == 2
+
+
+def test_overdue_notification_does_not_infer_response_status_transition():
+    result = run_all()["AS-PIX-011"]
+    notification = result["observations"][0]["payload"]
+    assert notification["event"] == "PAYMENT_OVERDUE"
+    assert notification["status_relationship"] == "documented_event_sequence_only"
