@@ -55,7 +55,7 @@ def main() -> int:
             total += 1
         print(f"{provider}: {len(reports)} scenarios validated")
     serialized = json.dumps(serialized_reports).lower()
-    for marker in ("pan", "cvv", "card_number"):
+    for marker in ("pan", "cvv", "card_number", "api_key", "access_token", "secret_key"):
         assert marker not in serialized
     assert total == 50
     def snapshot(reports):

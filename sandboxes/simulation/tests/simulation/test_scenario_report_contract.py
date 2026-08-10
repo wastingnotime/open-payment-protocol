@@ -46,9 +46,8 @@ def test_all_provider_scenario_reports_exclude_cardholder_data_markers():
         for report in scenarios.values():
             reports.append({name: _field(report, name) for name in ("name", "observations", "events", "projection")})
     serialized = json.dumps(reports).lower()
-    assert "pan" not in serialized
-    assert "cvv" not in serialized
-    assert "card_number" not in serialized
+    for marker in ("pan", "cvv", "card_number", "api_key", "access_token", "secret_key"):
+        assert marker not in serialized
 
 
 def test_all_provider_scenario_registries_are_deterministically_replayable():
