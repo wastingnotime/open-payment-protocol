@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 from collections.abc import Mapping
 from typing import Any
+from types import MappingProxyType
 
 
 __all__ = ["REPORT_FIELDS", "PROVIDER_ORDER", "PROVIDER_PREFIXES", "PROVIDER_SCENARIO_COUNTS", "SECURITY_MARKERS", "allowed_sources", "assert_sanitized", "canonical_snapshot", "field", "validate_report"]
@@ -12,8 +13,8 @@ __all__ = ["REPORT_FIELDS", "PROVIDER_ORDER", "PROVIDER_PREFIXES", "PROVIDER_SCE
 
 REPORT_FIELDS = ("name", "observations", "events", "projection")
 PROVIDER_ORDER = ("asaas", "iugu", "mercadopago", "pagarme", "pagbank")
-PROVIDER_PREFIXES = {"asaas": "AS-", "iugu": "IUGU-", "mercadopago": "MP-", "pagarme": "PG-", "pagbank": "PB-"}
-PROVIDER_SCENARIO_COUNTS = {"asaas": 8, "iugu": 13, "mercadopago": 10, "pagarme": 9, "pagbank": 10}
+PROVIDER_PREFIXES = MappingProxyType({"asaas": "AS-", "iugu": "IUGU-", "mercadopago": "MP-", "pagarme": "PG-", "pagbank": "PB-"})
+PROVIDER_SCENARIO_COUNTS = MappingProxyType({"asaas": 8, "iugu": 13, "mercadopago": 10, "pagarme": 9, "pagbank": 10})
 SECURITY_MARKERS = ("pan", "cvv", "card_number", "api_key", "access_token", "secret_key")
 
 
