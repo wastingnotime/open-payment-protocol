@@ -112,3 +112,6 @@ invalid_transition` boundary.
 
 Look up an invoice using an unknown external reference and preserve Iugu's
 native `404 invoice_not_found` boundary.
+
+All scenarios above are implemented in the shared simulation registry and
+retain Iugu-native invoice and Pix status fields.
