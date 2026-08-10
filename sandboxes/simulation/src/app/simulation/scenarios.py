@@ -236,6 +236,38 @@ def documented_rejected_webhook_event() -> ScenarioResult:
     return _finish("IUGU-PIX-021", provider, log)
 
 
+def documented_partially_refunded_webhook_event() -> ScenarioResult:
+    provider, log = IuguPixProvider(), []
+    created = provider.create_invoice(deepcopy(BASE_REQUEST))
+    payload = provider.webhook_form_payload(created["id"], event="invoice.partially_refunded")
+    _observation(log, "native_webhook_event", {"transport": "application/x-www-form-urlencoded", "event": payload["event"], "fields": payload, "state_transition": "event_only", "evidence": "research/iugu/webhooks.md"})
+    return _finish("IUGU-PIX-022", provider, log)
+
+
+def documented_refund_reverted_webhook_event() -> ScenarioResult:
+    provider, log = IuguPixProvider(), []
+    created = provider.create_invoice(deepcopy(BASE_REQUEST))
+    payload = provider.webhook_form_payload(created["id"], event="invoice.refund_reverted")
+    _observation(log, "native_webhook_event", {"transport": "application/x-www-form-urlencoded", "event": payload["event"], "fields": payload, "state_transition": "event_only", "evidence": "research/iugu/webhooks.md"})
+    return _finish("IUGU-PIX-023", provider, log)
+
+
+def documented_created_webhook_event() -> ScenarioResult:
+    provider, log = IuguPixProvider(), []
+    created = provider.create_invoice(deepcopy(BASE_REQUEST))
+    payload = provider.webhook_form_payload(created["id"], event="invoice.created")
+    _observation(log, "native_webhook_event", {"transport": "application/x-www-form-urlencoded", "event": payload["event"], "fields": payload, "state_transition": "event_only", "evidence": "research/iugu/webhooks.md"})
+    return _finish("IUGU-PIX-024", provider, log)
+
+
+def documented_released_webhook_event() -> ScenarioResult:
+    provider, log = IuguPixProvider(), []
+    created = provider.create_invoice(deepcopy(BASE_REQUEST))
+    payload = provider.webhook_form_payload(created["id"], event="invoice.released")
+    _observation(log, "native_webhook_event", {"transport": "application/x-www-form-urlencoded", "event": payload["event"], "fields": payload, "state_transition": "event_only", "relationship_to_pix_funds": "unknown", "evidence": "research/iugu/lifecycle.md"})
+    return _finish("IUGU-PIX-025", provider, log)
+
+
 def deterministic_replay() -> ScenarioResult:
     first = create_and_retrieve()
     second = create_and_retrieve()
@@ -268,6 +300,10 @@ SCENARIOS: dict[str, Callable[[], ScenarioResult]] = {
     "IUGU-PIX-019": documented_payment_failed_webhook_event,
     "IUGU-PIX-020": documented_refund_webhook_event,
     "IUGU-PIX-021": documented_rejected_webhook_event,
+    "IUGU-PIX-022": documented_partially_refunded_webhook_event,
+    "IUGU-PIX-023": documented_refund_reverted_webhook_event,
+    "IUGU-PIX-024": documented_created_webhook_event,
+    "IUGU-PIX-025": documented_released_webhook_event,
 }
 
 
