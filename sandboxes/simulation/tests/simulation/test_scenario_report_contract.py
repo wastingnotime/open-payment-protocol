@@ -40,7 +40,7 @@ def test_observation_inventory_preserves_provider_native_names():
     inventory = observation_inventory(run_all_providers())
     assert tuple(inventory) == PROVIDER_ORDER
     assert inventory["asaas"]["native_webhook_notification"] == 2
-    assert inventory["iugu"]["native_webhook_event"] == 2
+    assert inventory["iugu"]["native_webhook_event"] == 6
     assert inventory["mercadopago"]["native_webhook_notification"] == 1
     assert inventory["pagarme"]["native_webhook_delivery"] == 3
     assert inventory["pagbank"]["native_webhook_notification"] == 1

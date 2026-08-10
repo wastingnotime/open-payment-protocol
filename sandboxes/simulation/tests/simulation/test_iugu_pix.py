@@ -13,7 +13,7 @@ def test_all_selected_scenarios_complete_with_native_observations():
 
 
 def test_iugu_slice_scenario_inventory_is_complete():
-    assert set(SCENARIOS) == {f"IUGU-PIX-{number:03d}" for number in range(1, 18)}
+    assert set(SCENARIOS) == {f"IUGU-PIX-{number:03d}" for number in range(1, 22)}
 
 
 def test_create_and_retrieve_preserves_iugu_invoice_shape():
@@ -158,3 +158,11 @@ def test_iugu_webhook_configuration_requires_event_and_url():
     error = next(item for item in result.observations if item["name"] == "native_error")
     assert error["payload"]["status"] == 422
     assert error["payload"]["code"] == "required_parameter"
+
+
+def test_documented_iugu_event_envelopes_preserve_native_event_names():
+    results = run_all()
+    assert results["IUGU-PIX-018"].observations[0]["payload"]["event"] == "invoice.due"
+    assert results["IUGU-PIX-019"].observations[0]["payload"]["event"] == "invoice.payment_failed"
+    assert results["IUGU-PIX-020"].observations[0]["payload"]["event"] == "invoice.refund"
+    assert results["IUGU-PIX-021"].observations[0]["payload"]["event"] == "invoice.rejected"
