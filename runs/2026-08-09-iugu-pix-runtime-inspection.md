@@ -3,12 +3,12 @@
 - Date: 2026-08-09
 - Command: `mrl-simulation supervise --once --scenario-factory app.simulation.mrl_runtime_scenario:create_simulation`
 - Direct runner: `SimulationRunner().run(create_simulation())`
-- Result: runtime started successfully; 61 observations emitted
+- Result: runtime started successfully; 62 observations emitted
 - Evidence mode: deterministic documentation-derived simulation; not provider sandbox evidence
 
 ## Observed Runtime Shape
 
-The runtime emitted `scenario_started`, one scheduled action, twenty-four scenario
+The runtime emitted `scenario_started`, one scheduled action, twenty-five scenario
 traces, and `scenario_finished`. Each semantic observation now carries its
 scenario identifier in the payload, allowing the combined runtime stream to be
 partitioned without introducing separate simulations per provider or scenario.
