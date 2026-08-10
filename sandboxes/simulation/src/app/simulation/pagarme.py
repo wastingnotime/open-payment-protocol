@@ -26,6 +26,7 @@ class PagarmeStore:
     orders: dict[str, dict[str, Any]] = field(default_factory=dict)
     charges: dict[str, dict[str, Any]] = field(default_factory=dict)
     events: list[dict[str, Any]] = field(default_factory=list)
+    webhooks: dict[str, dict[str, Any]] = field(default_factory=dict)
     next_id: int = 1
 
 
@@ -105,7 +106,20 @@ class PagarmePixProvider:
             "account": "acc_DOCUMENTATION",
             "data": deepcopy(data),
         }
+        self.store.webhooks[delivery["id"]] = deepcopy(delivery)
         self.store.events.append({"type": "webhook_delivery", "payload": {"webhook_id": delivery["id"], "event": event, "status": status, "response_status": response_status, "evidence": "research/pagarme/webhooks.md"}})
+        return deepcopy(delivery)
+
+    def resend_webhook(self, webhook_id: str, *, response_status: int = 200) -> dict[str, Any]:
+        """Manually resend a recorded webhook delivery."""
+        delivery = self.store.webhooks.get(webhook_id)
+        if delivery is None:
+            raise PagarmeNativeError(PagarmeError(404, "webhook_not_found", "The webhook was not found.", "research/pagarme/webhooks.md"))
+        delivery["attempts"] += 1
+        delivery["status"] = "sent" if 200 <= response_status < 300 else "failed"
+        delivery["last_attempt"] = "2030-01-01T12:00:01Z"
+        delivery["response_status"] = response_status
+        self.store.events.append({"type": "webhook_resent", "payload": {"webhook_id": webhook_id, "status": delivery["status"], "attempts": delivery["attempts"], "response_status": response_status, "evidence": "research/pagarme/webhooks.md"}})
         return deepcopy(delivery)
 
     def _validate(self, request: dict[str, Any]) -> None:

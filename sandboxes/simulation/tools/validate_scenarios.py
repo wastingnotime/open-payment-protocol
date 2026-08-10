@@ -27,7 +27,7 @@ def main() -> int:
             total += 1
         print(f"{provider}: {len(reports)} scenarios validated")
     assert_sanitized(json.dumps(serialized_reports))
-    assert total == 52
+    assert total == 53
     assert {provider: canonical_snapshot(reports) for provider, reports in runners.items()} == {
         provider: canonical_snapshot(reports) for provider, reports in second_run.items()
     }
