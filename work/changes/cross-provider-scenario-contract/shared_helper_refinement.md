@@ -30,6 +30,8 @@ Validation consumers should import the shared helper surface without duplicate
 provider-specific aliases.
 Missing report fields should be reported as contract failures with the field
 name included.
+`run_all_providers()` returns a fresh provider-keyed mapping whose keys follow
+`PROVIDER_ORDER`.
 The provider runner registry follows the same rule; callers consume
 `run_all_providers()` rather than mutating registration state.
 Regression tests cover both immutability boundaries.
