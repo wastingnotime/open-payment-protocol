@@ -18,12 +18,11 @@ def test_all_provider_scenarios_preserve_comparable_report_shape():
     assert {provider: len(scenarios) for provider, scenarios in registries.items()} == {
         "asaas": 8, "iugu": 13, "mercadopago": 10, "pagarme": 9, "pagbank": 10,
     }
-    prefixes = {"asaas": "AS-", "iugu": "IUGU-", "mercadopago": "MP-", "pagarme": "PG-", "pagbank": "PB-"}
     assert sum(len(scenarios) for scenarios in registries.values()) == 50
     for provider, scenarios in registries.items():
         assert scenarios
         for scenario_id, report in scenarios.items():
-            assert scenario_id.startswith(prefixes[provider])
+            assert scenario_id.startswith(PROVIDER_PREFIXES[provider])
             assert field(report, "name") == scenario_id
             assert isinstance(field(report, "events"), list)
             assert isinstance(field(report, "projection"), dict)
