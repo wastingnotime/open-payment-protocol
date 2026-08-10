@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from copy import deepcopy
 from dataclasses import dataclass, field
+from decimal import Decimal
 import hashlib
 import hmac
 from typing import Any
@@ -85,6 +86,37 @@ class MercadoPagoPixProvider:
             self._event("order_retrieve_rejected", {"order_id": order_id})
             raise MercadoPagoNativeError(MercadoPagoError(404, "order_not_found", "The order was not found."))
         self._event("order_retrieved", {"order_id": order_id})
+        return deepcopy(order)
+
+    def mark_pix_approved(self, order_id: str) -> dict[str, Any]:
+        order = self.store.orders.get(order_id)
+        if order is None:
+            raise MercadoPagoNativeError(MercadoPagoError(404, "order_not_found", "The order was not found."))
+        payment = order["transactions"]["payments"][0]
+        if payment["status"] != "action_required":
+            raise MercadoPagoNativeError(MercadoPagoError(400, "invalid_status", "The payment is not awaiting approval."))
+        order["status"] = payment["status"] = "processed"
+        order["status_detail"] = payment["status_detail"] = "accredited"
+        payment["paid_amount"] = payment["amount"]
+        self._event("payment_approved", {"order_id": order_id, "payment_id": payment["id"], "status": payment["status"]})
+        return deepcopy(order)
+
+    def refund_order(self, order_id: str, *, amount: str | None = None) -> dict[str, Any]:
+        order = self.store.orders.get(order_id)
+        if order is None:
+            raise MercadoPagoNativeError(MercadoPagoError(404, "order_not_found", "The order was not found."))
+        payment = order["transactions"]["payments"][0]
+        if payment["status"] != "processed":
+            raise MercadoPagoNativeError(MercadoPagoError(400, "invalid_status", "Only processed Pix payments can be refunded."))
+        total = Decimal(payment["amount"])
+        refunded = Decimal(payment.get("refunded_amount", "0.00"))
+        refund_amount = total - refunded if amount is None else Decimal(amount)
+        if refund_amount <= 0 or refunded + refund_amount > total:
+            raise MercadoPagoNativeError(MercadoPagoError(400, "invalid_refund_amount", "Refund amount exceeds the refundable payment amount."))
+        payment["refunded_amount"] = f"{refunded + refund_amount:.2f}"
+        payment["status"] = "refunded" if refunded + refund_amount == total else "partially_refunded"
+        order["status"] = payment["status"]
+        self._event("payment_refunded", {"order_id": order_id, "payment_id": payment["id"], "amount": f"{refund_amount:.2f}", "status": payment["status"], "funds_returned_to": "payer_account", "refund_window_days": 180})
         return deepcopy(order)
 
     def create_async_order_variant(self, request: dict[str, Any]) -> dict[str, Any]:

@@ -120,3 +120,27 @@ def test_order_notification_points_to_authoritative_order_id():
     notification = result["observations"][0]["payload"]
     assert notification["authoritative_reconciliation"] == "get"
     assert notification["order_id"].startswith("ORD_ASYNC_DOCUMENTATION_")
+
+
+def test_refund_preserves_decimal_amounts_and_partial_status():
+    provider = MercadoPagoPixProvider()
+    order = provider.create_order(deepcopy(BASE_REQUEST), idempotency_key="refund-001")
+    provider.mark_pix_approved(order["id"])
+
+    refunded = provider.refund_order(order["id"], amount="20.00")
+
+    payment = refunded["transactions"]["payments"][0]
+    assert payment["status"] == "partially_refunded"
+    assert payment["refunded_amount"] == "20.00"
+    assert refunded["status"] == "partially_refunded"
+
+
+def test_refund_without_amount_refunds_remaining_total():
+    provider = MercadoPagoPixProvider()
+    order = provider.create_order(deepcopy(BASE_REQUEST), idempotency_key="refund-002")
+    provider.mark_pix_approved(order["id"])
+
+    refunded = provider.refund_order(order["id"])
+
+    assert refunded["status"] == "refunded"
+    assert refunded["transactions"]["payments"][0]["refunded_amount"] == "50.00"
