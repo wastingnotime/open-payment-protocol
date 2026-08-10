@@ -12,6 +12,10 @@ def test_all_selected_scenarios_complete_with_native_observations():
         assert result.events is not None
 
 
+def test_iugu_slice_scenario_inventory_is_complete():
+    assert set(SCENARIOS) == {f"IUGU-PIX-{number:03d}" for number in range(1, 14)}
+
+
 def test_create_and_retrieve_preserves_iugu_invoice_shape():
     provider = IuguPixProvider()
     invoice = provider.create_invoice(deepcopy(BASE_REQUEST), idempotency_key="test-1")
