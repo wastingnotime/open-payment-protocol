@@ -11,3 +11,7 @@
 
 Response-status transitions, retry schedule, acknowledgement codes, ordering,
 authentication, and queue behavior remain unmodeled.
+
+Final validation preserves the complete native payment object in each event
+envelope and keeps duplicate delivery identity separate from response-status
+transition semantics.
