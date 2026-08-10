@@ -102,3 +102,8 @@ end-to-end ID. This intentionally keeps cancellation non-final for Iugu.
 
 Attempt to cancel an invoice after the documented Pix payment transition and
 preserve Iugu's native `422 invalid_transition` boundary.
+
+### IUGU-PIX-012 — Reject payment after expiration
+
+Attempt to pay an expired invoice and preserve the native `422
+invalid_transition` boundary.

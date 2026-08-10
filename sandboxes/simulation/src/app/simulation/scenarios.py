@@ -145,6 +145,17 @@ def invalid_paid_cancellation() -> ScenarioResult:
     return _finish("IUGU-PIX-011", provider, log)
 
 
+def invalid_expired_payment() -> ScenarioResult:
+    provider, log = IuguPixProvider(), []
+    created = provider.create_invoice(deepcopy(BASE_REQUEST))
+    provider.expire_invoice(created["id"])
+    try:
+        provider.mark_pix_paid(created["id"], end_to_end_id="E2E_EXPIRED_FIXTURE")
+    except IuguNativeError as exc:
+        _observation(log, "native_error", {"status": exc.error.status, "code": exc.error.code, "evidence": exc.error.evidence})
+    return _finish("IUGU-PIX-012", provider, log)
+
+
 def deterministic_replay() -> ScenarioResult:
     first = create_and_retrieve()
     second = create_and_retrieve()
@@ -167,6 +178,7 @@ SCENARIOS: dict[str, Callable[[], ScenarioResult]] = {
     "IUGU-PIX-009": expired_invoice_transition,
     "IUGU-PIX-010": canceled_invoice_recovery,
     "IUGU-PIX-011": invalid_paid_cancellation,
+    "IUGU-PIX-012": invalid_expired_payment,
 }
 
 
