@@ -5,3 +5,5 @@ The final cycle adds a replay check across all provider registries, comparing
 the report's minimum fields without requiring provider payloads to share a
 schema. The assertion must capture two named snapshots per provider so a
 future edit cannot accidentally compare a value to itself.
+Canonical snapshots must sort reports by their reported scenario name so
+registry insertion order cannot change the replay receipt.
