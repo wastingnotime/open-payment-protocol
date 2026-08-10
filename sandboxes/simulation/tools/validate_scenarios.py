@@ -9,6 +9,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from app.simulation.scenario_registry import run_all_providers
+from app.simulation.native_graph import GRAPH
 from app.simulation.report_contract import PROVIDER_ORDER, REPORT_FIELDS, PROVIDER_SCENARIO_COUNTS, assert_sanitized, canonical_snapshot, field, validate_report
 
 
@@ -31,6 +32,8 @@ def main() -> int:
         provider: canonical_snapshot(reports) for provider, reports in second_run.items()
     }
     print(f"validated {total} scenarios")
+    graph = GRAPH.snapshot()
+    print(f"graph: {len(graph['nodes'])} nodes, {len(graph['known_edges'])} known edges, {len(graph['deferred_edges'])} deferred edges")
     return 0
 
 

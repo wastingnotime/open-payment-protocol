@@ -23,3 +23,11 @@ def test_deferred_graph_edges_remain_explicit_and_non_executable():
         assert edge.target not in registries[edge.provider]
         assert edge.reason
         assert edge.evidence.startswith("research/")
+
+
+def test_graph_snapshot_exposes_executable_and_deferred_nodes():
+    snapshot = GRAPH.snapshot()
+    assert len(snapshot["nodes"]) == 20
+    assert sum(node["kind"] == "deferred" for node in snapshot["nodes"]) == 2
+    assert len(snapshot["known_edges"]) == 13
+    assert len(snapshot["deferred_edges"]) == 2

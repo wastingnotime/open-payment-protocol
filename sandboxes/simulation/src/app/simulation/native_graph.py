@@ -8,7 +8,6 @@ OPP status model.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any
 
 
 @dataclass(frozen=True)
@@ -47,6 +46,13 @@ class NativeScenarioGraph:
     @property
     def node_ids(self) -> frozenset[str]:
         return frozenset(node.id for node in self.nodes)
+
+    def snapshot(self) -> dict[str, object]:
+        return {
+            "nodes": [node.__dict__.copy() for node in self.nodes],
+            "known_edges": [edge.__dict__.copy() for edge in self.known_edges],
+            "deferred_edges": [edge.__dict__.copy() for edge in self.deferred_edges],
+        }
 
 
 def _scenario_node(provider: str, scenario_id: str, label: str) -> GraphNode:
