@@ -10,6 +10,10 @@ def _field(report, name):
     return report[name] if isinstance(report, dict) else getattr(report, name)
 
 
+def _allowed_sources(provider):
+    return {provider, "simulation"} if provider == "iugu" else {provider}
+
+
 def test_all_provider_scenarios_preserve_comparable_report_shape():
     registries = {
         "asaas": run_asaas(),
@@ -31,8 +35,7 @@ def test_all_provider_scenarios_preserve_comparable_report_shape():
             assert _field(report, "observations")
             for observation in _field(report, "observations"):
                 assert set(("type", "name", "source", "payload")) <= observation.keys()
-                allowed_sources = {provider, "simulation"} if provider == "iugu" else {provider}
-                assert observation["source"] in allowed_sources
+                assert observation["source"] in _allowed_sources(provider)
                 assert observation["payload"]["scenario"] == scenario_id
 
 

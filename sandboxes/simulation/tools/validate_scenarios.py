@@ -19,6 +19,10 @@ def field(report, name):
     return report[name] if isinstance(report, dict) else getattr(report, name)
 
 
+def allowed_sources(provider):
+    return {provider, "simulation"} if provider == "iugu" else {provider}
+
+
 def main() -> int:
     runners = {
         "asaas": run_asaas(),
@@ -45,8 +49,7 @@ def main() -> int:
             assert observations
             for observation in observations:
                 assert {"type", "name", "source", "payload"} <= observation.keys()
-                allowed_sources = {provider, "simulation"} if provider == "iugu" else {provider}
-                assert observation["source"] in allowed_sources
+                assert observation["source"] in allowed_sources(provider)
                 assert observation["payload"]["scenario"] == scenario_id
             serialized_reports.append({name: field(report, name) for name in ("name", "observations", "events", "projection")})
             total += 1
