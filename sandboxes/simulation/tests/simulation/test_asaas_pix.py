@@ -1,4 +1,5 @@
 from copy import deepcopy
+import json
 
 from app.simulation.asaas import AsaasPixProvider
 from app.simulation.asaas_scenarios import BASE_REQUEST, run_all
@@ -80,3 +81,8 @@ def test_overdue_notification_does_not_infer_response_status_transition():
     notification = result["observations"][0]["payload"]
     assert notification["event"] == "PAYMENT_OVERDUE"
     assert notification["status_relationship"] == "documented_event_sequence_only"
+
+
+def test_asaas_notification_report_does_not_expose_account_identity_secret():
+    result = run_all()["AS-PIX-009"]
+    assert "ACCOUNT_DOCUMENTATION" not in json.dumps(result, sort_keys=True)
