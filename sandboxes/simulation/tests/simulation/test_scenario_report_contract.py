@@ -92,6 +92,11 @@ def test_asaas_authentication_observations_preserve_401_evidence():
     assert all(observation["payload"]["evidence"] == "research/asaas/errors.md" for observation in observations)
 
 
+def test_observation_inventory_preserves_iugu_documented_event_names():
+    inventory = observation_inventory(run_all_providers())
+    assert inventory["iugu"]["native_webhook_event"] == 6
+
+
 def test_observation_inventory_covers_every_provider_scenario():
     registries = run_all_providers()
     inventory = observation_inventory(registries)
