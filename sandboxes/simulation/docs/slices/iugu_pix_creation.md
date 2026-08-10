@@ -26,6 +26,11 @@ unsupported or explicitly unknown.
 Executable scenarios are `IUGU-PIX-001` through `IUGU-PIX-025` in
 `simulators/iugu/scenarios.md`.
 
+The webhook event inventory preserves `invoice.created`,
+`invoice.status_changed`, `invoice.payment_failed`, `invoice.due`,
+`invoice.refund`, `invoice.partially_refunded`, `invoice.refund_reverted`, and
+`invoice.rejected`; `invoice.released` remains an event-only unknown boundary.
+
 ## Native Use-Case Contract
 
 Given an Iugu-specific create-invoice command, the simulator validates only
