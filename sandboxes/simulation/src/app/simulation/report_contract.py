@@ -40,6 +40,7 @@ def canonical_snapshot(reports: Mapping[str, Any]) -> str:
         [{name: field(report, name) for name in REPORT_FIELDS} for report in sorted(reports.values(), key=lambda item: field(item, "name"))],
         sort_keys=True,
         separators=(",", ":"),
+        allow_nan=False,
     )
 
 

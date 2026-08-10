@@ -1,4 +1,5 @@
 import json
+import math
 
 import pytest
 
@@ -42,6 +43,12 @@ def test_canonical_snapshot_ignores_registry_insertion_order():
     }
     reversed_reports = dict(reversed(list(reports.items())))
     assert canonical_snapshot(reports) == canonical_snapshot(reversed_reports)
+
+
+def test_canonical_snapshot_rejects_nonstandard_numbers():
+    reports = {"one": {"name": "A", "observations": [], "events": [], "projection": {"value": math.nan}}}
+    with pytest.raises(ValueError, match="Out of range float values"):
+        canonical_snapshot(reports)
 
 
 def test_contract_mappings_are_immutable():
