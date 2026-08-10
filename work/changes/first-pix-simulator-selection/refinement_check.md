@@ -43,6 +43,8 @@ references, and the documented 409 idempotency conflict.
   paid invoice is canceled; the simulator does not imply an illegal reversal.
 - The lifecycle matrix also rejects payment after expiration with the same
   native invalid-transition boundary; expired state is not silently reopened.
+- Caller-reference lookup preserves a native 404 when neither external
+  reference nor order ID matches, without falling back to broad retrieval.
 - Iugu's conflicting payer requirements remain unsupported/unknown combinations.
 - Exact provider error bodies, idempotency retention, expiry, refunds, and
   webhook delivery remain deferred as documented in the slice plan.
