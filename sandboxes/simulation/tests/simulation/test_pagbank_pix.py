@@ -6,7 +6,7 @@ from app.simulation.pagbank_scenarios import BASE_REQUEST, run_all
 
 def test_pagbank_scenarios_complete():
     results = run_all()
-    assert set(results) == {"PB-PIX-001", "PB-PIX-002", "PB-PIX-003", "PB-PIX-004", "PB-PIX-005", "PB-PIX-006", "PB-PIX-007", "PB-PIX-008", "PB-PIX-009"}
+    assert set(results) == {"PB-PIX-001", "PB-PIX-002", "PB-PIX-003", "PB-PIX-004", "PB-PIX-005", "PB-PIX-006", "PB-PIX-007", "PB-PIX-008", "PB-PIX-009", "PB-PIX-010"}
     assert results["PB-PIX-001"]["projection"]
 
 
@@ -68,6 +68,13 @@ def test_missing_qr_codes_is_native_required_parameter_boundary():
 
 def test_missing_reference_id_is_native_required_parameter_boundary():
     result = run_all()["PB-PIX-009"]
+    error = result["observations"][0]["payload"]
+    assert error["status"] == 400
+    assert error["code"] == "required_parameter"
+
+
+def test_missing_idempotency_key_is_native_required_parameter_boundary():
+    result = run_all()["PB-PIX-010"]
     error = result["observations"][0]["payload"]
     assert error["status"] == 400
     assert error["code"] == "required_parameter"

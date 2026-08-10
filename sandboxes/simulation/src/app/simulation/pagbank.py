@@ -36,6 +36,8 @@ class PagBankPixProvider:
         self.store = store or PagBankStore()
 
     def create_order(self, request: dict[str, Any], *, idempotency_key: str) -> dict[str, Any]:
+        if not idempotency_key:
+            raise PagBankNativeError(PagBankError(400, "required_parameter", "An idempotency key is required."))
         if idempotency_key in self.store.idempotency:
             self._event("order_create_rejected", {"code": "idempotency_key_in_use"})
             raise PagBankNativeError(PagBankError(409, "idempotency_key_in_use", "The idempotency key is already in use."))

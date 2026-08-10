@@ -118,7 +118,16 @@ def missing_reference_id() -> dict[str, Any]:
     return _result("PB-PIX-009", provider, observations)
 
 
-SCENARIOS = {"PB-PIX-001": create_and_retrieve, "PB-PIX-002": invalid_amount, "PB-PIX-003": idempotency_conflict, "PB-PIX-004": charge_emerges_after_pix_payment, "PB-PIX-005": unknown_order_retrieval, "PB-PIX-006": duplicate_pix_payment, "PB-PIX-007": multiple_qr_codes, "PB-PIX-008": missing_qr_codes, "PB-PIX-009": missing_reference_id}
+def missing_idempotency_key() -> dict[str, Any]:
+    provider, observations = PagBankPixProvider(), []
+    try:
+        provider.create_order(deepcopy(BASE_REQUEST), idempotency_key="")
+    except PagBankNativeError as exc:
+        observations.append({"type": "semantic_observation", "name": "native_error", "source": "pagbank", "payload": {"status": exc.error.status, "code": exc.error.code}})
+    return _result("PB-PIX-010", provider, observations)
+
+
+SCENARIOS = {"PB-PIX-001": create_and_retrieve, "PB-PIX-002": invalid_amount, "PB-PIX-003": idempotency_conflict, "PB-PIX-004": charge_emerges_after_pix_payment, "PB-PIX-005": unknown_order_retrieval, "PB-PIX-006": duplicate_pix_payment, "PB-PIX-007": multiple_qr_codes, "PB-PIX-008": missing_qr_codes, "PB-PIX-009": missing_reference_id, "PB-PIX-010": missing_idempotency_key}
 
 
 def run_all() -> dict[str, dict[str, Any]]:
