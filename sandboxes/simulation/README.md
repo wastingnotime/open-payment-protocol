@@ -27,7 +27,9 @@ It distinguishes executable transitions from explicitly deferred edges.
 Run the pure scenario suite with `pytest -q sandboxes/simulation/tests` or
 emit a canonical report with
 `python3 sandboxes/simulation/tools/run_iugu_pix.py`. WNT MRL Runtime
-supervision additionally requires the user-space runtime installation.
+supervision additionally requires the user-space runtime installation; start a
+fresh session with `mrl-simulation supervise` after changing the graph so its
+stream includes the `graph_route` beam observations.
 
 ## Layout
 
