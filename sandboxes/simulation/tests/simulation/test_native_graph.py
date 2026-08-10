@@ -75,6 +75,10 @@ def test_observatory_spec_contains_runtime_visible_nodes_and_edges():
     assert {node["domain"] for node in spec["nodes"]} == {"payment-provider-discovery"}
 
 
+def test_observatory_summary_matches_runtime_graph_contract():
+    assert GRAPH.observatory_summary() == {"nodes": 63, "edges": 95, "actors": 6, "scenarios": 38, "resources": 11}
+
+
 def test_beam_observations_route_between_declared_connected_nodes():
     observations = GRAPH.beam_observations()
     spec = GRAPH.observatory_spec()

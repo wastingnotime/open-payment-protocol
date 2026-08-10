@@ -76,6 +76,10 @@ class NativeScenarioGraph:
             "deferred_edges": [edge.__dict__.copy() for edge in self.deferred_edges],
         }
 
+    def observatory_summary(self) -> dict[str, int]:
+        spec = self.observatory_spec()
+        return {"nodes": len(spec["nodes"]), "edges": len(spec["edges"]), "actors": len(self.actor_ids), "scenarios": len(self.scenario_ids), "resources": len(self.resource_ids)}
+
     def validation_errors(self) -> list[str]:
         """Return structural graph defects without normalizing provider facts."""
         errors: list[str] = []
