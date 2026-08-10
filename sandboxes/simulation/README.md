@@ -14,7 +14,8 @@ pressure, and an explicit model release.
 The five-provider documentation baseline is complete. All five native
 create/retrieve increments are runnable with deterministic tests and scenario
 reports. The project is now refining cross-provider lifecycle pressure. Bounded
-lifecycle/event-delivery increments are runnable for Pagar.me and Iugu.
+lifecycle/event-delivery increments are runnable for Pagar.me, Iugu, and
+PagBank.
 
 The selection evidence is recorded in
 [`research/pix-simulator-selection.md`](../../research/pix-simulator-selection.md)
