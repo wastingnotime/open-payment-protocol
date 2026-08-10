@@ -42,6 +42,14 @@ class AsaasPixProvider:
             raise AsaasNativeError(AsaasError(401, "invalid_access_token", "The access token is invalid."))
         return {"environment": environment, "status": "authenticated"}
 
+    @staticmethod
+    def simulate_rate_limit() -> None:
+        raise AsaasNativeError(AsaasError(429, "rate_limit", "The documented request limit was exceeded.", "research/asaas/errors.md"))
+
+    @staticmethod
+    def simulate_unknown_create_result(*, transport: str = "http_500") -> None:
+        raise AsaasNativeError(AsaasError(500, "internal_error", f"The create result is unknown after {transport}.", "research/asaas/errors.md"))
+
     def create_payment(self, request: dict[str, Any]) -> dict[str, Any]:
         self._validate(request)
         payment_id = f"pay_documentation_{self.store.next_id:06d}"

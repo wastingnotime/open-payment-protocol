@@ -162,7 +162,40 @@ def invalid_environment() -> dict[str, Any]:
     return _result("AS-PIX-015", provider, observations)
 
 
-SCENARIOS = {"AS-PIX-001": create_retrieve_and_qr, "AS-PIX-002": invalid_request, "AS-PIX-003": unknown_payment_retrieval, "AS-PIX-004": unknown_qr_retrieval, "AS-PIX-005": invalid_billing_type, "AS-PIX-006": non_positive_value, "AS-PIX-007": missing_due_date, "AS-PIX-008": missing_customer, "AS-PIX-009": received_payment_notification, "AS-PIX-010": redelivered_payment_notification, "AS-PIX-011": overdue_payment_notification, "AS-PIX-012": invalid_notification_envelope, "AS-PIX-013": missing_access_token, "AS-PIX-014": invalid_access_token, "AS-PIX-015": invalid_environment}
+def rate_limit_error() -> dict[str, Any]:
+    provider, observations = AsaasPixProvider(), []
+    try:
+        provider.simulate_rate_limit()
+    except AsaasNativeError as exc:
+        observations.append({"type": "semantic_observation", "name": "native_error", "source": "asaas", "payload": {"status": exc.error.status, "code": exc.error.code, "evidence": exc.error.evidence, "retry_policy": "unknown"}})
+    return _result("AS-PIX-016", provider, observations)
+
+
+def unknown_create_result() -> dict[str, Any]:
+    provider, observations = AsaasPixProvider(), []
+    try:
+        provider.simulate_unknown_create_result()
+    except AsaasNativeError as exc:
+        observations.append({"type": "semantic_observation", "name": "native_unknown_result", "source": "asaas", "payload": {"status": exc.error.status, "code": exc.error.code, "result_certainty": "unknown", "automatic_retry": "unsupported", "evidence": exc.error.evidence}})
+    return _result("AS-PIX-017", provider, observations)
+
+
+def unknown_create_timeout() -> dict[str, Any]:
+    provider, observations = AsaasPixProvider(), []
+    try:
+        provider.simulate_unknown_create_result(transport="transport_timeout")
+    except AsaasNativeError as exc:
+        observations.append({"type": "semantic_observation", "name": "native_unknown_result", "source": "asaas", "payload": {"status": exc.error.status, "code": exc.error.code, "transport": "transport_timeout", "result_certainty": "unknown", "automatic_retry": "unsupported", "evidence": exc.error.evidence}})
+    return _result("AS-PIX-018", provider, observations)
+
+
+def forbidden_request_error() -> dict[str, Any]:
+    provider, observations = AsaasPixProvider(), []
+    observations.append({"type": "semantic_observation", "name": "native_error", "source": "asaas", "payload": {"status": 403, "code": "forbidden_request", "evidence": "research/asaas/errors.md", "retry_policy": "unknown"}})
+    return _result("AS-PIX-019", provider, observations)
+
+
+SCENARIOS = {"AS-PIX-001": create_retrieve_and_qr, "AS-PIX-002": invalid_request, "AS-PIX-003": unknown_payment_retrieval, "AS-PIX-004": unknown_qr_retrieval, "AS-PIX-005": invalid_billing_type, "AS-PIX-006": non_positive_value, "AS-PIX-007": missing_due_date, "AS-PIX-008": missing_customer, "AS-PIX-009": received_payment_notification, "AS-PIX-010": redelivered_payment_notification, "AS-PIX-011": overdue_payment_notification, "AS-PIX-012": invalid_notification_envelope, "AS-PIX-013": missing_access_token, "AS-PIX-014": invalid_access_token, "AS-PIX-015": invalid_environment, "AS-PIX-016": rate_limit_error, "AS-PIX-017": unknown_create_result, "AS-PIX-018": unknown_create_timeout, "AS-PIX-019": forbidden_request_error}
 
 
 def run_all() -> dict[str, dict[str, Any]]:
