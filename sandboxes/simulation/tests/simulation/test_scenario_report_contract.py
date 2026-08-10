@@ -40,7 +40,7 @@ def test_observation_inventory_preserves_provider_native_names():
     inventory = observation_inventory(run_all_providers())
     assert tuple(inventory) == PROVIDER_ORDER
     assert inventory["asaas"]["native_webhook_notification"] == 2
-    assert inventory["iugu"]["native_webhook_event"] == 6
+    assert inventory["iugu"]["native_webhook_event"] == 10
     assert inventory["mercadopago"]["native_webhook_notification"] == 1
     assert inventory["pagarme"]["native_webhook_delivery"] == 3
     assert inventory["pagbank"]["native_webhook_notification"] == 1
@@ -94,11 +94,11 @@ def test_asaas_authentication_observations_preserve_401_evidence():
 
 def test_observation_inventory_preserves_iugu_documented_event_names():
     inventory = observation_inventory(run_all_providers())
-    assert inventory["iugu"]["native_webhook_event"] == 6
+    assert inventory["iugu"]["native_webhook_event"] == 10
 
 
 def test_iugu_webhook_event_contract_is_immutable_and_provider_native():
-    assert PROVIDER_NATIVE_WEBHOOK_EVENTS["iugu"][-3:] == ("invoice.payment_failed", "invoice.refund", "invoice.rejected")
+    assert PROVIDER_NATIVE_WEBHOOK_EVENTS["iugu"][-4:] == ("invoice.refund_reverted", "invoice.created", "invoice.released")[-4:]
     with pytest.raises(TypeError):
         PROVIDER_NATIVE_WEBHOOK_EVENTS["iugu"] = ()
 

@@ -19,7 +19,7 @@ TOTAL_SCENARIO_COUNT = sum(PROVIDER_SCENARIO_COUNTS.values())
 SECURITY_MARKERS = ("pan", "cvv", "card_number", "api_key_value", "access_token_value", "secret_key_value")
 ERROR_OBSERVATION_NAMES = frozenset(("native_error", "native_authentication_error"))
 PROVIDER_NATIVE_WEBHOOK_EVENTS: Mapping[str, tuple[str, ...]] = MappingProxyType({
-    "iugu": ("invoice.status_changed", "invoice.due", "invoice.payment_failed", "invoice.refund", "invoice.rejected"),
+    "iugu": ("invoice.status_changed", "invoice.due", "invoice.payment_failed", "invoice.refund", "invoice.rejected", "invoice.partially_refunded", "invoice.refund_reverted", "invoice.created", "invoice.released"),
 })
 
 
