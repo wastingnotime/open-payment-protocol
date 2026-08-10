@@ -6,7 +6,7 @@ from app.simulation.pagarme_scenarios import BASE_REQUEST, run_all
 
 def test_pagarme_scenarios_complete():
     results = run_all()
-    assert set(results) == {"PG-PIX-001", "PG-PIX-002", "PG-PIX-003", "PG-PIX-004", "PG-PIX-005", "PG-PIX-006", "PG-PIX-007"}
+    assert set(results) == {"PG-PIX-001", "PG-PIX-002", "PG-PIX-003", "PG-PIX-004", "PG-PIX-005", "PG-PIX-006", "PG-PIX-007", "PG-PIX-008"}
 
 
 def test_order_charge_transaction_hierarchy_is_preserved():
@@ -50,3 +50,11 @@ def test_missing_payments_is_native_required_parameter_boundary():
     error = result["observations"][0]["payload"]
     assert error["status"] == 400
     assert error["code"] == "required_parameter"
+
+
+def test_exact_threshold_is_paid_across_native_statuses():
+    result = run_all()["PG-PIX-008"]
+    transition = result["observations"][0]["payload"]
+    assert transition["order_status"] == "paid"
+    assert transition["charge_status"] == "paid"
+    assert transition["transaction_status"] == "paid"

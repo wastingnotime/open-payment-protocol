@@ -88,7 +88,17 @@ def missing_payments() -> dict[str, Any]:
     return _result("PG-PIX-007", provider, observations)
 
 
-SCENARIOS = {"PG-PIX-001": create_and_retrieve_charge, "PG-PIX-002": invalid_request, "PG-PIX-003": simulator_success, "PG-PIX-004": simulator_failure, "PG-PIX-005": unknown_charge_retrieval, "PG-PIX-006": invalid_payment_method, "PG-PIX-007": missing_payments}
+def exact_threshold_success() -> dict[str, Any]:
+    provider, observations = PagarmePixProvider(), []
+    request = deepcopy(BASE_REQUEST)
+    request["items"][0]["amount"] = 50000
+    order = provider.create_order(request)
+    charge = provider.simulate_pix_outcome(order["charges"][0]["id"])
+    observations.append({"type": "semantic_observation", "name": "native_transition", "source": "pagarme", "payload": {"order_status": provider.store.orders[order["id"]]["status"], "charge_status": charge["status"], "transaction_status": charge["last_transaction"]["status"]}})
+    return _result("PG-PIX-008", provider, observations)
+
+
+SCENARIOS = {"PG-PIX-001": create_and_retrieve_charge, "PG-PIX-002": invalid_request, "PG-PIX-003": simulator_success, "PG-PIX-004": simulator_failure, "PG-PIX-005": unknown_charge_retrieval, "PG-PIX-006": invalid_payment_method, "PG-PIX-007": missing_payments, "PG-PIX-008": exact_threshold_success}
 
 
 def run_all() -> dict[str, dict[str, Any]]:
