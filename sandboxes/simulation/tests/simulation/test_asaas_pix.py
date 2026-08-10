@@ -6,7 +6,7 @@ from app.simulation.asaas_scenarios import BASE_REQUEST, run_all
 
 def test_asaas_scenarios_complete():
     results = run_all()
-    assert set(results) == {"AS-PIX-001", "AS-PIX-002", "AS-PIX-003", "AS-PIX-004", "AS-PIX-005", "AS-PIX-006", "AS-PIX-007"}
+    assert set(results) == {"AS-PIX-001", "AS-PIX-002", "AS-PIX-003", "AS-PIX-004", "AS-PIX-005", "AS-PIX-006", "AS-PIX-007", "AS-PIX-008"}
 
 
 def test_payment_and_separate_qr_retrieval_are_preserved():
@@ -48,6 +48,13 @@ def test_non_positive_value_is_native_invalid_value_boundary():
 
 def test_missing_due_date_is_native_required_parameter_boundary():
     result = run_all()["AS-PIX-007"]
+    error = result["observations"][0]["payload"]
+    assert error["status"] == 400
+    assert error["code"] == "required_parameter"
+
+
+def test_missing_customer_is_native_required_parameter_boundary():
+    result = run_all()["AS-PIX-008"]
     error = result["observations"][0]["payload"]
     assert error["status"] == 400
     assert error["code"] == "required_parameter"
