@@ -38,3 +38,9 @@ so missing evidence is not converted into an invented common state transition.
 The MRL adapter passes `observatory_nodes` and `observatory_edges` into the
 runtime `Scenario`, so supervision uses this graph instead of the runtime's
 three-node actor/scheduler fallback.
+
+The observatory uses distinct supported runtime kinds and numeric layers:
+actors, use cases, provider-native aggregates, scenario projections, and
+deferred external-provider nodes. The metadata domain is
+`payment-provider-discovery`; Pix is the current method slice, not the name of
+the whole simulation domain.

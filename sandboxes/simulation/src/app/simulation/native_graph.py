@@ -76,17 +76,25 @@ class NativeScenarioGraph:
         return observations
 
     def observatory_spec(self) -> dict[str, list[dict[str, object]]]:
+        runtime_kind = {
+            "actor": "actor",
+            "use_case": "use_case",
+            "resource": "aggregate",
+            "scenario": "projection",
+            "deferred": "external_provider",
+        }
+        runtime_layer = {"actor": -8, "use_case": 0, "resource": 4, "scenario": 6, "deferred": 10}
         return {
             "nodes": [
                 {
                     "id": node.id,
                     "label": node.label,
-                    "kind": node.kind,
-                    "layer": "provider-native-simulation",
+                    "kind": runtime_kind[node.kind],
+                    "layer": runtime_layer[node.kind],
                     "realm": node.provider,
-                    "domain": "pix",
-                    "description": f"{node.provider} provider-native scenario node",
-                    "badge": "deferred" if node.kind == "deferred" else "executable",
+                    "domain": "payment-provider-discovery",
+                    "description": f"{node.provider} provider-native {node.kind} in the Pix discovery slice",
+                    "badge": "deferred" if node.kind == "deferred" else ("Pix" if node.kind in {"resource", "scenario"} else node.kind),
                 }
                 for node in self.nodes
             ],

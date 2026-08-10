@@ -47,4 +47,6 @@ def test_observatory_spec_contains_runtime_visible_nodes_and_edges():
     assert len(spec["nodes"]) == 43
     assert len(spec["edges"]) == 38
     assert {node["id"] for node in spec["nodes"]} == GRAPH.node_ids
-    assert all(node["layer"] == "provider-native-simulation" for node in spec["nodes"])
+    assert {node["kind"] for node in spec["nodes"]} == {"actor", "use_case", "aggregate", "projection", "external_provider"}
+    assert {node["layer"] for node in spec["nodes"]} == {-8, 0, 4, 6, 10}
+    assert {node["domain"] for node in spec["nodes"]} == {"payment-provider-discovery"}
