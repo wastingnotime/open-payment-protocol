@@ -6,7 +6,7 @@ from app.simulation.pagarme_scenarios import BASE_REQUEST, run_all
 
 def test_pagarme_scenarios_complete():
     results = run_all()
-    assert set(results) == {f"PG-PIX-{number:03d}" for number in range(1, 14)}
+    assert set(results) == {f"PG-PIX-{number:03d}" for number in range(1, 15)}
 
 
 def test_order_charge_transaction_hierarchy_is_preserved():
@@ -99,3 +99,10 @@ def test_webhook_delivery_can_be_queried_with_native_delivery_fields():
     assert delivery["status"] == "sent"
     assert delivery["attempts"] == 1
     assert delivery["response_status"] == 200
+
+
+def test_paid_order_webhook_preserves_order_level_event_name():
+    result = run_all()["PG-PIX-014"]
+    delivery = result["observations"][0]["payload"]
+    assert delivery["event"] == "order.paid"
+    assert delivery["status"] == "sent"

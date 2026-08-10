@@ -206,6 +206,7 @@ NODES = TOPOLOGY_NODES + (
     _scenario_node("pagarme", "PG-PIX-011", "failed outcome webhook delivery failed"),
     _scenario_node("pagarme", "PG-PIX-012", "failed webhook manually resent"),
     _scenario_node("pagarme", "PG-PIX-013", "webhook delivery queried"),
+    _scenario_node("pagarme", "PG-PIX-014", "paid order webhook sent"),
     _scenario_node("asaas", "AS-PIX-001", "payment with separate QR"),
     GraphNode("AS-PIX-DEFERRED-SUCCESS", "asaas", "deferred", "Pix success transition unknown"),
     GraphNode("MP-PIX-DEFERRED-FINALIZATION", "mercadopago", "deferred", "async finalization unknown"),
@@ -256,6 +257,7 @@ TOPOLOGY_EDGES = (
     TopologyEdge("UC-PAGARME-CREATE-OUTCOME", "PG-PIX-011", "executes", "use_case_scenario"),
     TopologyEdge("UC-PAGARME-CREATE-OUTCOME", "PG-PIX-012", "executes", "use_case_scenario"),
     TopologyEdge("UC-PAGARME-CREATE-OUTCOME", "PG-PIX-013", "executes", "use_case_scenario"),
+    TopologyEdge("UC-PAGARME-CREATE-OUTCOME", "PG-PIX-014", "executes", "use_case_scenario"),
     TopologyEdge("UC-ASAAS-CREATE-RETRIEVE", "AS-PIX-001", "executes", "use_case_scenario"),
 )
 
@@ -278,6 +280,7 @@ KNOWN_EDGES = (
     GraphEdge("pagarme", "PG-PIX-004", "PG-PIX-011", "failed_webhook_delivery", "research/pagarme/webhooks.md"),
     GraphEdge("pagarme", "PG-PIX-011", "PG-PIX-012", "webhook_manually_resent", "research/pagarme/webhooks.md"),
     GraphEdge("pagarme", "PG-PIX-012", "PG-PIX-013", "webhook_delivery_queried", "research/pagarme/webhooks.md"),
+    GraphEdge("pagarme", "PG-PIX-003", "PG-PIX-014", "paid_order_webhook_sent", "research/pagarme/webhooks.md"),
 )
 
 DEFERRED_EDGES = (

@@ -14,7 +14,7 @@ def test_all_provider_scenarios_preserve_comparable_report_shape():
     assert tuple(registries) == PROVIDER_ORDER
     assert all(isinstance(reports, dict) for reports in registries.values())
     assert {provider: len(scenarios) for provider, scenarios in registries.items()} == PROVIDER_SCENARIO_COUNTS
-    assert sum(len(scenarios) for scenarios in registries.values()) == 54
+    assert sum(len(scenarios) for scenarios in registries.values()) == 55
     for provider, scenarios in registries.items():
         assert scenarios
         for scenario_id, report in scenarios.items():
