@@ -15,8 +15,8 @@ The five-provider documentation baseline is complete. All five native
 create/retrieve increments are runnable with deterministic tests and scenario
 reports. The project is now refining cross-provider lifecycle pressure. Bounded
 lifecycle/event-delivery increments are runnable for Pagar.me, Iugu, and
-PagBank, and Mercado Pago, including provider-specific authenticity and
-endpoint boundaries.
+PagBank, Mercado Pago, and Asaas, including provider-specific authenticity,
+redelivery, and endpoint boundaries.
 
 The selection evidence is recorded in
 [`research/pix-simulator-selection.md`](../../research/pix-simulator-selection.md)
