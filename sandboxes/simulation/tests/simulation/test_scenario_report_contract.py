@@ -4,7 +4,7 @@ import math
 import pytest
 
 from app.simulation.scenario_registry import PROVIDER_RUNNERS, run_all_providers
-from app.simulation.report_contract import PROVIDER_ORDER, PROVIDER_PREFIXES, PROVIDER_SCENARIO_COUNTS, REPORT_FIELDS, allowed_sources, assert_sanitized, canonical_snapshot, field, validate_report
+from app.simulation.report_contract import PROVIDER_ORDER, PROVIDER_PREFIXES, PROVIDER_SCENARIO_COUNTS, REPORT_FIELDS, allowed_sources, assert_sanitized, canonical_snapshot, field, observation_inventory, validate_report
 
 
 def test_all_provider_scenarios_preserve_comparable_report_shape():
@@ -34,6 +34,16 @@ def test_all_provider_scenario_registries_are_deterministically_replayable():
     first_run = [canonical_snapshot(reports) for reports in run_all_providers().values()]
     second_run = [canonical_snapshot(reports) for reports in run_all_providers().values()]
     assert first_run == second_run
+
+
+def test_observation_inventory_preserves_provider_native_names():
+    inventory = observation_inventory(run_all_providers())
+    assert tuple(inventory) == PROVIDER_ORDER
+    assert inventory["asaas"]["native_webhook_notification"] == 2
+    assert inventory["iugu"]["native_webhook_event"] == 2
+    assert inventory["mercadopago"]["native_webhook_notification"] == 1
+    assert inventory["pagarme"]["native_webhook_delivery"] == 3
+    assert inventory["pagbank"]["native_webhook_notification"] == 1
 
 
 def test_canonical_snapshot_ignores_registry_insertion_order():

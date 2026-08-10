@@ -8,7 +8,7 @@ from typing import Any
 from types import MappingProxyType
 
 
-__all__ = ["REPORT_FIELDS", "PROVIDER_ORDER", "PROVIDER_PREFIXES", "PROVIDER_SCENARIO_COUNTS", "SECURITY_MARKERS", "allowed_sources", "assert_sanitized", "canonical_snapshot", "field", "validate_report"]
+__all__ = ["REPORT_FIELDS", "PROVIDER_ORDER", "PROVIDER_PREFIXES", "PROVIDER_SCENARIO_COUNTS", "SECURITY_MARKERS", "allowed_sources", "assert_sanitized", "canonical_snapshot", "field", "observation_inventory", "validate_report"]
 
 
 REPORT_FIELDS = ("name", "observations", "events", "projection")
@@ -42,6 +42,26 @@ def canonical_snapshot(reports: Mapping[str, Any]) -> str:
         separators=(",", ":"),
         allow_nan=False,
     )
+
+
+def observation_inventory(registries: Mapping[str, Mapping[str, Any]]) -> dict[str, dict[str, int]]:
+    """Count each provider's native observation names without normalizing them."""
+    return {
+        provider: {
+            name: sum(
+                1
+                for report in scenarios.values()
+                for observation in field(report, "observations")
+                if observation["name"] == name
+            )
+            for name in sorted({
+                observation["name"]
+                for report in scenarios.values()
+                for observation in field(report, "observations")
+            })
+        }
+        for provider, scenarios in registries.items()
+    }
 
 
 def validate_report(provider: str, scenario_id: str, report: Any) -> None:
