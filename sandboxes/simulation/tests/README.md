@@ -14,7 +14,7 @@ Each observation also retains its event `type`, semantic `name`, provider
 remain intentionally unconstrained.
 
 The `source` field must identify the provider registry that emitted the
-observation.
+observation. Framework-level Iugu replay observations may use `simulation`.
 
 Run the full deterministic suite with `pytest -q sandboxes/simulation/tests`.
 

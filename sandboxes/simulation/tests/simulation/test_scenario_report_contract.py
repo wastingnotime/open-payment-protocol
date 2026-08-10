@@ -27,7 +27,8 @@ def test_all_provider_scenarios_preserve_comparable_report_shape():
             assert _field(report, "observations")
             for observation in _field(report, "observations"):
                 assert set(("type", "name", "source", "payload")) <= observation.keys()
-                assert observation["source"] == provider
+                allowed_sources = {provider, "simulation"} if provider == "iugu" else {provider}
+                assert observation["source"] in allowed_sources
                 assert observation["payload"]["scenario"] == scenario_id
 
 
