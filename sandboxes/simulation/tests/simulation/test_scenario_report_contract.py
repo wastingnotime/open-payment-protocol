@@ -1,10 +1,10 @@
 from app.simulation.scenario_registry import PROVIDER_RUNNERS, run_all_providers
-from app.simulation.report_contract import REPORT_FIELDS, PROVIDER_SCENARIO_COUNTS, assert_sanitized, canonical_snapshot, field, validate_report
+from app.simulation.report_contract import PROVIDER_ORDER, REPORT_FIELDS, PROVIDER_SCENARIO_COUNTS, assert_sanitized, canonical_snapshot, field, validate_report
 import json
 
 
 def test_all_provider_scenarios_preserve_comparable_report_shape():
-    assert tuple(PROVIDER_RUNNERS) == ("asaas", "iugu", "mercadopago", "pagarme", "pagbank")
+    assert tuple(PROVIDER_RUNNERS) == PROVIDER_ORDER
     registries = run_all_providers()
     assert {provider: len(scenarios) for provider, scenarios in registries.items()} == PROVIDER_SCENARIO_COUNTS
     assert sum(len(scenarios) for scenarios in registries.values()) == 50

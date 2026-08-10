@@ -9,12 +9,13 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from app.simulation.scenario_registry import run_all_providers
-from app.simulation.report_contract import REPORT_FIELDS, PROVIDER_SCENARIO_COUNTS, assert_sanitized, canonical_snapshot, field, validate_report
+from app.simulation.report_contract import PROVIDER_ORDER, REPORT_FIELDS, PROVIDER_SCENARIO_COUNTS, assert_sanitized, canonical_snapshot, field, validate_report
 
 
 def main() -> int:
     runners = run_all_providers()
     second_run = run_all_providers()
+    assert tuple(runners) == PROVIDER_ORDER
     total = 0
     assert {provider: len(reports) for provider, reports in runners.items()} == PROVIDER_SCENARIO_COUNTS
     serialized_reports = []
