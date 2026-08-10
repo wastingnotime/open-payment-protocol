@@ -19,6 +19,8 @@ rejected, and idempotency-conflict events as semantic observations.
 append-only event store for runtime inspection and later adapter pressure.
 - The documented asynchronous variant retains `processing` with no payment
   information; later reconciliation is explicitly through webhook or GET.
+- Runtime inspection confirms the `processing` result is correlated as
+  `MP-PIX-004` without fabricating a payment transaction.
 
 ## Remaining Questions
 
