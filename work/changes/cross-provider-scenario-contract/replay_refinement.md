@@ -7,3 +7,4 @@ schema. The assertion must capture two named snapshots per provider so a
 future edit cannot accidentally compare a value to itself.
 Canonical snapshots must sort reports by their reported scenario name so
 registry insertion order cannot change the replay receipt.
+Repeated registry runs must also return independent report projections.
