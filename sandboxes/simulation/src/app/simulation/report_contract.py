@@ -8,7 +8,7 @@ from typing import Any
 from types import MappingProxyType
 
 
-__all__ = ["REPORT_FIELDS", "PROVIDER_ORDER", "PROVIDER_PREFIXES", "PROVIDER_SCENARIO_COUNTS", "TOTAL_SCENARIO_COUNT", "SECURITY_MARKERS", "allowed_sources", "assert_sanitized", "canonical_snapshot", "field", "observation_inventory", "validate_report"]
+__all__ = ["REPORT_FIELDS", "PROVIDER_ORDER", "PROVIDER_PREFIXES", "PROVIDER_SCENARIO_COUNTS", "TOTAL_SCENARIO_COUNT", "SECURITY_MARKERS", "allowed_sources", "assert_sanitized", "canonical_snapshot", "error_inventory", "field", "observation_inventory", "validate_report"]
 
 
 REPORT_FIELDS = ("name", "observations", "events", "projection")
@@ -59,6 +59,29 @@ def observation_inventory(registries: Mapping[str, Mapping[str, Any]]) -> dict[s
                 observation["name"]
                 for report in scenarios.values()
                 for observation in field(report, "observations")
+            })
+        }
+        for provider, scenarios in registries.items()
+    }
+
+
+def error_inventory(registries: Mapping[str, Mapping[str, Any]]) -> dict[str, dict[str, int]]:
+    """Count native error codes without classifying provider semantics."""
+    return {
+        provider: {
+            code: sum(
+                1
+                for report in scenarios.values()
+                for observation in field(report, "observations")
+                if observation["name"] in {"native_error", "native_authentication_error"}
+                and observation["payload"].get("code") == code
+            )
+            for code in sorted({
+                observation["payload"].get("code")
+                for report in scenarios.values()
+                for observation in field(report, "observations")
+                if observation["name"] in {"native_error", "native_authentication_error"}
+                and observation["payload"].get("code")
             })
         }
         for provider, scenarios in registries.items()

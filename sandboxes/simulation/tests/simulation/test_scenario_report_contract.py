@@ -4,7 +4,7 @@ import math
 import pytest
 
 from app.simulation.scenario_registry import PROVIDER_RUNNERS, run_all_providers
-from app.simulation.report_contract import PROVIDER_ORDER, PROVIDER_PREFIXES, PROVIDER_SCENARIO_COUNTS, REPORT_FIELDS, TOTAL_SCENARIO_COUNT, allowed_sources, assert_sanitized, canonical_snapshot, field, observation_inventory, validate_report
+from app.simulation.report_contract import PROVIDER_ORDER, PROVIDER_PREFIXES, PROVIDER_SCENARIO_COUNTS, REPORT_FIELDS, TOTAL_SCENARIO_COUNT, allowed_sources, assert_sanitized, canonical_snapshot, error_inventory, field, observation_inventory, validate_report
 
 
 def test_all_provider_scenarios_preserve_comparable_report_shape():
@@ -65,6 +65,14 @@ def test_observation_inventory_exposes_expiration_alternatives_as_native_evidenc
 def test_observation_inventory_exposes_asaas_authentication_errors():
     inventory = observation_inventory(run_all_providers())
     assert inventory["asaas"]["native_authentication_error"] == 3
+
+
+def test_error_inventory_preserves_provider_native_codes():
+    inventory = error_inventory(run_all_providers())
+    assert inventory["asaas"]["access_token_not_found"] == 1
+    assert inventory["asaas"]["invalid_access_token"] == 1
+    assert inventory["asaas"]["invalid_environment"] == 1
+    assert inventory["mercadopago"]["order_not_found"] == 1
 
 
 def test_observation_inventory_covers_every_provider_scenario():
