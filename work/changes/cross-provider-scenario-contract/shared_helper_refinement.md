@@ -9,6 +9,8 @@ It also owns the expected current scenario counts used by both validation
 paths.
 Per-report validation remains limited to the shared envelope, attribution, and
 prefix rules; provider payload semantics stay outside the helper.
+Validation failures should identify the provider and scenario so local
+receipts are actionable without debugging the runner registry first.
 The helper remains an experimental internal simulation surface, not protocol
 authority.
 Provider runner registration is kept in a neighboring simulation registry so
