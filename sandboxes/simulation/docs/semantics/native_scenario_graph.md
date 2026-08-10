@@ -28,8 +28,8 @@ flowchart LR
   MP4 -. finalization unknown .-> MPU[deferred]
 ```
 
-The runtime graph currently exposes 70 nodes: 6 actors, 6 use cases, 11
-provider-native resources, 45 executable scenario nodes, and 2 deferred
+The runtime graph currently exposes 85 nodes: 6 actors, 6 use cases, 11
+provider-native resources, 60 executable scenario nodes, and 2 deferred
 evidence-gap nodes. Its `snapshot()` method exposes those nodes and edges to
 local validation tools. Topology and lifecycle edges are defined in
 `src/app/simulation/native_graph.py`. Use-case edges connect actors to
@@ -61,6 +61,11 @@ status behavior.
 The authentication-error increment adds Asaas native 401 branches for missing
 credentials, invalid credentials, and invalid environment. Credential values
 remain sanitized; retryability and unknown-result semantics are not inferred.
+
+The error-boundary increment adds documented Asaas 429 rate limiting, 403
+forbidden access, and 500/transport-timeout unknown-result branches. The
+simulation records native status and evidence while leaving retry policy
+unsupported and create-result certainty unknown.
 
 The observatory uses distinct supported runtime kinds and graph-derived numeric
 layers. Every linked target is placed in a later rank, including lifecycle

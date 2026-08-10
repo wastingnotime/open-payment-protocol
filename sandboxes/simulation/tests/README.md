@@ -21,6 +21,10 @@ Run the full deterministic suite with `pytest -q sandboxes/simulation/tests`.
 Cross-provider checks also ensure scenario reports do not introduce raw PAN,
 CVV, equivalent cardholder-data field markers, or provider credential markers
 such as API keys and access tokens.
+
+Asaas error-boundary scenarios retain documented 429/403/500 statuses and do
+not infer automatic retry or successful payment creation after an unknown
+result.
 The marker list is shared with the standalone validator.
 
 Provider scenario registries must also be replayable: identical deterministic
