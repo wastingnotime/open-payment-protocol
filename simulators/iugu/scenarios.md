@@ -107,3 +107,8 @@ preserve Iugu's native `422 invalid_transition` boundary.
 
 Attempt to pay an expired invoice and preserve the native `422
 invalid_transition` boundary.
+
+### IUGU-PIX-013 — Unknown caller-reference lookup
+
+Look up an invoice using an unknown external reference and preserve Iugu's
+native `404 invoice_not_found` boundary.

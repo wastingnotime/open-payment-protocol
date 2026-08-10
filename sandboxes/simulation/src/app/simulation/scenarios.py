@@ -156,6 +156,15 @@ def invalid_expired_payment() -> ScenarioResult:
     return _finish("IUGU-PIX-012", provider, log)
 
 
+def unknown_caller_reference() -> ScenarioResult:
+    provider, log = IuguPixProvider(), []
+    try:
+        provider.lookup_invoice(external_reference="opp-unknown-reference")
+    except IuguNativeError as exc:
+        _observation(log, "native_error", {"status": exc.error.status, "code": exc.error.code, "evidence": exc.error.evidence})
+    return _finish("IUGU-PIX-013", provider, log)
+
+
 def deterministic_replay() -> ScenarioResult:
     first = create_and_retrieve()
     second = create_and_retrieve()
@@ -179,6 +188,7 @@ SCENARIOS: dict[str, Callable[[], ScenarioResult]] = {
     "IUGU-PIX-010": canceled_invoice_recovery,
     "IUGU-PIX-011": invalid_paid_cancellation,
     "IUGU-PIX-012": invalid_expired_payment,
+    "IUGU-PIX-013": unknown_caller_reference,
 }
 
 

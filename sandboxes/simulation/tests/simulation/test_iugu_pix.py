@@ -109,3 +109,10 @@ def test_expired_invoice_payment_is_native_invalid_transition():
     error = next(item for item in result.observations if item["name"] == "native_error")
     assert error["payload"]["status"] == 422
     assert error["payload"]["code"] == "invalid_transition"
+
+
+def test_unknown_caller_reference_is_native_not_found_boundary():
+    result = SCENARIOS["IUGU-PIX-013"]()
+    error = next(item for item in result.observations if item["name"] == "native_error")
+    assert error["payload"]["status"] == 404
+    assert error["payload"]["code"] == "invoice_not_found"
