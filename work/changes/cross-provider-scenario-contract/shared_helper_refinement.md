@@ -24,6 +24,8 @@ Allowed observation-source sets are read-only as well.
 Unknown provider names should fail with a contextual contract error rather than
 an incidental mapping lookup error.
 Immutable registry constants retain explicit mapping types for static tooling.
+Malformed observation payloads must produce the same contextual assertion style
+as other report-contract failures.
 The provider runner registry follows the same rule; callers consume
 `run_all_providers()` rather than mutating registration state.
 Regression tests cover both immutability boundaries.
