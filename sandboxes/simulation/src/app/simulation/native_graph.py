@@ -54,6 +54,17 @@ class NativeScenarioGraph:
             "deferred_edges": [edge.__dict__.copy() for edge in self.deferred_edges],
         }
 
+    def observations(self) -> list[dict[str, object]]:
+        observations = [
+            {"type": "graph_node", "name": "simulation_graph_node", "source": "simulation", "payload": node.__dict__.copy()}
+            for node in self.nodes
+        ]
+        observations.extend(
+            {"type": "graph_edge", "name": "simulation_graph_edge", "source": "simulation", "payload": edge.__dict__.copy()}
+            for edge in (*self.known_edges, *self.deferred_edges)
+        )
+        return observations
+
 
 def _scenario_node(provider: str, scenario_id: str, label: str) -> GraphNode:
     return GraphNode(scenario_id, provider, "scenario", label, scenario_id)

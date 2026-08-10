@@ -31,3 +31,12 @@ def test_graph_snapshot_exposes_executable_and_deferred_nodes():
     assert sum(node["kind"] == "deferred" for node in snapshot["nodes"]) == 2
     assert len(snapshot["known_edges"]) == 13
     assert len(snapshot["deferred_edges"]) == 2
+
+
+def test_graph_observations_emit_every_node_and_edge():
+    observations = GRAPH.observations()
+    nodes = [item for item in observations if item["type"] == "graph_node"]
+    edges = [item for item in observations if item["type"] == "graph_edge"]
+    assert len(nodes) == 20
+    assert len(edges) == 15
+    assert {item["payload"]["id"] for item in nodes} == GRAPH.node_ids

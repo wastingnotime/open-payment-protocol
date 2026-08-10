@@ -14,6 +14,7 @@ from .mercadopago_scenarios import run_all as run_mercadopago
 from .pagbank_scenarios import run_all as run_pagbank
 from .pagarme_scenarios import run_all as run_pagarme
 from .asaas_scenarios import run_all as run_asaas
+from .native_graph import GRAPH
 
 
 def create_simulation():
@@ -31,6 +32,13 @@ def create_simulation():
     initial_time = datetime(2026, 8, 9, 12, 0, tzinfo=timezone.utc)
 
     def emit_slice_results(context) -> None:
+        for observation in GRAPH.observations():
+            context.emit(
+                observation["type"],
+                observation["name"],
+                source=observation["source"],
+                payload=observation["payload"],
+            )
         all_results = {**run_all(), **run_mercadopago(), **run_pagbank(), **run_pagarme(), **run_asaas()}
         for result in all_results.values():
             observations = result.observations if hasattr(result, "observations") else result["observations"]
