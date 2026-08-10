@@ -8,29 +8,13 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from app.simulation.asaas_scenarios import run_all as run_asaas
-from app.simulation.mercadopago_scenarios import run_all as run_mercado_pago
-from app.simulation.pagarme_scenarios import run_all as run_pagarme
-from app.simulation.pagbank_scenarios import run_all as run_pagbank
-from app.simulation.scenarios import run_all as run_iugu
+from app.simulation.scenario_registry import run_all_providers
 from app.simulation.report_contract import REPORT_FIELDS, PROVIDER_SCENARIO_COUNTS, SECURITY_MARKERS, canonical_snapshot, field, validate_report
 
 
 def main() -> int:
-    runners = {
-        "asaas": run_asaas(),
-        "iugu": run_iugu(),
-        "mercadopago": run_mercado_pago(),
-        "pagarme": run_pagarme(),
-        "pagbank": run_pagbank(),
-    }
-    second_run = {
-        "asaas": run_asaas(),
-        "iugu": run_iugu(),
-        "mercadopago": run_mercado_pago(),
-        "pagarme": run_pagarme(),
-        "pagbank": run_pagbank(),
-    }
+    runners = run_all_providers()
+    second_run = run_all_providers()
     total = 0
     assert {provider: len(reports) for provider, reports in runners.items()} == PROVIDER_SCENARIO_COUNTS
     serialized_reports = []

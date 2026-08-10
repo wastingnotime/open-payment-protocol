@@ -1,20 +1,10 @@
-from app.simulation.asaas_scenarios import run_all as run_asaas
-from app.simulation.scenarios import run_all as run_iugu
-from app.simulation.mercadopago_scenarios import run_all as run_mercado_pago
-from app.simulation.pagarme_scenarios import run_all as run_pagarme
-from app.simulation.pagbank_scenarios import run_all as run_pagbank
+from app.simulation.scenario_registry import run_all_providers
 from app.simulation.report_contract import REPORT_FIELDS, PROVIDER_SCENARIO_COUNTS, SECURITY_MARKERS, canonical_snapshot, field, validate_report
 import json
 
 
 def test_all_provider_scenarios_preserve_comparable_report_shape():
-    registries = {
-        "asaas": run_asaas(),
-        "iugu": run_iugu(),
-        "mercadopago": run_mercado_pago(),
-        "pagarme": run_pagarme(),
-        "pagbank": run_pagbank(),
-    }
+    registries = run_all_providers()
     assert {provider: len(scenarios) for provider, scenarios in registries.items()} == PROVIDER_SCENARIO_COUNTS
     assert sum(len(scenarios) for scenarios in registries.values()) == 50
     for provider, scenarios in registries.items():
@@ -24,7 +14,7 @@ def test_all_provider_scenarios_preserve_comparable_report_shape():
 
 
 def test_all_provider_scenario_reports_exclude_cardholder_data_markers():
-    registries = (run_asaas(), run_iugu(), run_mercado_pago(), run_pagarme(), run_pagbank())
+    registries = tuple(run_all_providers().values())
     reports = []
     for scenarios in registries:
         for report in scenarios.values():
@@ -35,10 +25,8 @@ def test_all_provider_scenario_reports_exclude_cardholder_data_markers():
 
 
 def test_all_provider_scenario_registries_are_deterministically_replayable():
-    runners = (run_asaas, run_iugu, run_mercado_pago, run_pagarme, run_pagbank)
-
-    first_run = [canonical_snapshot(runner()) for runner in runners]
-    second_run = [canonical_snapshot(runner()) for runner in runners]
+    first_run = [canonical_snapshot(reports) for reports in run_all_providers().values()]
+    second_run = [canonical_snapshot(reports) for reports in run_all_providers().values()]
     assert first_run == second_run
 
 
