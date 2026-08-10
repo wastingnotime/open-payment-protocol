@@ -89,7 +89,8 @@ simulation evidence, not provider API fields.
    PagBank, Pagar.me, and Asaas create/retrieve built).
 3. Successful provider-native lifecycle transition and event delivery, with
    Iugu, PagBank, and Pagar.me edges now represented in the internal native
-   scenario graph; Pagar.me now has a runnable bounded delivery increment.
+   scenario graph; Pagar.me, Iugu, and PagBank now have runnable bounded
+   delivery increments.
 4. Failed or expired transition and error/result certainty.
 5. Thin adapter comparison across all five providers.
 
