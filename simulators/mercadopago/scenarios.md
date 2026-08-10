@@ -11,6 +11,7 @@ Built scenarios:
 - `MP-PIX-006`: unknown order retrieval preserves the native not-found boundary.
 - `MP-PIX-007`: non-Pix payment method preserves the native property-value boundary.
 - `MP-PIX-008`: missing payer preserves the native required-properties boundary.
+- `MP-PIX-009`: multiple payments preserve the native property-value boundary.
 
 Deferred: asynchronous finalization, successful transfer, expiration, webhooks,
 refunds, and legacy Payments API compatibility.

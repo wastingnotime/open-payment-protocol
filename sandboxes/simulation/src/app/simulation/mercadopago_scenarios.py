@@ -104,7 +104,18 @@ def missing_payer() -> dict[str, Any]:
     return _result("MP-PIX-008", provider, observations)
 
 
-SCENARIOS = {"MP-PIX-001": create_and_retrieve, "MP-PIX-002": invalid_total, "MP-PIX-003": idempotency_conflict, "MP-PIX-004": asynchronous_processing_variant, "MP-PIX-005": asynchronous_reconciliation_get, "MP-PIX-006": unknown_order_retrieval, "MP-PIX-007": non_pix_payment_method, "MP-PIX-008": missing_payer}
+def multiple_payments() -> dict[str, Any]:
+    provider, observations = MercadoPagoPixProvider(), []
+    request = deepcopy(BASE_REQUEST)
+    request["transactions"]["payments"].append(deepcopy(BASE_REQUEST["transactions"]["payments"][0]))
+    try:
+        provider.create_order(request, idempotency_key="mp-scenario-009")
+    except MercadoPagoNativeError as exc:
+        observations.append({"type": "semantic_observation", "name": "native_error", "source": "mercadopago", "payload": {"status": exc.error.status, "code": exc.error.code}})
+    return _result("MP-PIX-009", provider, observations)
+
+
+SCENARIOS = {"MP-PIX-001": create_and_retrieve, "MP-PIX-002": invalid_total, "MP-PIX-003": idempotency_conflict, "MP-PIX-004": asynchronous_processing_variant, "MP-PIX-005": asynchronous_reconciliation_get, "MP-PIX-006": unknown_order_retrieval, "MP-PIX-007": non_pix_payment_method, "MP-PIX-008": missing_payer, "MP-PIX-009": multiple_payments}
 
 
 def run_all() -> dict[str, dict[str, Any]]:

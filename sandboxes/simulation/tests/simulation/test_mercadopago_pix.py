@@ -6,7 +6,7 @@ from app.simulation.mercadopago_scenarios import BASE_REQUEST, run_all
 
 def test_mercado_pago_scenarios_complete():
     results = run_all()
-    assert set(results) == {"MP-PIX-001", "MP-PIX-002", "MP-PIX-003", "MP-PIX-004", "MP-PIX-005", "MP-PIX-006", "MP-PIX-007", "MP-PIX-008"}
+    assert set(results) == {"MP-PIX-001", "MP-PIX-002", "MP-PIX-003", "MP-PIX-004", "MP-PIX-005", "MP-PIX-006", "MP-PIX-007", "MP-PIX-008", "MP-PIX-009"}
     assert results["MP-PIX-001"]["projection"]
 
 
@@ -72,3 +72,10 @@ def test_missing_payer_is_native_required_properties_boundary():
     error = result["observations"][0]["payload"]
     assert error["status"] == 400
     assert error["code"] == "required_properties"
+
+
+def test_multiple_payments_are_native_property_value_boundary():
+    result = run_all()["MP-PIX-009"]
+    error = result["observations"][0]["payload"]
+    assert error["status"] == 400
+    assert error["code"] == "property_value"
