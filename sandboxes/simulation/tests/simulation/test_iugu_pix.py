@@ -13,7 +13,7 @@ def test_all_selected_scenarios_complete_with_native_observations():
 
 
 def test_iugu_slice_scenario_inventory_is_complete():
-    assert set(SCENARIOS) == {f"IUGU-PIX-{number:03d}" for number in range(1, 22)}
+    assert set(SCENARIOS) == {f"IUGU-PIX-{number:03d}" for number in range(1, 26)}
 
 
 def test_create_and_retrieve_preserves_iugu_invoice_shape():
@@ -184,6 +184,22 @@ def test_iugu_event_only_scenarios_do_not_invent_invoice_state_changes():
         assert invoice["status"] == "pending"
     refund_projection = next(iter(results["IUGU-PIX-020"].projection.values()))
     assert refund_projection["status"] == "paid"
+
+
+def test_iugu_additional_documented_event_names_remain_opaque():
+    results = run_all()
+    expected = {
+        "IUGU-PIX-022": "invoice.partially_refunded",
+        "IUGU-PIX-023": "invoice.refund_reverted",
+        "IUGU-PIX-024": "invoice.created",
+        "IUGU-PIX-025": "invoice.released",
+    }
+    for scenario_id, event_name in expected.items():
+        event = results[scenario_id].observations[0]["payload"]
+        assert event["event"] == event_name
+        assert event["state_transition"] == "event_only"
+        assert event["transport"] == "application/x-www-form-urlencoded"
+        assert next(iter(results[scenario_id].projection.values()))["status"] == "pending"
 
 
 def test_iugu_unmodeled_documented_event_name_is_preserved_opaque():
