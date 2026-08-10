@@ -7,7 +7,7 @@ from app.simulation.pagbank_scenarios import BASE_REQUEST, run_all
 
 def test_pagbank_scenarios_complete():
     results = run_all()
-    assert set(results) == {f"PB-PIX-{number:03d}" for number in range(1, 16)}
+    assert set(results) == {f"PB-PIX-{number:03d}" for number in range(1, 18)}
     assert results["PB-PIX-001"]["projection"]
 
 
@@ -128,6 +128,19 @@ def test_insecure_notification_url_is_native_invalid_parameter_boundary():
     error = result["observations"][0]["payload"]
     assert error["status"] == 400
     assert error["code"] == "invalid_parameter"
+
+
+def test_partial_cancellation_scenario_preserves_paid_status():
+    result = run_all()["PB-PIX-016"]
+    cancellation = result["observations"][0]["payload"]
+    assert cancellation["status"] == "PAID"
+    assert cancellation["refunded"] == 400
+
+
+def test_full_cancellation_scenario_preserves_canceled_status():
+    result = run_all()["PB-PIX-017"]
+    cancellation = result["observations"][0]["payload"]
+    assert cancellation["status"] == "CANCELED"
 
 
 def test_partial_charge_cancellation_keeps_pagbank_paid_status():

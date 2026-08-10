@@ -179,7 +179,27 @@ def insecure_notification_url_rejected() -> dict[str, Any]:
     return _result("PB-PIX-015", provider, observations)
 
 
-SCENARIOS = {"PB-PIX-001": create_and_retrieve, "PB-PIX-002": invalid_amount, "PB-PIX-003": idempotency_conflict, "PB-PIX-004": charge_emerges_after_pix_payment, "PB-PIX-005": unknown_order_retrieval, "PB-PIX-006": duplicate_pix_payment, "PB-PIX-007": multiple_qr_codes, "PB-PIX-008": missing_qr_codes, "PB-PIX-009": missing_reference_id, "PB-PIX-010": missing_idempotency_key, "PB-PIX-011": paid_notification_with_authenticity, "PB-PIX-012": mismatched_notification_authenticity, "PB-PIX-013": notification_url_is_preserved, "PB-PIX-014": multiple_notification_urls_rejected, "PB-PIX-015": insecure_notification_url_rejected}
+def partial_charge_cancellation() -> dict[str, Any]:
+    provider, observations = PagBankPixProvider(), []
+    order = provider.create_order(deepcopy(BASE_REQUEST), idempotency_key="pagbank-scenario-016")
+    paid = provider.mark_pix_paid(order["id"], end_to_end_id="E2E_PARTIAL_CANCEL")
+    canceled = provider.cancel_charge(paid["id"], amount=400)
+    charge = canceled["charges"][0]
+    observations.append({"type": "semantic_observation", "name": "native_partial_cancellation", "source": "pagbank", "payload": {"order_id": canceled["id"], "charge_id": charge["id"], "status": charge["status"], "refunded": charge["amount"]["summary"]["refunded"], "evidence": "research/pagbank/contract.md"}})
+    return _result("PB-PIX-016", provider, observations)
+
+
+def full_charge_cancellation() -> dict[str, Any]:
+    provider, observations = PagBankPixProvider(), []
+    order = provider.create_order(deepcopy(BASE_REQUEST), idempotency_key="pagbank-scenario-017")
+    paid = provider.mark_pix_paid(order["id"], end_to_end_id="E2E_FULL_CANCEL")
+    canceled = provider.cancel_charge(paid["id"])
+    charge = canceled["charges"][0]
+    observations.append({"type": "semantic_observation", "name": "native_full_cancellation", "source": "pagbank", "payload": {"order_id": canceled["id"], "charge_id": charge["id"], "status": charge["status"], "refunded": charge["amount"]["summary"]["refunded"], "evidence": "research/pagbank/contract.md"}})
+    return _result("PB-PIX-017", provider, observations)
+
+
+SCENARIOS = {"PB-PIX-001": create_and_retrieve, "PB-PIX-002": invalid_amount, "PB-PIX-003": idempotency_conflict, "PB-PIX-004": charge_emerges_after_pix_payment, "PB-PIX-005": unknown_order_retrieval, "PB-PIX-006": duplicate_pix_payment, "PB-PIX-007": multiple_qr_codes, "PB-PIX-008": missing_qr_codes, "PB-PIX-009": missing_reference_id, "PB-PIX-010": missing_idempotency_key, "PB-PIX-011": paid_notification_with_authenticity, "PB-PIX-012": mismatched_notification_authenticity, "PB-PIX-013": notification_url_is_preserved, "PB-PIX-014": multiple_notification_urls_rejected, "PB-PIX-015": insecure_notification_url_rejected, "PB-PIX-016": partial_charge_cancellation, "PB-PIX-017": full_charge_cancellation}
 
 
 def run_all() -> dict[str, dict[str, Any]]:
