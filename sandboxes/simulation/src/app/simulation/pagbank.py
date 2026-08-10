@@ -94,6 +94,24 @@ class PagBankPixProvider:
         self.store.events.append({"type": "charge_created", "payload": {"order_id": order_id, "charge_id": charge_id, "status": "PAID"}})
         return deepcopy(order)
 
+    def cancel_charge(self, order_id: str, *, amount: int | None = None) -> dict[str, Any]:
+        order = self.store.orders.get(order_id)
+        if order is None:
+            raise PagBankNativeError(PagBankError(404, "order_not_found", "The order was not found."))
+        if not order["charges"]:
+            raise PagBankNativeError(PagBankError(400, "charge_not_found", "The order has no charge to cancel."))
+        charge = order["charges"][0]
+        total = int(charge["amount"]["summary"]["total"])
+        refunded = int(charge["amount"]["summary"]["refunded"])
+        cancel_amount = total - refunded if amount is None else int(amount)
+        if cancel_amount <= 0 or refunded + cancel_amount > total:
+            raise PagBankNativeError(PagBankError(400, "invalid_refund_amount", "Cancellation amount exceeds the refundable charge amount."))
+        refunded += cancel_amount
+        charge["amount"]["summary"]["refunded"] = refunded
+        charge["status"] = "CANCELED" if refunded == total else "PAID"
+        self._event("charge_canceled", {"order_id": order_id, "charge_id": charge["id"], "amount": cancel_amount, "status": charge["status"], "refunded": refunded, "evidence": "research/pagbank/contract.md"})
+        return deepcopy(order)
+
     def notification_payload(self, order_id: str) -> dict[str, Any]:
         """Return the documented full-order paid notification payload."""
         order = self.store.orders.get(order_id)

@@ -128,3 +128,25 @@ def test_insecure_notification_url_is_native_invalid_parameter_boundary():
     error = result["observations"][0]["payload"]
     assert error["status"] == 400
     assert error["code"] == "invalid_parameter"
+
+
+def test_partial_charge_cancellation_keeps_pagbank_paid_status():
+    provider = PagBankPixProvider()
+    order = provider.create_order(deepcopy(BASE_REQUEST), idempotency_key="cancel-001")
+    provider.mark_pix_paid(order["id"], end_to_end_id="E2E_CANCEL_FIXTURE")
+
+    canceled = provider.cancel_charge(order["id"], amount=400)
+
+    charge = canceled["charges"][0]
+    assert charge["status"] == "PAID"
+    assert charge["amount"]["summary"]["refunded"] == 400
+
+
+def test_full_charge_cancellation_uses_pagbank_canceled_status():
+    provider = PagBankPixProvider()
+    order = provider.create_order(deepcopy(BASE_REQUEST), idempotency_key="cancel-002")
+    provider.mark_pix_paid(order["id"], end_to_end_id="E2E_CANCEL_FIXTURE")
+
+    canceled = provider.cancel_charge(order["id"])
+
+    assert canceled["charges"][0]["status"] == "CANCELED"
