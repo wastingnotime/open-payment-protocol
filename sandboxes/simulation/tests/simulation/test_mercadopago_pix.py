@@ -1,4 +1,5 @@
 from copy import deepcopy
+import json
 
 from app.simulation.mercadopago import MercadoPagoNativeError, MercadoPagoPixProvider
 from app.simulation.mercadopago_scenarios import BASE_REQUEST, run_all
@@ -102,3 +103,8 @@ def test_mismatched_order_notification_signature_is_discarded():
     notification = result["observations"][0]["payload"]
     assert notification["signature_verified"] is False
     assert notification["action"] == "discard"
+
+
+def test_mercado_pago_notification_report_does_not_expose_webhook_secret():
+    result = run_all()["MP-PIX-011"]
+    assert "WEBHOOK_SECRET_DOCUMENTATION" not in json.dumps(result, sort_keys=True)
