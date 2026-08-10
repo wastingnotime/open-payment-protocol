@@ -6,7 +6,7 @@ from app.simulation.pagarme_scenarios import BASE_REQUEST, run_all
 
 def test_pagarme_scenarios_complete():
     results = run_all()
-    assert set(results) == {"PG-PIX-001", "PG-PIX-002", "PG-PIX-003", "PG-PIX-004", "PG-PIX-005", "PG-PIX-006", "PG-PIX-007", "PG-PIX-008", "PG-PIX-009"}
+    assert set(results) == {f"PG-PIX-{number:03d}" for number in range(1, 12)}
 
 
 def test_order_charge_transaction_hierarchy_is_preserved():
@@ -65,3 +65,20 @@ def test_oversized_order_code_is_native_invalid_parameter_boundary():
     error = result["observations"][0]["payload"]
     assert error["status"] == 400
     assert error["code"] == "invalid_parameter"
+
+
+def test_paid_outcome_emits_documented_sent_webhook_delivery():
+    result = run_all()["PG-PIX-010"]
+    delivery = result["observations"][0]["payload"]
+    assert delivery["event"] == "charge.paid"
+    assert delivery["status"] == "sent"
+    assert delivery["attempts"] == 1
+    assert delivery["response_status"] == 200
+
+
+def test_failed_webhook_delivery_preserves_native_failed_state():
+    result = run_all()["PG-PIX-011"]
+    delivery = result["observations"][0]["payload"]
+    assert delivery["event"] == "charge.payment_failed"
+    assert delivery["status"] == "failed"
+    assert delivery["response_status"] == 503

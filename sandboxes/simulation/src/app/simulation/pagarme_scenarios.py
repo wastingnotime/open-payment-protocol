@@ -109,7 +109,34 @@ def oversized_order_code() -> dict[str, Any]:
     return _result("PG-PIX-009", provider, observations)
 
 
-SCENARIOS = {"PG-PIX-001": create_and_retrieve_charge, "PG-PIX-002": invalid_request, "PG-PIX-003": simulator_success, "PG-PIX-004": simulator_failure, "PG-PIX-005": unknown_charge_retrieval, "PG-PIX-006": invalid_payment_method, "PG-PIX-007": missing_payments, "PG-PIX-008": exact_threshold_success, "PG-PIX-009": oversized_order_code}
+def paid_webhook_delivery() -> dict[str, Any]:
+    provider, observations = PagarmePixProvider(), []
+    order = provider.create_order(deepcopy(BASE_REQUEST))
+    charge = provider.simulate_pix_outcome(order["charges"][0]["id"])
+    delivery = provider.deliver_webhook(
+        "charge.paid",
+        {"charge_id": charge["id"], "order_id": order["id"], "status": charge["status"]},
+    )
+    observations.append({"type": "semantic_observation", "name": "native_webhook_delivery", "source": "pagarme", "payload": {"event": delivery["event"], "webhook_id": delivery["id"], "status": delivery["status"], "attempts": delivery["attempts"], "response_status": delivery["response_status"], "evidence": "research/pagarme/webhooks.md"}})
+    return _result("PG-PIX-010", provider, observations)
+
+
+def failed_webhook_delivery() -> dict[str, Any]:
+    provider, observations = PagarmePixProvider(), []
+    request = deepcopy(BASE_REQUEST)
+    request["items"][0]["amount"] = 60000
+    order = provider.create_order(request)
+    charge = provider.simulate_pix_outcome(order["charges"][0]["id"])
+    delivery = provider.deliver_webhook(
+        "charge.payment_failed",
+        {"charge_id": charge["id"], "order_id": order["id"], "status": charge["status"]},
+        response_status=503,
+    )
+    observations.append({"type": "semantic_observation", "name": "native_webhook_delivery", "source": "pagarme", "payload": {"event": delivery["event"], "webhook_id": delivery["id"], "status": delivery["status"], "attempts": delivery["attempts"], "response_status": delivery["response_status"], "evidence": "research/pagarme/webhooks.md"}})
+    return _result("PG-PIX-011", provider, observations)
+
+
+SCENARIOS = {"PG-PIX-001": create_and_retrieve_charge, "PG-PIX-002": invalid_request, "PG-PIX-003": simulator_success, "PG-PIX-004": simulator_failure, "PG-PIX-005": unknown_charge_retrieval, "PG-PIX-006": invalid_payment_method, "PG-PIX-007": missing_payments, "PG-PIX-008": exact_threshold_success, "PG-PIX-009": oversized_order_code, "PG-PIX-010": paid_webhook_delivery, "PG-PIX-011": failed_webhook_delivery}
 
 
 def run_all() -> dict[str, dict[str, Any]]:

@@ -78,6 +78,36 @@ class PagarmePixProvider:
         self.store.events.append({"type": "charge_status_changed", "payload": {"charge_id": charge_id, "status": outcome, "evidence": "research/pagarme/lifecycle.md"}})
         return deepcopy(charge)
 
+    def deliver_webhook(
+        self,
+        event: str,
+        data: dict[str, Any],
+        *,
+        target_url: str = "https://example.invalid/opp/webhooks/pagarme",
+        response_status: int = 200,
+    ) -> dict[str, Any]:
+        """Record one documented webhook delivery attempt.
+
+        Retry timing, authentication, ordering, and duplicate semantics are
+        intentionally not modeled because the reviewed evidence leaves them
+        unknown.
+        """
+        status = "sent" if 200 <= response_status < 300 else "failed"
+        delivery = {
+            "id": f"hook_DOCUMENTATION_{len(self.store.events) + 1:06d}",
+            "url": target_url,
+            "event": event,
+            "status": status,
+            "attempts": 1,
+            "last_attempt": "2030-01-01T12:00:00Z",
+            "response_status": response_status,
+            "response_raw": "SANITIZED_WEBHOOK_RESPONSE",
+            "account": "acc_DOCUMENTATION",
+            "data": deepcopy(data),
+        }
+        self.store.events.append({"type": "webhook_delivery", "payload": {"webhook_id": delivery["id"], "event": event, "status": status, "response_status": response_status, "evidence": "research/pagarme/webhooks.md"}})
+        return deepcopy(delivery)
+
     def _validate(self, request: dict[str, Any]) -> None:
         if not request.get("items") or not request.get("payments"):
             raise PagarmeNativeError(PagarmeError(400, "required_parameter", "items and payments are required."))
