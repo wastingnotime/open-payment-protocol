@@ -21,7 +21,7 @@ SECURITY_MARKERS = ("pan", "cvv", "card_number", "api_key", "access_token", "sec
 def field(report: Any, name: str) -> Any:
     try:
         return report[name] if isinstance(report, Mapping) else getattr(report, name)
-    except (KeyError, AttributeError) as exc:
+    except (KeyError, AttributeError, TypeError) as exc:
         raise AssertionError(f"report is missing required field: {name}") from exc
 
 

@@ -93,6 +93,8 @@ def test_event_items_must_be_mappings():
 def test_missing_report_field_has_named_contract_error():
     with pytest.raises(AssertionError, match="missing required field: name"):
         field({}, "name")
+    with pytest.raises(AssertionError, match="missing required field: name"):
+        field(None, "name")
 
 
 def test_repeated_provider_runs_return_independent_projections():
