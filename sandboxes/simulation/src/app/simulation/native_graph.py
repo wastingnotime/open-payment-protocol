@@ -64,6 +64,10 @@ class NativeScenarioGraph:
     def scenario_ids(self) -> tuple[str, ...]:
         return tuple(node.id for node in self.nodes if node.kind == "scenario")
 
+    @property
+    def resource_ids(self) -> tuple[str, ...]:
+        return tuple(node.id for node in self.nodes if node.kind == "resource")
+
     def snapshot(self) -> dict[str, object]:
         return {
             "nodes": [node.__dict__.copy() for node in self.nodes],

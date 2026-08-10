@@ -44,6 +44,11 @@ def test_graph_snapshot_exposes_executable_and_deferred_nodes():
     assert len(snapshot["deferred_edges"]) == 2
 
 
+def test_graph_exposes_provider_resource_nodes_separately_from_scenarios():
+    assert len(GRAPH.resource_ids) == 11
+    assert not set(GRAPH.resource_ids) & set(GRAPH.scenario_ids)
+
+
 def test_graph_observations_emit_every_node_and_edge():
     observations = GRAPH.observations()
     nodes = [item for item in observations if item["type"] == "graph_node"]
