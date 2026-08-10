@@ -113,6 +113,14 @@ def test_iugu_webhook_event_contract_is_immutable_and_provider_native():
         PROVIDER_NATIVE_WEBHOOK_EVENTS["iugu"] = ()
 
 
+def test_iugu_webhook_event_contract_covers_documented_lifecycle_names():
+    assert set(PROVIDER_NATIVE_WEBHOOK_EVENTS["iugu"]) == {
+        "invoice.status_changed", "invoice.due", "invoice.payment_failed",
+        "invoice.refund", "invoice.rejected", "invoice.partially_refunded",
+        "invoice.refund_reverted", "invoice.created", "invoice.released",
+    }
+
+
 def test_observation_inventory_covers_every_provider_scenario():
     registries = run_all_providers()
     inventory = observation_inventory(registries)
