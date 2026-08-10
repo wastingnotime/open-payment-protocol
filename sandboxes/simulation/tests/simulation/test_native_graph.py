@@ -76,6 +76,14 @@ def test_expiration_graph_nodes_keep_provider_domain_and_later_rank():
     assert nodes["MP-PIX-017"]["layer"] > nodes["MP-PIX-001"]["layer"]
 
 
+def test_authentication_error_nodes_keep_asaas_domain_and_rank():
+    spec = GRAPH.observatory_spec()
+    nodes = {node["id"]: node for node in spec["nodes"]}
+    for scenario_id in ("AS-PIX-013", "AS-PIX-014", "AS-PIX-015"):
+        assert nodes[scenario_id]["domain"] == "provider-asaas"
+        assert nodes[scenario_id]["layer"] > nodes["UC-ASAAS-CREATE-RETRIEVE"]["layer"]
+
+
 def test_graph_observations_emit_every_node_and_edge():
     observations = GRAPH.observations()
     nodes = [item for item in observations if item["type"] == "graph_node"]
