@@ -22,3 +22,4 @@ validation paths.
 Provider-prefix and scenario-count mappings are read-only contract data.
 The provider runner registry follows the same rule; callers consume
 `run_all_providers()` rather than mutating registration state.
+Regression tests cover both immutability boundaries.
