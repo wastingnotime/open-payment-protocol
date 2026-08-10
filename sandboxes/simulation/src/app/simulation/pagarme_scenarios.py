@@ -77,7 +77,18 @@ def invalid_payment_method() -> dict[str, Any]:
     return _result("PG-PIX-006", provider, observations)
 
 
-SCENARIOS = {"PG-PIX-001": create_and_retrieve_charge, "PG-PIX-002": invalid_request, "PG-PIX-003": simulator_success, "PG-PIX-004": simulator_failure, "PG-PIX-005": unknown_charge_retrieval, "PG-PIX-006": invalid_payment_method}
+def missing_payments() -> dict[str, Any]:
+    provider, observations = PagarmePixProvider(), []
+    request = deepcopy(BASE_REQUEST)
+    request.pop("payments")
+    try:
+        provider.create_order(request)
+    except PagarmeNativeError as exc:
+        observations.append({"type": "semantic_observation", "name": "native_error", "source": "pagarme", "payload": {"status": exc.error.status, "code": exc.error.code}})
+    return _result("PG-PIX-007", provider, observations)
+
+
+SCENARIOS = {"PG-PIX-001": create_and_retrieve_charge, "PG-PIX-002": invalid_request, "PG-PIX-003": simulator_success, "PG-PIX-004": simulator_failure, "PG-PIX-005": unknown_charge_retrieval, "PG-PIX-006": invalid_payment_method, "PG-PIX-007": missing_payments}
 
 
 def run_all() -> dict[str, dict[str, Any]]:
