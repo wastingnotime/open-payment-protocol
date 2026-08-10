@@ -140,6 +140,12 @@ def test_canceled_iugu_webhook_keeps_paid_fields_absent():
     assert "pix_end_to_end_id" not in fields
 
 
+def test_iugu_form_webhook_fields_are_transport_strings():
+    result = SCENARIOS["IUGU-PIX-014"]()
+    fields = next(item for item in result.observations if item["name"] == "native_webhook_event")["payload"]["fields"]
+    assert all(isinstance(value, str) for value in fields.values())
+
+
 def test_iugu_webhook_configuration_preserves_form_transport_and_auth_capability():
     result = SCENARIOS["IUGU-PIX-016"]()
     configuration = next(item for item in result.observations if item["name"] == "native_webhook_configuration")
