@@ -184,3 +184,13 @@ def test_iugu_event_only_scenarios_do_not_invent_invoice_state_changes():
         assert invoice["status"] == "pending"
     refund_projection = next(iter(results["IUGU-PIX-020"].projection.values()))
     assert refund_projection["status"] == "paid"
+
+
+def test_iugu_unmodeled_documented_event_name_is_preserved_opaque():
+    provider = IuguPixProvider()
+    invoice = provider.create_invoice(deepcopy(BASE_REQUEST))
+
+    payload = provider.webhook_form_payload(invoice["id"], event="invoice.partially_refunded")
+
+    assert payload["event"] == "invoice.partially_refunded"
+    assert payload["status"] == "pending"
