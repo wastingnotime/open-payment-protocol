@@ -21,6 +21,7 @@ Run the full deterministic suite with `pytest -q sandboxes/simulation/tests`.
 Cross-provider checks also ensure scenario reports do not introduce raw PAN,
 CVV, equivalent cardholder-data field markers, or provider credential markers
 such as API keys and access tokens.
+The marker list is shared with the standalone validator.
 
 Provider scenario registries must also be replayable: identical deterministic
 inputs produce byte-equivalent report content across repeated runs.
