@@ -13,14 +13,7 @@ from app.simulation.mercadopago_scenarios import run_all as run_mercado_pago
 from app.simulation.pagarme_scenarios import run_all as run_pagarme
 from app.simulation.pagbank_scenarios import run_all as run_pagbank
 from app.simulation.scenarios import run_all as run_iugu
-
-
-def field(report, name):
-    return report[name] if isinstance(report, dict) else getattr(report, name)
-
-
-def allowed_sources(provider):
-    return {provider, "simulation"} if provider == "iugu" else {provider}
+from app.simulation.report_contract import REPORT_FIELDS, PROVIDER_PREFIXES, allowed_sources, canonical_snapshot, field
 
 
 def main() -> int:
@@ -39,12 +32,11 @@ def main() -> int:
         "pagbank": run_pagbank(),
     }
     total = 0
-    prefixes = {"asaas": "AS-", "iugu": "IUGU-", "mercadopago": "MP-", "pagarme": "PG-", "pagbank": "PB-"}
     serialized_reports = []
     for provider, reports in runners.items():
         for scenario_id, report in reports.items():
             observations = field(report, "observations")
-            assert scenario_id.startswith(prefixes[provider])
+            assert scenario_id.startswith(PROVIDER_PREFIXES[provider])
             assert field(report, "name") == scenario_id
             assert isinstance(field(report, "events"), list)
             assert isinstance(field(report, "projection"), dict)
@@ -53,22 +45,15 @@ def main() -> int:
                 assert {"type", "name", "source", "payload"} <= observation.keys()
                 assert observation["source"] in allowed_sources(provider)
                 assert observation["payload"]["scenario"] == scenario_id
-            serialized_reports.append({name: field(report, name) for name in ("name", "observations", "events", "projection")})
+            serialized_reports.append({name: field(report, name) for name in REPORT_FIELDS})
             total += 1
         print(f"{provider}: {len(reports)} scenarios validated")
     serialized = json.dumps(serialized_reports).lower()
     for marker in ("pan", "cvv", "card_number", "api_key", "access_token", "secret_key"):
         assert marker not in serialized
     assert total == 50
-    def snapshot(reports):
-        return json.dumps(
-            [{name: field(report, name) for name in ("name", "observations", "events", "projection")}
-             for report in reports.values()],
-            sort_keys=True,
-            separators=(",", ":"),
-        )
-    assert {provider: snapshot(reports) for provider, reports in runners.items()} == {
-        provider: snapshot(reports) for provider, reports in second_run.items()
+    assert {provider: canonical_snapshot(reports) for provider, reports in runners.items()} == {
+        provider: canonical_snapshot(reports) for provider, reports in second_run.items()
     }
     print(f"validated {total} scenarios")
     return 0

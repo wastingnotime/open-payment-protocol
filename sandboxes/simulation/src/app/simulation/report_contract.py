@@ -1,0 +1,26 @@
+"""Shared report-contract rules for tests and local validation tools."""
+
+from __future__ import annotations
+
+import json
+from typing import Any
+
+
+REPORT_FIELDS = ("name", "observations", "events", "projection")
+PROVIDER_PREFIXES = {"asaas": "AS-", "iugu": "IUGU-", "mercadopago": "MP-", "pagarme": "PG-", "pagbank": "PB-"}
+
+
+def field(report: Any, name: str) -> Any:
+    return report[name] if isinstance(report, dict) else getattr(report, name)
+
+
+def allowed_sources(provider: str) -> set[str]:
+    return {provider, "simulation"} if provider == "iugu" else {provider}
+
+
+def canonical_snapshot(reports: dict[str, Any]) -> str:
+    return json.dumps(
+        [{name: field(report, name) for name in REPORT_FIELDS} for report in reports.values()],
+        sort_keys=True,
+        separators=(",", ":"),
+    )
