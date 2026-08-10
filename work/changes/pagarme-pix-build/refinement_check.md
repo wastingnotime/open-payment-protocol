@@ -31,6 +31,8 @@ visible together without introducing a normalized status enum.
   and does not infer an order lookup fallback.
 - Pix outcome simulation applies the documented amount threshold once per
   charge and keeps order, charge, and transaction statuses aligned.
+- Order creation requires both item and payment collections; missing either
+  input remains the native required-parameter boundary.
 
 ## Remaining Questions
 
