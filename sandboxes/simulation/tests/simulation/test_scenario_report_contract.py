@@ -46,6 +46,16 @@ def test_observation_inventory_preserves_provider_native_names():
     assert inventory["pagbank"]["native_webhook_notification"] == 1
 
 
+def test_observation_inventory_exposes_refund_and_cancellation_names_without_normalizing_them():
+    inventory = observation_inventory(run_all_providers())
+    assert inventory["mercadopago"]["native_partial_refund"] == 1
+    assert inventory["mercadopago"]["native_total_refund"] == 1
+    assert inventory["pagbank"]["native_partial_cancellation"] == 1
+    assert inventory["pagbank"]["native_full_cancellation"] == 1
+    assert "native_refund" not in inventory["mercadopago"]
+    assert "native_refund" not in inventory["pagbank"]
+
+
 def test_observation_inventory_covers_every_provider_scenario():
     registries = run_all_providers()
     inventory = observation_inventory(registries)
