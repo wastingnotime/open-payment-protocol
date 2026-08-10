@@ -11,3 +11,5 @@ Per-report validation remains limited to the shared envelope, attribution, and
 prefix rules; provider payload semantics stay outside the helper.
 The helper remains an experimental internal simulation surface, not protocol
 authority.
+Provider runner registration is kept in a neighboring simulation registry so
+tools do not maintain separate provider lists.

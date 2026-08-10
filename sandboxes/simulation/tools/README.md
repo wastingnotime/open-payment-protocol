@@ -16,3 +16,4 @@ It also replays each provider registry and compares the serialized report
 snapshot.
 The only framework-level source exception is Iugu's `simulation` replay
 observation.
+Provider registration is shared with the deterministic test suite.
