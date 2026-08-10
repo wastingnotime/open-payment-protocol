@@ -18,6 +18,7 @@ def test_all_provider_scenarios_preserve_comparable_report_shape():
         "pagarme": run_pagarme(),
         "pagbank": run_pagbank(),
     }
+    assert sum(len(scenarios) for scenarios in registries.values()) == 50
     for provider, scenarios in registries.items():
         assert scenarios
         for scenario_id, report in scenarios.items():

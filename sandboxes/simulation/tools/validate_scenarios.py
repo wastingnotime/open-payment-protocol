@@ -54,6 +54,7 @@ def main() -> int:
     serialized = json.dumps(serialized_reports).lower()
     for marker in ("pan", "cvv", "card_number"):
         assert marker not in serialized
+    assert total == 50
     def snapshot(reports):
         return json.dumps(
             [{name: field(report, name) for name in ("name", "observations", "events", "projection")}
