@@ -36,6 +36,8 @@ class MercadoPagoPixProvider:
         self.store = store or MercadoPagoStore()
 
     def create_order(self, request: dict[str, Any], *, idempotency_key: str) -> dict[str, Any]:
+        if not idempotency_key:
+            raise MercadoPagoNativeError(MercadoPagoError(400, "required_properties", "An idempotency key is required."))
         if idempotency_key in self.store.idempotency:
             self._event("order_create_rejected", {"code": "idempotency_key_already_used"})
             raise MercadoPagoNativeError(MercadoPagoError(409, "idempotency_key_already_used", "The idempotency key was already used."))
