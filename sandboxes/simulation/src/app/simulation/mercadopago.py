@@ -101,6 +101,32 @@ class MercadoPagoPixProvider:
         self._event("payment_approved", {"order_id": order_id, "payment_id": payment["id"], "status": payment["status"]})
         return deepcopy(order)
 
+    def cancel_unpaid_order(self, order_id: str) -> dict[str, Any]:
+        order = self.store.orders.get(order_id)
+        if order is None:
+            raise MercadoPagoNativeError(MercadoPagoError(404, "order_not_found", "The order was not found."))
+        payment = order["transactions"]["payments"][0]
+        if payment["status"] != "action_required":
+            raise MercadoPagoNativeError(MercadoPagoError(400, "invalid_status", "Only unpaid action-required Pix payments can be canceled."))
+        order["status"] = payment["status"] = "canceled"
+        order["status_detail"] = payment["status_detail"] = "canceled"
+        self._event("payment_canceled", {"order_id": order_id, "payment_id": payment["id"], "status": payment["status"], "reason": "unpaid_action_required"})
+        return deepcopy(order)
+
+    def resolve_unpaid_expiration(self, order_id: str, *, outcome: str) -> dict[str, Any]:
+        if outcome not in {"canceled", "expired"}:
+            raise MercadoPagoNativeError(MercadoPagoError(400, "invalid_expiration_outcome", "Expiration outcome must be canceled or expired."))
+        order = self.store.orders.get(order_id)
+        if order is None:
+            raise MercadoPagoNativeError(MercadoPagoError(404, "order_not_found", "The order was not found."))
+        payment = order["transactions"]["payments"][0]
+        if payment["status"] != "action_required":
+            raise MercadoPagoNativeError(MercadoPagoError(400, "invalid_status", "Only unpaid action-required Pix payments can expire."))
+        order["status"] = payment["status"] = outcome
+        order["status_detail"] = payment["status_detail"] = "expired"
+        self._event("payment_expired", {"order_id": order_id, "payment_id": payment["id"], "status": payment["status"], "documented_alternatives": ["canceled", "expired"], "manual_cancellation_available": False})
+        return deepcopy(order)
+
     def refund_order(self, order_id: str, *, amount: str | None = None) -> dict[str, Any]:
         order = self.store.orders.get(order_id)
         if order is None:

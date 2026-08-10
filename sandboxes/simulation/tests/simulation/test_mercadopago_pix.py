@@ -169,3 +169,23 @@ def test_refund_over_total_is_native_invalid_amount_boundary():
         assert exc.error.code == "invalid_refund_amount"
     else:
         raise AssertionError("expected Mercado Pago refund amount rejection")
+
+
+def test_unpaid_cancellation_preserves_native_canceled_status():
+    provider = MercadoPagoPixProvider()
+    order = provider.create_order(deepcopy(BASE_REQUEST), idempotency_key="expiry-001")
+
+    canceled = provider.cancel_unpaid_order(order["id"])
+
+    assert canceled["status"] == "canceled"
+    assert canceled["transactions"]["payments"][0]["status"] == "canceled"
+
+
+def test_expiration_preserves_documented_status_alternative():
+    provider = MercadoPagoPixProvider()
+    order = provider.create_order(deepcopy(BASE_REQUEST), idempotency_key="expiry-002")
+
+    expired = provider.resolve_unpaid_expiration(order["id"], outcome="expired")
+
+    assert expired["status"] == "expired"
+    assert expired["status_detail"] == "expired"
