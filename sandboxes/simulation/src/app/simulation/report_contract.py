@@ -25,3 +25,16 @@ def canonical_snapshot(reports: dict[str, Any]) -> str:
         sort_keys=True,
         separators=(",", ":"),
     )
+
+
+def validate_report(provider: str, scenario_id: str, report: Any) -> None:
+    assert scenario_id.startswith(PROVIDER_PREFIXES[provider])
+    assert field(report, "name") == scenario_id
+    assert isinstance(field(report, "events"), list)
+    assert isinstance(field(report, "projection"), dict)
+    observations = field(report, "observations")
+    assert observations
+    for observation in observations:
+        assert {"type", "name", "source", "payload"} <= observation.keys()
+        assert observation["source"] in allowed_sources(provider)
+        assert observation["payload"]["scenario"] == scenario_id

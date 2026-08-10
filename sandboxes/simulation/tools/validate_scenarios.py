@@ -13,7 +13,7 @@ from app.simulation.mercadopago_scenarios import run_all as run_mercado_pago
 from app.simulation.pagarme_scenarios import run_all as run_pagarme
 from app.simulation.pagbank_scenarios import run_all as run_pagbank
 from app.simulation.scenarios import run_all as run_iugu
-from app.simulation.report_contract import REPORT_FIELDS, PROVIDER_PREFIXES, PROVIDER_SCENARIO_COUNTS, allowed_sources, canonical_snapshot, field
+from app.simulation.report_contract import REPORT_FIELDS, PROVIDER_SCENARIO_COUNTS, canonical_snapshot, field, validate_report
 
 
 def main() -> int:
@@ -36,16 +36,7 @@ def main() -> int:
     serialized_reports = []
     for provider, reports in runners.items():
         for scenario_id, report in reports.items():
-            observations = field(report, "observations")
-            assert scenario_id.startswith(PROVIDER_PREFIXES[provider])
-            assert field(report, "name") == scenario_id
-            assert isinstance(field(report, "events"), list)
-            assert isinstance(field(report, "projection"), dict)
-            assert observations
-            for observation in observations:
-                assert {"type", "name", "source", "payload"} <= observation.keys()
-                assert observation["source"] in allowed_sources(provider)
-                assert observation["payload"]["scenario"] == scenario_id
+            validate_report(provider, scenario_id, report)
             serialized_reports.append({name: field(report, name) for name in REPORT_FIELDS})
             total += 1
         print(f"{provider}: {len(reports)} scenarios validated")
