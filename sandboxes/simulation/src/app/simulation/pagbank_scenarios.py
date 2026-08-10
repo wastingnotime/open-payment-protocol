@@ -85,7 +85,18 @@ def duplicate_pix_payment() -> dict[str, Any]:
     return _result("PB-PIX-006", provider, observations)
 
 
-SCENARIOS = {"PB-PIX-001": create_and_retrieve, "PB-PIX-002": invalid_amount, "PB-PIX-003": idempotency_conflict, "PB-PIX-004": charge_emerges_after_pix_payment, "PB-PIX-005": unknown_order_retrieval, "PB-PIX-006": duplicate_pix_payment}
+def multiple_qr_codes() -> dict[str, Any]:
+    provider, observations = PagBankPixProvider(), []
+    request = deepcopy(BASE_REQUEST)
+    request["qr_codes"].append(deepcopy(BASE_REQUEST["qr_codes"][0]))
+    try:
+        provider.create_order(request, idempotency_key="pagbank-scenario-007")
+    except PagBankNativeError as exc:
+        observations.append({"type": "semantic_observation", "name": "native_error", "source": "pagbank", "payload": {"status": exc.error.status, "code": exc.error.code}})
+    return _result("PB-PIX-007", provider, observations)
+
+
+SCENARIOS = {"PB-PIX-001": create_and_retrieve, "PB-PIX-002": invalid_amount, "PB-PIX-003": idempotency_conflict, "PB-PIX-004": charge_emerges_after_pix_payment, "PB-PIX-005": unknown_order_retrieval, "PB-PIX-006": duplicate_pix_payment, "PB-PIX-007": multiple_qr_codes}
 
 
 def run_all() -> dict[str, dict[str, Any]]:

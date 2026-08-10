@@ -6,7 +6,7 @@ from app.simulation.pagbank_scenarios import BASE_REQUEST, run_all
 
 def test_pagbank_scenarios_complete():
     results = run_all()
-    assert set(results) == {"PB-PIX-001", "PB-PIX-002", "PB-PIX-003", "PB-PIX-004", "PB-PIX-005", "PB-PIX-006"}
+    assert set(results) == {"PB-PIX-001", "PB-PIX-002", "PB-PIX-003", "PB-PIX-004", "PB-PIX-005", "PB-PIX-006", "PB-PIX-007"}
     assert results["PB-PIX-001"]["projection"]
 
 
@@ -50,3 +50,10 @@ def test_duplicate_pix_payment_is_native_invalid_status_boundary():
     error = result["observations"][0]["payload"]
     assert error["status"] == 400
     assert error["code"] == "invalid_status"
+
+
+def test_multiple_qr_codes_are_native_invalid_parameter_boundary():
+    result = run_all()["PB-PIX-007"]
+    error = result["observations"][0]["payload"]
+    assert error["status"] == 400
+    assert error["code"] == "invalid_parameter"
