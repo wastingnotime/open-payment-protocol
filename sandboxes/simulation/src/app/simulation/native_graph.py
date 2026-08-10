@@ -266,6 +266,9 @@ NODES = TOPOLOGY_NODES + (
     _scenario_node("asaas", "AS-PIX-010", "payment webhook redelivered"),
     _scenario_node("asaas", "AS-PIX-011", "overdue payment webhook"),
     _scenario_node("asaas", "AS-PIX-012", "invalid webhook envelope rejected"),
+    _scenario_node("asaas", "AS-PIX-013", "missing access token rejected"),
+    _scenario_node("asaas", "AS-PIX-014", "invalid access token rejected"),
+    _scenario_node("asaas", "AS-PIX-015", "invalid environment rejected"),
     GraphNode("AS-PIX-DEFERRED-SUCCESS", "asaas", "deferred", "Pix success transition unknown"),
     GraphNode("MP-PIX-DEFERRED-FINALIZATION", "mercadopago", "deferred", "async finalization unknown"),
 )
@@ -339,6 +342,9 @@ TOPOLOGY_EDGES = (
     TopologyEdge("UC-ASAAS-CREATE-RETRIEVE", "AS-PIX-010", "executes", "use_case_scenario"),
     TopologyEdge("UC-ASAAS-CREATE-RETRIEVE", "AS-PIX-011", "executes", "use_case_scenario"),
     TopologyEdge("UC-ASAAS-CREATE-RETRIEVE", "AS-PIX-012", "executes", "use_case_scenario"),
+    TopologyEdge("UC-ASAAS-CREATE-RETRIEVE", "AS-PIX-013", "executes", "use_case_scenario"),
+    TopologyEdge("UC-ASAAS-CREATE-RETRIEVE", "AS-PIX-014", "executes", "use_case_scenario"),
+    TopologyEdge("UC-ASAAS-CREATE-RETRIEVE", "AS-PIX-015", "executes", "use_case_scenario"),
 )
 
 

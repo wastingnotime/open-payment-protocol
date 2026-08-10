@@ -35,7 +35,7 @@ def main() -> int:
     print(f"native observations: {observation_inventory(runners)}")
     graph = GRAPH.snapshot()
     assert GRAPH.validation_errors() == []
-    assert len(GRAPH.scenario_ids) == 45
+    assert len(GRAPH.scenario_ids) == 48
     expiration_scenarios = {"MP-PIX-015", "MP-PIX-016", "MP-PIX-017"}
     assert expiration_scenarios <= set(GRAPH.scenario_ids)
     print(f"expiration slice: {sorted(expiration_scenarios)}")
