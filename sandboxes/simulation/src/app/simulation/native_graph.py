@@ -56,6 +56,10 @@ class NativeScenarioGraph:
     def node_ids(self) -> frozenset[str]:
         return frozenset(node.id for node in self.nodes)
 
+    @property
+    def actor_ids(self) -> tuple[str, ...]:
+        return tuple(node.id for node in self.nodes if node.kind == "actor")
+
     def snapshot(self) -> dict[str, object]:
         return {
             "nodes": [node.__dict__.copy() for node in self.nodes],

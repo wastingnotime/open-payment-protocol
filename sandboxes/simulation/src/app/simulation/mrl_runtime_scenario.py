@@ -64,7 +64,7 @@ def create_simulation():
         run_id="payment-provider-discovery",
         seed=1,
         initial_time=initial_time,
-        actors=[Actor("IuguScenarioActor")],
+        actors=[Actor(actor_id) for actor_id in GRAPH.actor_ids],
         observatory_nodes=[ObservatoryNode(**node) for node in graph_spec["nodes"]],
         observatory_edges=[ObservatoryEdge(**edge) for edge in graph_spec["edges"]],
         scheduled_actions=[
@@ -72,7 +72,7 @@ def create_simulation():
                 when=initial_time,
                 action=emit_slice_results,
                 name="RunIuguPixScenarios",
-                source="IuguScenarioActor",
+                source="ACTOR-IUGU",
                 correlation_id="payment-provider-discovery",
             )
         ],
