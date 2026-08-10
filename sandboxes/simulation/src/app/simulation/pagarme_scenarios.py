@@ -57,7 +57,16 @@ def simulator_failure() -> dict[str, Any]:
     return _result("PG-PIX-004", provider, observations)
 
 
-SCENARIOS = {"PG-PIX-001": create_and_retrieve_charge, "PG-PIX-002": invalid_request, "PG-PIX-003": simulator_success, "PG-PIX-004": simulator_failure}
+def unknown_charge_retrieval() -> dict[str, Any]:
+    provider, observations = PagarmePixProvider(), []
+    try:
+        provider.retrieve_charge("ch_UNKNOWN_DOCUMENTATION")
+    except PagarmeNativeError as exc:
+        observations.append({"type": "semantic_observation", "name": "native_error", "source": "pagarme", "payload": {"status": exc.error.status, "code": exc.error.code}})
+    return _result("PG-PIX-005", provider, observations)
+
+
+SCENARIOS = {"PG-PIX-001": create_and_retrieve_charge, "PG-PIX-002": invalid_request, "PG-PIX-003": simulator_success, "PG-PIX-004": simulator_failure, "PG-PIX-005": unknown_charge_retrieval}
 
 
 def run_all() -> dict[str, dict[str, Any]]:
