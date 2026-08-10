@@ -33,6 +33,7 @@ def main() -> int:
     }
     print(f"validated {total} scenarios")
     graph = GRAPH.snapshot()
+    assert GRAPH.validation_errors() == []
     print(f"graph: {len(graph['nodes'])} nodes, {len(graph['topology_edges'])} topology edges, {len(graph['known_edges'])} known edges, {len(graph['deferred_edges'])} deferred edges")
     return 0
 
