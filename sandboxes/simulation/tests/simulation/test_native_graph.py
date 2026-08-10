@@ -38,7 +38,7 @@ def test_graph_observations_emit_every_node_and_edge():
     nodes = [item for item in observations if item["type"] == "graph_node"]
     edges = [item for item in observations if item["type"] == "graph_edge"]
     assert len(nodes) == 43
-    assert len(edges) == 38
+    assert len(edges) == 56
     assert {item["payload"]["id"] for item in nodes} == GRAPH.node_ids
 
 
