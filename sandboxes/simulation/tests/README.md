@@ -13,6 +13,9 @@ Each observation also retains its event `type`, semantic `name`, provider
 `source`, and structured `payload`; only the payload's provider-specific fields
 remain intentionally unconstrained.
 
+The `source` field must identify the provider registry that emitted the
+observation.
+
 Run the full deterministic suite with `pytest -q sandboxes/simulation/tests`.
 
 Cross-provider checks also ensure scenario reports do not introduce raw PAN,
