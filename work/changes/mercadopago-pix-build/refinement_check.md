@@ -26,6 +26,8 @@ append-only event store for runtime inspection and later adapter pressure.
   boundary.
 - Unknown order retrieval remains a native 404 boundary and is distinct from
   asynchronous reconciliation of a known processing order.
+- Orders require exactly one Pix payment transaction; non-Pix or ambiguous
+  payment shapes remain native property-value validation errors.
 
 ## Remaining Questions
 
