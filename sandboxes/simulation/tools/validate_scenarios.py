@@ -10,7 +10,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from app.simulation.scenario_registry import run_all_providers
 from app.simulation.native_graph import GRAPH
-from app.simulation.report_contract import PROVIDER_ORDER, REPORT_FIELDS, PROVIDER_SCENARIO_COUNTS, TOTAL_SCENARIO_COUNT, assert_sanitized, canonical_snapshot, error_inventory, field, observation_inventory, validate_report
+from app.simulation.report_contract import PROVIDER_ORDER, REPORT_FIELDS, PROVIDER_SCENARIO_COUNTS, TOTAL_SCENARIO_COUNT, assert_sanitized, canonical_snapshot, error_inventory, field, observation_inventory, unknown_result_inventory, validate_report
 
 
 def main() -> int:
@@ -34,6 +34,7 @@ def main() -> int:
     print(f"validated {total} scenarios")
     print(f"native observations: {observation_inventory(runners)}")
     print(f"native errors: {error_inventory(runners)}")
+    print(f"unknown results: {unknown_result_inventory(runners)}")
     iugu_events = {
         observation["payload"]["event"]
         for report in runners["iugu"].values()
