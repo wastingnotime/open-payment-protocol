@@ -95,3 +95,10 @@ def test_documented_canceled_to_paid_recovery_is_preserved():
     transition = next(item for item in result.observations if item["name"] == "native_transition")
     assert transition["payload"]["invoice_status"] == "paid"
     assert transition["payload"]["recovery"] is True
+
+
+def test_paid_invoice_cancellation_is_native_invalid_transition():
+    result = SCENARIOS["IUGU-PIX-011"]()
+    error = next(item for item in result.observations if item["name"] == "native_error")
+    assert error["payload"]["status"] == 422
+    assert error["payload"]["code"] == "invalid_transition"

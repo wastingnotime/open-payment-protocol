@@ -97,3 +97,8 @@ complete Pix status transition or timing rule.
 
 Apply the documented `canceled -> paid` transition and preserve the paid Pix
 end-to-end ID. This intentionally keeps cancellation non-final for Iugu.
+
+### IUGU-PIX-011 — Reject cancellation after payment
+
+Attempt to cancel an invoice after the documented Pix payment transition and
+preserve Iugu's native `422 invalid_transition` boundary.

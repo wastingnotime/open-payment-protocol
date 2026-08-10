@@ -39,6 +39,8 @@ references, and the documented 409 idempotency conflict.
   proving Iugu cancellation is not universally final.
 - Runtime inspection emits 59 observations and confirms the recovery event,
   paid Pix state, and explicit recovery marker together.
+- `IUGU-PIX-011` preserves the native `422 invalid_transition` response when a
+  paid invoice is canceled; the simulator does not imply an illegal reversal.
 - Iugu's conflicting payer requirements remain unsupported/unknown combinations.
 - Exact provider error bodies, idempotency retention, expiry, refunds, and
   webhook delivery remain deferred as documented in the slice plan.
