@@ -50,9 +50,10 @@ For a local inspection of the exact ordered stream, run
 
 The observatory uses distinct supported runtime kinds and numeric layers:
 actors, use cases, provider-native aggregates, scenario projections, and
-deferred external-provider nodes. The metadata domain is
-`payment-provider-discovery`; Pix is the current method slice, not the name of
-the whole simulation domain.
+deferred external-provider nodes. Observatory domains are split into one
+`simulation-coordination` domain and one domain per provider, such as
+`provider-asaas` and `provider-iugu`. Pix is the current method slice, not the
+name of the whole simulation domain.
 
 ## Comparison boundary
 

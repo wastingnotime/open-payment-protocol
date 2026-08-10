@@ -153,7 +153,7 @@ class NativeScenarioGraph:
                     "kind": runtime_kind[node.kind],
                     "layer": runtime_layer[node.kind],
                     "realm": node.provider,
-                    "domain": "payment-provider-discovery",
+                    "domain": "simulation-coordination" if node.provider == "simulation" else f"provider-{node.provider}",
                     "description": f"{node.provider} provider-native {node.kind} in the Pix discovery slice",
                     "badge": "deferred" if node.kind == "deferred" else ("Pix" if node.kind in {"resource", "scenario"} else node.kind),
                 }

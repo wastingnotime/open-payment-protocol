@@ -72,7 +72,17 @@ def test_observatory_spec_contains_runtime_visible_nodes_and_edges():
     assert {node["id"] for node in spec["nodes"]} == GRAPH.node_ids
     assert {node["kind"] for node in spec["nodes"]} == {"actor", "use_case", "aggregate", "projection", "external_provider"}
     assert {node["layer"] for node in spec["nodes"]} == {-8, 0, 4, 6, 10}
-    assert {node["domain"] for node in spec["nodes"]} == {"payment-provider-discovery"}
+    assert {node["domain"] for node in spec["nodes"]} == {
+        "simulation-coordination",
+        "provider-asaas",
+        "provider-iugu",
+        "provider-mercadopago",
+        "provider-pagbank",
+        "provider-pagarme",
+    }
+    assert spec["nodes"][0]["domain"] == "simulation-coordination"
+    for node in spec["nodes"][1:]:
+        assert node["domain"] == f"provider-{node['realm']}"
 
 
 def test_observatory_summary_matches_runtime_graph_contract():
