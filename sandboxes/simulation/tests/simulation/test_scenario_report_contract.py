@@ -1,8 +1,9 @@
-from app.simulation.scenario_registry import PROVIDER_RUNNERS, run_all_providers
-from app.simulation.report_contract import PROVIDER_PREFIXES, PROVIDER_SCENARIO_COUNTS
-from app.simulation.report_contract import PROVIDER_ORDER, REPORT_FIELDS, PROVIDER_SCENARIO_COUNTS, allowed_sources, assert_sanitized, canonical_snapshot, field, validate_report
 import json
+
 import pytest
+
+from app.simulation.scenario_registry import PROVIDER_RUNNERS, run_all_providers
+from app.simulation.report_contract import PROVIDER_ORDER, PROVIDER_SCENARIO_COUNTS, REPORT_FIELDS, allowed_sources, assert_sanitized, canonical_snapshot, field, validate_report
 
 
 def test_all_provider_scenarios_preserve_comparable_report_shape():
