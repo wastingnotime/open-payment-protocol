@@ -157,3 +157,15 @@ def test_refund_without_amount_refunds_remaining_total():
 
     assert refunded["status"] == "refunded"
     assert refunded["transactions"]["payments"][0]["refunded_amount"] == "50.00"
+
+
+def test_refund_over_total_is_native_invalid_amount_boundary():
+    provider = MercadoPagoPixProvider()
+    order = provider.create_order(deepcopy(BASE_REQUEST), idempotency_key="refund-003")
+    provider.mark_pix_approved(order["id"])
+    try:
+        provider.refund_order(order["id"], amount="50.01")
+    except MercadoPagoNativeError as exc:
+        assert exc.error.code == "invalid_refund_amount"
+    else:
+        raise AssertionError("expected Mercado Pago refund amount rejection")

@@ -163,3 +163,15 @@ def test_full_charge_cancellation_uses_pagbank_canceled_status():
     canceled = provider.cancel_charge(order["id"])
 
     assert canceled["charges"][0]["status"] == "CANCELED"
+
+
+def test_cancellation_over_total_is_native_invalid_amount_boundary():
+    provider = PagBankPixProvider()
+    order = provider.create_order(deepcopy(BASE_REQUEST), idempotency_key="cancel-003")
+    provider.mark_pix_paid(order["id"], end_to_end_id="E2E_CANCEL_FIXTURE")
+    try:
+        provider.cancel_charge(order["id"], amount=1001)
+    except PagBankNativeError as exc:
+        assert exc.error.code == "invalid_refund_amount"
+    else:
+        raise AssertionError("expected PagBank cancellation amount rejection")
