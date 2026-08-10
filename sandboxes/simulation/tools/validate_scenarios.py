@@ -36,6 +36,9 @@ def main() -> int:
     graph = GRAPH.snapshot()
     assert GRAPH.validation_errors() == []
     assert len(GRAPH.scenario_ids) == 45
+    expiration_scenarios = {"MP-PIX-015", "MP-PIX-016", "MP-PIX-017"}
+    assert expiration_scenarios <= set(GRAPH.scenario_ids)
+    print(f"expiration slice: {sorted(expiration_scenarios)}")
     print(f"graph: {len(graph['nodes'])} nodes, {len(graph['topology_edges'])} topology edges, {len(graph['known_edges'])} known edges, {len(graph['deferred_edges'])} deferred edges")
     return 0
 
