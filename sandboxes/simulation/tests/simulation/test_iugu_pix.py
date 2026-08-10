@@ -174,3 +174,13 @@ def test_documented_iugu_event_envelopes_preserve_event_only_boundary():
         assert event["transport"] == "application/x-www-form-urlencoded"
         assert event["state_transition"] == "event_only"
         assert all(isinstance(value, str) for value in event["fields"].values())
+
+
+def test_iugu_event_only_scenarios_do_not_invent_invoice_state_changes():
+    results = run_all()
+    for scenario_id in ("IUGU-PIX-018", "IUGU-PIX-019", "IUGU-PIX-021"):
+        projection = results[scenario_id].projection
+        invoice = next(iter(projection.values()))
+        assert invoice["status"] == "pending"
+    refund_projection = next(iter(results["IUGU-PIX-020"].projection.values()))
+    assert refund_projection["status"] == "paid"
