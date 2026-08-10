@@ -9,6 +9,9 @@ from app.simulation.report_contract import PROVIDER_ORDER, PROVIDER_PREFIXES, PR
 def test_all_provider_scenarios_preserve_comparable_report_shape():
     assert tuple(PROVIDER_RUNNERS) == PROVIDER_ORDER
     registries = run_all_providers()
+    assert isinstance(registries, dict)
+    assert tuple(registries) == PROVIDER_ORDER
+    assert all(isinstance(reports, dict) for reports in registries.values())
     assert {provider: len(scenarios) for provider, scenarios in registries.items()} == PROVIDER_SCENARIO_COUNTS
     assert sum(len(scenarios) for scenarios in registries.values()) == 50
     for provider, scenarios in registries.items():
