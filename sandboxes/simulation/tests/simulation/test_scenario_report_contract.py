@@ -3,7 +3,7 @@ from app.simulation.scenarios import run_all as run_iugu
 from app.simulation.mercadopago_scenarios import run_all as run_mercado_pago
 from app.simulation.pagarme_scenarios import run_all as run_pagarme
 from app.simulation.pagbank_scenarios import run_all as run_pagbank
-from app.simulation.report_contract import REPORT_FIELDS, PROVIDER_PREFIXES, allowed_sources, canonical_snapshot, field
+from app.simulation.report_contract import REPORT_FIELDS, PROVIDER_PREFIXES, PROVIDER_SCENARIO_COUNTS, allowed_sources, canonical_snapshot, field
 import json
 
 
@@ -15,9 +15,7 @@ def test_all_provider_scenarios_preserve_comparable_report_shape():
         "pagarme": run_pagarme(),
         "pagbank": run_pagbank(),
     }
-    assert {provider: len(scenarios) for provider, scenarios in registries.items()} == {
-        "asaas": 8, "iugu": 13, "mercadopago": 10, "pagarme": 9, "pagbank": 10,
-    }
+    assert {provider: len(scenarios) for provider, scenarios in registries.items()} == PROVIDER_SCENARIO_COUNTS
     assert sum(len(scenarios) for scenarios in registries.values()) == 50
     for provider, scenarios in registries.items():
         assert scenarios

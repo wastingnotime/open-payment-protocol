@@ -8,6 +8,7 @@ from typing import Any
 
 REPORT_FIELDS = ("name", "observations", "events", "projection")
 PROVIDER_PREFIXES = {"asaas": "AS-", "iugu": "IUGU-", "mercadopago": "MP-", "pagarme": "PG-", "pagbank": "PB-"}
+PROVIDER_SCENARIO_COUNTS = {"asaas": 8, "iugu": 13, "mercadopago": 10, "pagarme": 9, "pagbank": 10}
 
 
 def field(report: Any, name: str) -> Any:

@@ -13,7 +13,7 @@ from app.simulation.mercadopago_scenarios import run_all as run_mercado_pago
 from app.simulation.pagarme_scenarios import run_all as run_pagarme
 from app.simulation.pagbank_scenarios import run_all as run_pagbank
 from app.simulation.scenarios import run_all as run_iugu
-from app.simulation.report_contract import REPORT_FIELDS, PROVIDER_PREFIXES, allowed_sources, canonical_snapshot, field
+from app.simulation.report_contract import REPORT_FIELDS, PROVIDER_PREFIXES, PROVIDER_SCENARIO_COUNTS, allowed_sources, canonical_snapshot, field
 
 
 def main() -> int:
@@ -32,6 +32,7 @@ def main() -> int:
         "pagbank": run_pagbank(),
     }
     total = 0
+    assert {provider: len(reports) for provider, reports in runners.items()} == PROVIDER_SCENARIO_COUNTS
     serialized_reports = []
     for provider, reports in runners.items():
         for scenario_id, report in reports.items():
