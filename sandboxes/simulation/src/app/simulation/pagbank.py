@@ -103,13 +103,14 @@ class PagBankPixProvider:
         return deepcopy(order)
 
     @staticmethod
-    def authenticity_token(account_token: str, raw_payload: str) -> str:
+    def authenticity_token(account_token: str, raw_payload: str | bytes) -> str:
         """Compute PagBank's SHA-256 token over account token plus raw bytes."""
-        return hashlib.sha256(f"{account_token}-{raw_payload}".encode()).hexdigest()
+        payload_bytes = raw_payload.encode() if isinstance(raw_payload, str) else raw_payload
+        return hashlib.sha256(account_token.encode() + b"-" + payload_bytes).hexdigest()
 
     @classmethod
     def verify_authenticity(
-        cls, account_token: str, raw_payload: str, received_token: str
+        cls, account_token: str, raw_payload: str | bytes, received_token: str
     ) -> bool:
         expected = cls.authenticity_token(account_token, raw_payload)
         return hmac.compare_digest(expected, received_token)

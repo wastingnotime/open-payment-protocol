@@ -96,6 +96,13 @@ def test_mismatched_notification_authenticity_is_discarded():
     assert notification["action"] == "discard"
 
 
+def test_authenticity_token_uses_exact_raw_bytes():
+    raw_payload = b'{"status":"PAID"}'
+    token = PagBankPixProvider.authenticity_token("ACCOUNT_TOKEN_DOCUMENTATION", raw_payload)
+    assert PagBankPixProvider.verify_authenticity("ACCOUNT_TOKEN_DOCUMENTATION", raw_payload, token)
+    assert not PagBankPixProvider.verify_authenticity("ACCOUNT_TOKEN_DOCUMENTATION", raw_payload + b" ", token)
+
+
 def test_notification_url_is_preserved_on_native_order_projection():
     result = run_all()["PB-PIX-013"]
     configuration = result["observations"][0]["payload"]
