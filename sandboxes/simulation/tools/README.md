@@ -2,3 +2,9 @@
 
 Repository-owned utilities may run or inspect the shared simulation. The common
 WNT MRL Runtime remains local infrastructure, not an OPP production surface.
+
+Validate every current provider scenario report with:
+
+```bash
+python3 sandboxes/simulation/tools/validate_scenarios.py
+```

@@ -1,0 +1,44 @@
+"""Validate the minimum report shape across provider scenario registries."""
+
+from __future__ import annotations
+
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+
+from app.simulation.asaas_scenarios import run_all as run_asaas
+from app.simulation.mercadopago_scenarios import run_all as run_mercado_pago
+from app.simulation.pagarme_scenarios import run_all as run_pagarme
+from app.simulation.pagbank_scenarios import run_all as run_pagbank
+from app.simulation.scenarios import run_all as run_iugu
+
+
+def field(report, name):
+    return report[name] if isinstance(report, dict) else getattr(report, name)
+
+
+def main() -> int:
+    providers = {
+        "asaas": run_asaas(),
+        "iugu": run_iugu(),
+        "mercadopago": run_mercado_pago(),
+        "pagarme": run_pagarme(),
+        "pagbank": run_pagbank(),
+    }
+    total = 0
+    for provider, reports in providers.items():
+        for scenario_id, report in reports.items():
+            observations = field(report, "observations")
+            assert field(report, "name") == scenario_id
+            assert isinstance(field(report, "events"), list)
+            assert isinstance(field(report, "projection"), dict)
+            assert observations and all(item["payload"]["scenario"] == scenario_id for item in observations)
+            total += 1
+        print(f"{provider}: {len(reports)} scenarios validated")
+    print(f"validated {total} scenarios")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
