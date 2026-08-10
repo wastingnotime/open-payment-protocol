@@ -277,6 +277,10 @@ NODES = TOPOLOGY_NODES + (
     _scenario_node("asaas", "AS-PIX-013", "missing access token rejected"),
     _scenario_node("asaas", "AS-PIX-014", "invalid access token rejected"),
     _scenario_node("asaas", "AS-PIX-015", "invalid environment rejected"),
+    _scenario_node("asaas", "AS-PIX-016", "rate limit error"),
+    _scenario_node("asaas", "AS-PIX-017", "create result unknown after HTTP 500"),
+    _scenario_node("asaas", "AS-PIX-018", "create result unknown after transport timeout"),
+    _scenario_node("asaas", "AS-PIX-019", "forbidden request error"),
     GraphNode("AS-PIX-DEFERRED-SUCCESS", "asaas", "deferred", "Pix success transition unknown"),
     GraphNode("MP-PIX-DEFERRED-FINALIZATION", "mercadopago", "deferred", "async finalization unknown"),
 )
@@ -361,6 +365,10 @@ TOPOLOGY_EDGES = (
     TopologyEdge("UC-ASAAS-CREATE-RETRIEVE", "AS-PIX-013", "executes", "use_case_scenario"),
     TopologyEdge("UC-ASAAS-CREATE-RETRIEVE", "AS-PIX-014", "executes", "use_case_scenario"),
     TopologyEdge("UC-ASAAS-CREATE-RETRIEVE", "AS-PIX-015", "executes", "use_case_scenario"),
+    TopologyEdge("UC-ASAAS-CREATE-RETRIEVE", "AS-PIX-016", "executes", "use_case_scenario"),
+    TopologyEdge("UC-ASAAS-CREATE-RETRIEVE", "AS-PIX-017", "executes", "use_case_scenario"),
+    TopologyEdge("UC-ASAAS-CREATE-RETRIEVE", "AS-PIX-018", "executes", "use_case_scenario"),
+    TopologyEdge("UC-ASAAS-CREATE-RETRIEVE", "AS-PIX-019", "executes", "use_case_scenario"),
 )
 
 
