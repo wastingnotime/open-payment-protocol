@@ -17,3 +17,5 @@ Provider runner registration is kept in a neighboring simulation registry so
 tools do not maintain separate provider lists.
 Its order follows the repository comparison sequence: Asaas, Iugu, Mercado
 Pago, Pagar.me, and PagBank.
+That order will be exposed as a shared constant and checked by both
+validation paths.
