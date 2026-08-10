@@ -13,7 +13,8 @@ pressure, and an explicit model release.
 
 The five-provider documentation baseline is complete. All five native
 create/retrieve increments are runnable with deterministic tests and scenario
-reports. The project is now refining cross-provider lifecycle pressure.
+reports. The project is now refining cross-provider lifecycle pressure. The
+first bounded lifecycle/event-delivery increment is runnable for Pagar.me.
 
 The selection evidence is recorded in
 [`research/pix-simulator-selection.md`](../../research/pix-simulator-selection.md)

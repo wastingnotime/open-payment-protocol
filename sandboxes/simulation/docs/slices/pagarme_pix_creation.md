@@ -1,8 +1,9 @@
 # Pagar.me Pix Order, Charge, and Transaction Creation
 
-Status: creation, documented transition, and caller-reference validation build
-complete; refinement check recorded in
-`work/changes/pagarme-pix-build/refinement_check.md`.
+Status: creation, documented transition, caller-reference, and bounded webhook
+delivery build complete; refinement checks recorded in
+`work/changes/pagarme-pix-build/refinement_check.md` and
+`work/changes/pagarme-pix-webhook-build/refinement_check.md`.
 
 The shared simulation preserves Pagar.me's `order → charge → last_transaction`
 hierarchy, integer amounts, pending native status, and embedded Pix QR fields.
