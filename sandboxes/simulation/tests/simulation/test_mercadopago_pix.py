@@ -6,7 +6,7 @@ from app.simulation.mercadopago_scenarios import BASE_REQUEST, run_all
 
 def test_mercado_pago_scenarios_complete():
     results = run_all()
-    assert set(results) == {"MP-PIX-001", "MP-PIX-002", "MP-PIX-003", "MP-PIX-004", "MP-PIX-005", "MP-PIX-006"}
+    assert set(results) == {"MP-PIX-001", "MP-PIX-002", "MP-PIX-003", "MP-PIX-004", "MP-PIX-005", "MP-PIX-006", "MP-PIX-007"}
     assert results["MP-PIX-001"]["projection"]
 
 
@@ -58,3 +58,10 @@ def test_unknown_order_retrieval_is_native_not_found_boundary():
     error = result["observations"][0]["payload"]
     assert error["status"] == 404
     assert error["code"] == "order_not_found"
+
+
+def test_non_pix_payment_method_is_native_property_value_boundary():
+    result = run_all()["MP-PIX-007"]
+    error = result["observations"][0]["payload"]
+    assert error["status"] == 400
+    assert error["code"] == "property_value"
