@@ -6,7 +6,7 @@ from app.simulation.asaas_scenarios import BASE_REQUEST, run_all
 
 def test_asaas_scenarios_complete():
     results = run_all()
-    assert set(results) == {f"AS-PIX-{number:03d}" for number in range(1, 10)}
+    assert set(results) == {f"AS-PIX-{number:03d}" for number in range(1, 11)}
 
 
 def test_payment_and_separate_qr_retrieval_are_preserved():
@@ -66,3 +66,10 @@ def test_received_payment_notification_preserves_event_identity_and_ack_boundary
     assert notification["event"] == "PAYMENT_RECEIVED"
     assert notification["event_id"] == "evt_DOCUMENTATION_RECEIVED"
     assert notification["persist_before_ack"] is True
+
+
+def test_asaas_redelivery_preserves_same_event_identity():
+    result = run_all()["AS-PIX-010"]
+    notification = result["observations"][0]["payload"]
+    assert notification["same_event_id"] is True
+    assert notification["delivery_count"] == 2

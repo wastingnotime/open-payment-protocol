@@ -108,7 +108,16 @@ def received_payment_notification() -> dict[str, Any]:
     return _result("AS-PIX-009", provider, observations)
 
 
-SCENARIOS = {"AS-PIX-001": create_retrieve_and_qr, "AS-PIX-002": invalid_request, "AS-PIX-003": unknown_payment_retrieval, "AS-PIX-004": unknown_qr_retrieval, "AS-PIX-005": invalid_billing_type, "AS-PIX-006": non_positive_value, "AS-PIX-007": missing_due_date, "AS-PIX-008": missing_customer, "AS-PIX-009": received_payment_notification}
+def redelivered_payment_notification() -> dict[str, Any]:
+    provider, observations = AsaasPixProvider(), []
+    payment = provider.create_payment(deepcopy(BASE_REQUEST))
+    first = provider.notification_payload(payment["id"], event_id="evt_DOCUMENTATION_DUPLICATE", event="PAYMENT_RECEIVED")
+    second = provider.notification_payload(payment["id"], event_id="evt_DOCUMENTATION_DUPLICATE", event="PAYMENT_RECEIVED")
+    observations.append({"type": "semantic_observation", "name": "native_webhook_redelivery", "source": "asaas", "payload": {"event_id": first["id"], "duplicate_event_id": second["id"], "same_event_id": first["id"] == second["id"], "delivery_count": 2, "evidence": "research/asaas/webhooks.md"}})
+    return _result("AS-PIX-010", provider, observations)
+
+
+SCENARIOS = {"AS-PIX-001": create_retrieve_and_qr, "AS-PIX-002": invalid_request, "AS-PIX-003": unknown_payment_retrieval, "AS-PIX-004": unknown_qr_retrieval, "AS-PIX-005": invalid_billing_type, "AS-PIX-006": non_positive_value, "AS-PIX-007": missing_due_date, "AS-PIX-008": missing_customer, "AS-PIX-009": received_payment_notification, "AS-PIX-010": redelivered_payment_notification}
 
 
 def run_all() -> dict[str, dict[str, Any]]:

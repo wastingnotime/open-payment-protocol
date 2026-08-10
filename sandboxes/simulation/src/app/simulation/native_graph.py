@@ -224,6 +224,7 @@ NODES = TOPOLOGY_NODES + (
     _scenario_node("pagarme", "PG-PIX-014", "paid order webhook sent"),
     _scenario_node("asaas", "AS-PIX-001", "payment with separate QR"),
     _scenario_node("asaas", "AS-PIX-009", "received payment webhook"),
+    _scenario_node("asaas", "AS-PIX-010", "payment webhook redelivered"),
     GraphNode("AS-PIX-DEFERRED-SUCCESS", "asaas", "deferred", "Pix success transition unknown"),
     GraphNode("MP-PIX-DEFERRED-FINALIZATION", "mercadopago", "deferred", "async finalization unknown"),
 )
@@ -287,6 +288,7 @@ TOPOLOGY_EDGES = (
     TopologyEdge("UC-PAGARME-CREATE-OUTCOME", "PG-PIX-014", "executes", "use_case_scenario"),
     TopologyEdge("UC-ASAAS-CREATE-RETRIEVE", "AS-PIX-001", "executes", "use_case_scenario"),
     TopologyEdge("UC-ASAAS-CREATE-RETRIEVE", "AS-PIX-009", "executes", "use_case_scenario"),
+    TopologyEdge("UC-ASAAS-CREATE-RETRIEVE", "AS-PIX-010", "executes", "use_case_scenario"),
 )
 
 
@@ -304,6 +306,7 @@ KNOWN_EDGES = (
     GraphEdge("mercadopago", "MP-PIX-001", "MP-PIX-004", "async_processing_variant", "research/mercadopago/lifecycle.md"),
     GraphEdge("mercadopago", "MP-PIX-004", "MP-PIX-005", "processing_retrieval", "research/mercadopago/lifecycle.md"),
     GraphEdge("mercadopago", "MP-PIX-004", "MP-PIX-011", "processing_order_webhook", "research/mercadopago/webhooks.md"),
+    GraphEdge("asaas", "AS-PIX-009", "AS-PIX-010", "webhook_redelivered", "research/asaas/webhooks.md"),
     GraphEdge("mercadopago", "MP-PIX-011", "MP-PIX-012", "notification_signature_rejected", "research/mercadopago/webhooks.md"),
     GraphEdge("pagbank", "PB-PIX-001", "PB-PIX-004", "charge_emerges_after_pix", "research/pagbank/lifecycle.md"),
     GraphEdge("pagbank", "PB-PIX-004", "PB-PIX-006", "duplicate_payment_rejected", "research/pagbank/lifecycle.md"),

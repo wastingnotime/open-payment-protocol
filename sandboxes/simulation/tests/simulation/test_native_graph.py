@@ -38,9 +38,9 @@ def test_graph_snapshot_exposes_executable_and_deferred_nodes():
         "ACTOR-PAGBANK",
         "ACTOR-PAGARME",
     )
-    assert len(snapshot["nodes"]) == 60
+    assert len(snapshot["nodes"]) == 61
     assert sum(node["kind"] == "deferred" for node in snapshot["nodes"]) == 2
-    assert len(snapshot["known_edges"]) == 29
+    assert len(snapshot["known_edges"]) == 30
     assert len(snapshot["deferred_edges"]) == 2
 
 
@@ -48,15 +48,15 @@ def test_graph_observations_emit_every_node_and_edge():
     observations = GRAPH.observations()
     nodes = [item for item in observations if item["type"] == "graph_node"]
     edges = [item for item in observations if item["type"] == "graph_edge"]
-    assert len(nodes) == 60
-    assert len(edges) == 89
+    assert len(nodes) == 61
+    assert len(edges) == 91
     assert {item["payload"]["id"] for item in nodes} == GRAPH.node_ids
 
 
 def test_observatory_spec_contains_runtime_visible_nodes_and_edges():
     spec = GRAPH.observatory_spec()
-    assert len(spec["nodes"]) == 60
-    assert len(spec["edges"]) == 89
+    assert len(spec["nodes"]) == 61
+    assert len(spec["edges"]) == 91
     assert {node["id"] for node in spec["nodes"]} == GRAPH.node_ids
     assert {node["kind"] for node in spec["nodes"]} == {"actor", "use_case", "aggregate", "projection", "external_provider"}
     assert {node["layer"] for node in spec["nodes"]} == {-8, 0, 4, 6, 10}
@@ -68,7 +68,7 @@ def test_beam_observations_route_between_declared_connected_nodes():
     spec = GRAPH.observatory_spec()
     declared_edges = {(edge["from_node"], edge["to_node"]) for edge in spec["edges"]}
 
-    assert len(observations) == 89
+    assert len(observations) == 91
     assert {(item["source"], item["name"]) for item in observations} == declared_edges
     assert all(item["type"] == "graph_route" for item in observations)
     assert all(item["source"] in GRAPH.node_ids for item in observations)
@@ -92,7 +92,7 @@ def test_beam_observations_preserve_deferred_status():
 def test_beam_observations_have_stable_sequence_and_edge_kind():
     observations = GRAPH.beam_observations()
 
-    assert [item["payload"]["sequence"] for item in observations] == list(range(89))
+    assert [item["payload"]["sequence"] for item in observations] == list(range(91))
     assert {item["payload"]["edge_kind"] for item in observations} == {
         "actor_flow",
         "actor_use_case",
