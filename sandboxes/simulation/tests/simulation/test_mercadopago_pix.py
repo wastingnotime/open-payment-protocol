@@ -6,7 +6,7 @@ from app.simulation.mercadopago_scenarios import BASE_REQUEST, run_all
 
 def test_mercado_pago_scenarios_complete():
     results = run_all()
-    assert set(results) == {f"MP-PIX-{number:03d}" for number in range(1, 12)}
+    assert set(results) == {f"MP-PIX-{number:03d}" for number in range(1, 13)}
     assert results["MP-PIX-001"]["projection"]
 
 
@@ -95,3 +95,10 @@ def test_processing_order_notification_preserves_signature_boundary():
     assert notification["topic"] == "order"
     assert notification["authoritative_reconciliation"] == "get"
     assert notification["signature_verified"] is True
+
+
+def test_mismatched_order_notification_signature_is_discarded():
+    result = run_all()["MP-PIX-012"]
+    notification = result["observations"][0]["payload"]
+    assert notification["signature_verified"] is False
+    assert notification["action"] == "discard"

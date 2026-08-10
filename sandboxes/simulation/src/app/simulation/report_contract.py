@@ -14,7 +14,7 @@ __all__ = ["REPORT_FIELDS", "PROVIDER_ORDER", "PROVIDER_PREFIXES", "PROVIDER_SCE
 REPORT_FIELDS = ("name", "observations", "events", "projection")
 PROVIDER_ORDER = ("asaas", "iugu", "mercadopago", "pagarme", "pagbank")
 PROVIDER_PREFIXES: Mapping[str, str] = MappingProxyType({"asaas": "AS-", "iugu": "IUGU-", "mercadopago": "MP-", "pagarme": "PG-", "pagbank": "PB-"})
-PROVIDER_SCENARIO_COUNTS: Mapping[str, int] = MappingProxyType({"asaas": 8, "iugu": 17, "mercadopago": 11, "pagarme": 14, "pagbank": 15})
+PROVIDER_SCENARIO_COUNTS: Mapping[str, int] = MappingProxyType({"asaas": 8, "iugu": 17, "mercadopago": 12, "pagarme": 14, "pagbank": 15})
 SECURITY_MARKERS = ("pan", "cvv", "card_number", "api_key", "access_token", "secret_key")
 
 
