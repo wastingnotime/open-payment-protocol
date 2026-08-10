@@ -53,3 +53,11 @@ actors, use cases, provider-native aggregates, scenario projections, and
 deferred external-provider nodes. The metadata domain is
 `payment-provider-discovery`; Pix is the current method slice, not the name of
 the whole simulation domain.
+
+## Comparison boundary
+
+Cross-provider comparison is limited to report shape, scenario attribution,
+graph reachability, and inventories of native observation names. The inventory
+does not rename provider events into a shared lifecycle vocabulary. A missing
+provider event, retry rule, authentication rule, or response transition remains
+an explicit unknown or deferred edge.
