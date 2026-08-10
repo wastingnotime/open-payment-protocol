@@ -21,6 +21,8 @@ projection.
   infer a payment when the billing type is unsupported.
 - Payment creation requires a strictly positive value; zero and negative
   values remain provider-native validation errors.
+- The documented payment create shape requires customer, billing type, value,
+  and due date; omitted fields remain native required-parameter failures.
 
 ## Remaining Questions
 
