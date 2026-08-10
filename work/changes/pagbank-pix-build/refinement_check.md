@@ -30,6 +30,8 @@ post-payment resource shape.
   QR or charge lookup fallback.
 - Charge emergence is single-use: a second payment attempt must preserve the
   provider-native invalid-status boundary rather than create another charge.
+- PagBank creation accepts exactly one QR Code; multiple QR definitions remain
+  a native validation error instead of being silently collapsed.
 
 ## Remaining Questions
 
