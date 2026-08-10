@@ -98,7 +98,7 @@ def test_observation_inventory_preserves_iugu_documented_event_names():
 
 
 def test_iugu_webhook_event_contract_is_immutable_and_provider_native():
-    assert PROVIDER_NATIVE_WEBHOOK_EVENTS["iugu"][-4:] == ("invoice.refund_reverted", "invoice.created", "invoice.released")[-4:]
+    assert PROVIDER_NATIVE_WEBHOOK_EVENTS["iugu"][-4:] == ("invoice.partially_refunded", "invoice.refund_reverted", "invoice.created", "invoice.released")
     with pytest.raises(TypeError):
         PROVIDER_NATIVE_WEBHOOK_EVENTS["iugu"] = ()
 
