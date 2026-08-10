@@ -1,4 +1,5 @@
 from copy import deepcopy
+import json
 
 from app.simulation.pagbank import PagBankNativeError, PagBankPixProvider
 from app.simulation.pagbank_scenarios import BASE_REQUEST, run_all
@@ -101,6 +102,11 @@ def test_authenticity_token_uses_exact_raw_bytes():
     token = PagBankPixProvider.authenticity_token("ACCOUNT_TOKEN_DOCUMENTATION", raw_payload)
     assert PagBankPixProvider.verify_authenticity("ACCOUNT_TOKEN_DOCUMENTATION", raw_payload, token)
     assert not PagBankPixProvider.verify_authenticity("ACCOUNT_TOKEN_DOCUMENTATION", raw_payload + b" ", token)
+
+
+def test_pagbank_notification_report_does_not_expose_account_token():
+    result = run_all()["PB-PIX-011"]
+    assert "ACCOUNT_TOKEN_DOCUMENTATION" not in json.dumps(result, sort_keys=True)
 
 
 def test_notification_url_is_preserved_on_native_order_projection():
