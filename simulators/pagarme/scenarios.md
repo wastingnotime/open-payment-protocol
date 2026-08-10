@@ -10,6 +10,7 @@ Built scenarios:
 - `PG-PIX-006`: non-Pix payment method preserves the native invalid-parameter boundary.
 - `PG-PIX-007`: missing payments preserve the native required-parameter boundary.
 - `PG-PIX-008`: exact BRL 500 threshold remains a paid native outcome.
+- `PG-PIX-009`: an order code over the documented 52-character limit preserves the native invalid-parameter boundary.
 
 Deferred: production timing, charge retrieval errors, expiration, webhooks, and
 idempotency behavior (not established in evidence).

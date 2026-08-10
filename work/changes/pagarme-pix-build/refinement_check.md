@@ -35,6 +35,8 @@ visible together without introducing a normalized status enum.
   input remains the native required-parameter boundary.
 - The simulator threshold is inclusive at BRL 500, so an exact 50000-cent
   charge remains a paid outcome rather than falling into the failure branch.
+- The documented maximum length for the optional order `code` is now covered;
+  item and customer code scopes remain outside this slice.
 
 ## Remaining Questions
 
