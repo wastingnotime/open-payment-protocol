@@ -45,6 +45,8 @@ observation source is the edge's declared `from` node and its name is the
 declared `to` node, matching the runtime observatory's route inference. These
 events are the animated beams; declared edges are the persistent structural
 beams. Deferred routes use the same visual path but retain `status: deferred`.
+For a local inspection of the exact ordered stream, run
+`python3 sandboxes/simulation/tools/show_native_graph.py --beams`.
 
 The observatory uses distinct supported runtime kinds and numeric layers:
 actors, use cases, provider-native aggregates, scenario projections, and
