@@ -35,7 +35,10 @@ def main() -> int:
             assert field(report, "name") == scenario_id
             assert isinstance(field(report, "events"), list)
             assert isinstance(field(report, "projection"), dict)
-            assert observations and all(item["payload"]["scenario"] == scenario_id for item in observations)
+            assert observations
+            for observation in observations:
+                assert {"type", "name", "source", "payload"} <= observation.keys()
+                assert observation["payload"]["scenario"] == scenario_id
             serialized_reports.append({name: field(report, name) for name in ("name", "observations", "events", "projection")})
             total += 1
         print(f"{provider}: {len(reports)} scenarios validated")
