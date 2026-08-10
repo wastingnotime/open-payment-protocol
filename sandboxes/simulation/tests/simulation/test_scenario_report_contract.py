@@ -4,7 +4,7 @@ import math
 import pytest
 
 from app.simulation.scenario_registry import PROVIDER_RUNNERS, run_all_providers
-from app.simulation.report_contract import PROVIDER_ORDER, PROVIDER_PREFIXES, PROVIDER_SCENARIO_COUNTS, REPORT_FIELDS, allowed_sources, assert_sanitized, canonical_snapshot, field, observation_inventory, validate_report
+from app.simulation.report_contract import PROVIDER_ORDER, PROVIDER_PREFIXES, PROVIDER_SCENARIO_COUNTS, REPORT_FIELDS, TOTAL_SCENARIO_COUNT, allowed_sources, assert_sanitized, canonical_snapshot, field, observation_inventory, validate_report
 
 
 def test_all_provider_scenarios_preserve_comparable_report_shape():
@@ -14,7 +14,7 @@ def test_all_provider_scenarios_preserve_comparable_report_shape():
     assert tuple(registries) == PROVIDER_ORDER
     assert all(isinstance(reports, dict) for reports in registries.values())
     assert {provider: len(scenarios) for provider, scenarios in registries.items()} == PROVIDER_SCENARIO_COUNTS
-    assert sum(len(scenarios) for scenarios in registries.values()) == 74
+    assert sum(len(scenarios) for scenarios in registries.values()) == TOTAL_SCENARIO_COUNT
     for provider, scenarios in registries.items():
         assert scenarios
         for scenario_id, report in scenarios.items():

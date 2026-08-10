@@ -10,7 +10,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from app.simulation.scenario_registry import run_all_providers
 from app.simulation.native_graph import GRAPH
-from app.simulation.report_contract import PROVIDER_ORDER, REPORT_FIELDS, PROVIDER_SCENARIO_COUNTS, assert_sanitized, canonical_snapshot, field, observation_inventory, validate_report
+from app.simulation.report_contract import PROVIDER_ORDER, REPORT_FIELDS, PROVIDER_SCENARIO_COUNTS, TOTAL_SCENARIO_COUNT, assert_sanitized, canonical_snapshot, field, observation_inventory, validate_report
 
 
 def main() -> int:
@@ -27,7 +27,7 @@ def main() -> int:
             total += 1
         print(f"{provider}: {len(reports)} scenarios validated")
     assert_sanitized(json.dumps(serialized_reports))
-    assert total == 74
+    assert total == TOTAL_SCENARIO_COUNT
     assert {provider: canonical_snapshot(reports) for provider, reports in runners.items()} == {
         provider: canonical_snapshot(reports) for provider, reports in second_run.items()
     }
