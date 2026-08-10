@@ -6,7 +6,7 @@ from app.simulation.mercadopago_scenarios import BASE_REQUEST, run_all
 
 def test_mercado_pago_scenarios_complete():
     results = run_all()
-    assert set(results) == {"MP-PIX-001", "MP-PIX-002", "MP-PIX-003", "MP-PIX-004", "MP-PIX-005", "MP-PIX-006", "MP-PIX-007", "MP-PIX-008", "MP-PIX-009", "MP-PIX-010"}
+    assert set(results) == {f"MP-PIX-{number:03d}" for number in range(1, 12)}
     assert results["MP-PIX-001"]["projection"]
 
 
@@ -86,3 +86,12 @@ def test_missing_idempotency_key_is_native_required_properties_boundary():
     error = result["observations"][0]["payload"]
     assert error["status"] == 400
     assert error["code"] == "required_properties"
+
+
+def test_processing_order_notification_preserves_signature_boundary():
+    result = run_all()["MP-PIX-011"]
+    notification = result["observations"][0]["payload"]
+    assert notification["transport"] == "https_post_json"
+    assert notification["topic"] == "order"
+    assert notification["authoritative_reconciliation"] == "get"
+    assert notification["signature_verified"] is True

@@ -124,7 +124,18 @@ def missing_idempotency_key() -> dict[str, Any]:
     return _result("MP-PIX-010", provider, observations)
 
 
-SCENARIOS = {"MP-PIX-001": create_and_retrieve, "MP-PIX-002": invalid_total, "MP-PIX-003": idempotency_conflict, "MP-PIX-004": asynchronous_processing_variant, "MP-PIX-005": asynchronous_reconciliation_get, "MP-PIX-006": unknown_order_retrieval, "MP-PIX-007": non_pix_payment_method, "MP-PIX-008": missing_payer, "MP-PIX-009": multiple_payments, "MP-PIX-010": missing_idempotency_key}
+def processing_order_notification() -> dict[str, Any]:
+    provider, observations = MercadoPagoPixProvider(), []
+    order = provider.create_async_order_variant(deepcopy(BASE_REQUEST))
+    notification = provider.notification_payload(order["id"])
+    request_id = "REQUEST_DOCUMENTATION"
+    timestamp = "1700000000"
+    signature = provider.signature("WEBHOOK_SECRET_DOCUMENTATION", data_id=order["id"], request_id=request_id, timestamp=timestamp)
+    observations.append({"type": "semantic_observation", "name": "native_webhook_notification", "source": "mercadopago", "payload": {"transport": "https_post_json", "topic": notification["type"], "action": notification["action"], "order_id": notification["data"]["id"], "authoritative_reconciliation": "get", "signature_verified": provider.verify_signature("WEBHOOK_SECRET_DOCUMENTATION", data_id=notification["data"]["id"], request_id=request_id, timestamp=timestamp, received=signature), "evidence": "research/mercadopago/webhooks.md"}})
+    return _result("MP-PIX-011", provider, observations)
+
+
+SCENARIOS = {"MP-PIX-001": create_and_retrieve, "MP-PIX-002": invalid_total, "MP-PIX-003": idempotency_conflict, "MP-PIX-004": asynchronous_processing_variant, "MP-PIX-005": asynchronous_reconciliation_get, "MP-PIX-006": unknown_order_retrieval, "MP-PIX-007": non_pix_payment_method, "MP-PIX-008": missing_payer, "MP-PIX-009": multiple_payments, "MP-PIX-010": missing_idempotency_key, "MP-PIX-011": processing_order_notification}
 
 
 def run_all() -> dict[str, dict[str, Any]]:

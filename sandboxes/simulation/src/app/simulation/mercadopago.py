@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from copy import deepcopy
 from dataclasses import dataclass, field
+import hashlib
+import hmac
 from typing import Any
 
 
@@ -94,6 +96,20 @@ class MercadoPagoPixProvider:
         self.store.orders[order_id] = deepcopy(order)
         self._event("order_processing", {"order_id": order_id})
         return deepcopy(order)
+
+    def notification_payload(self, order_id: str, *, action: str = "updated") -> dict[str, Any]:
+        if order_id not in self.store.orders:
+            raise MercadoPagoNativeError(MercadoPagoError(404, "order_not_found", "The order was not found."))
+        return {"action": action, "api_version": "v1", "application_id": "APPLICATION_DOCUMENTATION", "date_created": "2030-01-01T12:00:00Z", "id": "NOTIFICATION_DOCUMENTATION", "live_mode": False, "type": "order", "user_id": "USER_DOCUMENTATION", "data": {"id": order_id}}
+
+    @staticmethod
+    def signature(secret: str, *, data_id: str, request_id: str, timestamp: str) -> str:
+        message = f"id:{data_id.lower()};request-id:{request_id};ts:{timestamp};"
+        return hmac.new(secret.encode(), message.encode(), hashlib.sha256).hexdigest()
+
+    @classmethod
+    def verify_signature(cls, secret: str, *, data_id: str, request_id: str, timestamp: str, received: str) -> bool:
+        return hmac.compare_digest(received, cls.signature(secret, data_id=data_id, request_id=request_id, timestamp=timestamp))
 
     def _validate(self, request: dict[str, Any]) -> None:
         required = ("type", "total_amount", "external_reference", "processing_mode", "transactions", "payer")
