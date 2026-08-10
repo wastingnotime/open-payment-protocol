@@ -46,6 +46,14 @@ def test_observation_inventory_preserves_provider_native_names():
     assert inventory["pagbank"]["native_webhook_notification"] == 1
 
 
+def test_observation_inventory_covers_every_provider_scenario():
+    registries = run_all_providers()
+    inventory = observation_inventory(registries)
+    for provider, scenarios in registries.items():
+        assert sum(inventory[provider].values()) >= len(scenarios)
+        assert all(count > 0 for count in inventory[provider].values())
+
+
 def test_canonical_snapshot_ignores_registry_insertion_order():
     reports = {
         "second": {"name": "B", "observations": [], "events": [], "projection": {}},
