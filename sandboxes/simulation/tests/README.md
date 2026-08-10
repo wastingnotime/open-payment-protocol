@@ -28,3 +28,5 @@ inputs produce byte-equivalent report content across repeated runs.
 The current five-provider inventory contains 50 scenarios; changes to that
 total or to an individual provider count should update the relevant provider
 backlog and refinement receipt.
+Scenario identifiers also retain the native provider prefix used by the
+corresponding backlog.
