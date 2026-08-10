@@ -34,6 +34,8 @@ post-payment resource shape.
   a native validation error instead of being silently collapsed.
 - QR creation requires the complete order shape, including `qr_codes`; missing
   collections remain a native required-parameter error.
+- `reference_id` is also required at creation and is not synthesized when the
+  caller omits it.
 
 ## Remaining Questions
 
