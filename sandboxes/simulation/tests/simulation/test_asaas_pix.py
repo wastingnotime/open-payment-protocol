@@ -21,6 +21,17 @@ def test_asaas_error_boundary_scenarios_preserve_documented_unknowns():
         assert payload["evidence"] == "research/asaas/errors.md"
 
 
+def test_asaas_forbidden_boundary_keeps_retryability_unknown():
+    payload = run_all()["AS-PIX-019"]["observations"][0]["payload"]
+    assert payload == {
+        "status": 403,
+        "code": "forbidden_request",
+        "evidence": "research/asaas/errors.md",
+        "retry_policy": "unknown",
+        "scenario": "AS-PIX-019",
+    }
+
+
 def test_payment_and_separate_qr_retrieval_are_preserved():
     provider = AsaasPixProvider()
     payment = provider.create_payment(deepcopy(BASE_REQUEST))
