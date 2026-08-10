@@ -17,6 +17,8 @@ projection.
   inventing lookup or reconciliation semantics.
 - The unknown QR scenario keeps the separate QR operation's 404 boundary
   distinct from payment retrieval.
+- QR retrieval is only valid for an existing payment and does not create or
+  infer a payment when the billing type is unsupported.
 
 ## Remaining Questions
 
