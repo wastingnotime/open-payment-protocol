@@ -11,8 +11,14 @@ def _field(report, name):
 
 
 def test_all_provider_scenarios_preserve_comparable_report_shape():
-    registries = (run_asaas(), run_iugu(), run_mercado_pago(), run_pagarme(), run_pagbank())
-    for scenarios in registries:
+    registries = {
+        "asaas": run_asaas(),
+        "iugu": run_iugu(),
+        "mercadopago": run_mercado_pago(),
+        "pagarme": run_pagarme(),
+        "pagbank": run_pagbank(),
+    }
+    for provider, scenarios in registries.items():
         assert scenarios
         for scenario_id, report in scenarios.items():
             assert _field(report, "name") == scenario_id
@@ -21,6 +27,7 @@ def test_all_provider_scenarios_preserve_comparable_report_shape():
             assert _field(report, "observations")
             for observation in _field(report, "observations"):
                 assert set(("type", "name", "source", "payload")) <= observation.keys()
+                assert observation["source"] == provider
                 assert observation["payload"]["scenario"] == scenario_id
 
 
