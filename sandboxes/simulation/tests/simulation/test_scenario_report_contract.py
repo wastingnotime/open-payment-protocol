@@ -47,6 +47,7 @@ def test_contract_mappings_are_immutable():
         PROVIDER_SCENARIO_COUNTS["new"] = 0
     with pytest.raises(TypeError):
         PROVIDER_RUNNERS["new"] = lambda: {}
+    assert isinstance(__import__("app.simulation.report_contract", fromlist=["allowed_sources"]).allowed_sources("iugu"), frozenset)
 
 
 def test_repeated_provider_runs_return_independent_projections():

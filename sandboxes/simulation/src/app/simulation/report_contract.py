@@ -22,8 +22,8 @@ def field(report: Any, name: str) -> Any:
     return report[name] if isinstance(report, dict) else getattr(report, name)
 
 
-def allowed_sources(provider: str) -> set[str]:
-    return {provider, "simulation"} if provider == "iugu" else {provider}
+def allowed_sources(provider: str) -> frozenset[str]:
+    return frozenset((provider, "simulation")) if provider == "iugu" else frozenset((provider,))
 
 
 def assert_sanitized(serialized: str) -> None:
