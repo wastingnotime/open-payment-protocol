@@ -88,8 +88,13 @@ simulation evidence, not provider API fields.
    Asaas, ordered by evidence readiness and semantic pressure (Mercado Pago
    PagBank, Pagar.me, and Asaas create/retrieve built).
 3. Successful provider-native lifecycle transition and event delivery, with
-   Pagar.me as the leading deterministic candidate.
+   Iugu, PagBank, and Pagar.me edges now represented in the internal native
+   scenario graph.
 4. Failed or expired transition and error/result certainty.
 5. Thin adapter comparison across all five providers.
+
+The expanded internal graph is documented in
+[`native_scenario_graph.md`](native_scenario_graph.md). Its deferred Asaas and
+Mercado Pago finalization edges are evidence gaps, not normalized states.
 
 The map is provisional and must be updated after every refinement check.

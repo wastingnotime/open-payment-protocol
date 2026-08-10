@@ -20,6 +20,10 @@ The selection evidence is recorded in
 and the refined slice in
 [`docs/slices/iugu_pix_creation.md`](docs/slices/iugu_pix_creation.md).
 
+The current provider-native lifecycle graph is recorded in
+[`docs/semantics/native_scenario_graph.md`](docs/semantics/native_scenario_graph.md).
+It distinguishes executable transitions from explicitly deferred edges.
+
 Run the pure scenario suite with `pytest -q sandboxes/simulation/tests` or
 emit a canonical report with
 `python3 sandboxes/simulation/tools/run_iugu_pix.py`. WNT MRL Runtime
