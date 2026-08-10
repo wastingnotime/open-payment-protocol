@@ -8,3 +8,6 @@ Validate every current provider scenario report with:
 ```bash
 python3 sandboxes/simulation/tools/validate_scenarios.py
 ```
+
+The validator checks report shape, scenario attribution, and absence of raw
+PAN, CVV, and `card_number` markers.
