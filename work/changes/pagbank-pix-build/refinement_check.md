@@ -26,6 +26,8 @@ post-payment resource shape.
 - Charge emergence is a documented PagBank lifecycle event and remains distinct
   from initial QR creation.
 - The charge and QR must remain independently observable after payment.
+- Unknown order retrieval remains a native 404 boundary and does not imply a
+  QR or charge lookup fallback.
 
 ## Remaining Questions
 
