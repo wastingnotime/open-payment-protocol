@@ -47,3 +47,10 @@ def test_contract_mappings_are_immutable():
         PROVIDER_SCENARIO_COUNTS["new"] = 0
     with pytest.raises(TypeError):
         PROVIDER_RUNNERS["new"] = lambda: {}
+
+
+def test_repeated_provider_runs_return_independent_projections():
+    first_run = run_all_providers()
+    second_run = run_all_providers()
+    first_run["asaas"]["AS-PIX-001"]["projection"].clear()
+    assert second_run["asaas"]["AS-PIX-001"]["projection"]
