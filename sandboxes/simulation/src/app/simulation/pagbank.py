@@ -121,6 +121,8 @@ class PagBankPixProvider:
             raise PagBankNativeError(PagBankError(400, "required_parameter", f"Missing: {', '.join(missing)}"))
         if len(request["qr_codes"]) != 1:
             raise PagBankNativeError(PagBankError(400, "invalid_parameter", "Only one QR Code is supported per order."))
+        if len(request.get("notification_urls", [])) > 1:
+            raise PagBankNativeError(PagBankError(400, "invalid_parameter", "Only one notification URL is supported per order."))
         qr = request["qr_codes"][0]
         value = qr.get("amount", {}).get("value", 0)
         item_total = sum(int(item.get("unit_amount", 0)) * int(item.get("quantity", 1)) for item in request["items"])
