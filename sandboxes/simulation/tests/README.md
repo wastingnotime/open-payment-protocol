@@ -26,7 +26,7 @@ The marker list is shared with the standalone validator.
 Provider scenario registries must also be replayable: identical deterministic
 inputs produce byte-equivalent report content across repeated runs.
 
-The current five-provider inventory contains 80 scenarios; changes to that
+The current five-provider inventory contains 84 scenarios; changes to that
 total or to an individual provider count should update the relevant provider
 backlog and refinement receipt.
 Scenario identifiers also retain the native provider prefix used by the

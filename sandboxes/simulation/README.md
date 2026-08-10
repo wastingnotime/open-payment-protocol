@@ -18,9 +18,9 @@ lifecycle/event-delivery increments are runnable for Pagar.me, Iugu, and
 PagBank, Mercado Pago, and Asaas, including provider-specific authenticity,
 redelivery, and endpoint boundaries.
 
-The current inventory contains 80 scenarios (15 Asaas, 17 Iugu, 17 Mercado
+The current inventory contains 84 scenarios (15 Asaas, 21 Iugu, 17 Mercado
 Pago, 14 Pagar.me, and 17 PagBank). The observatory graph exposes 73 nodes and
-112 routes, including explicit deferred evidence gaps. The current refund
+116 routes, including explicit deferred evidence gaps. The current refund
 increment is executable for Mercado Pago and PagBank; the current expiration
 increment is executable for Mercado Pago only; the current authentication-error
 increment is executable for Asaas only.

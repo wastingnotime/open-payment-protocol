@@ -1,7 +1,7 @@
 # Iugu Pix Invoice Creation and Retrieval
 
-Status: creation, documented lifecycle, caller-reference, and bounded webhook
-event/configuration boundaries built;
+Status: creation, documented lifecycle, caller-reference, and bounded native
+webhook event/configuration boundaries built;
 refinement checks recorded in
 `work/changes/iugu-pix-research/refinement.md`.
 
@@ -23,7 +23,7 @@ The conservative sanitized fixture is the valid baseline. Conflicting minimal
 payer requirements are not resolved in code; combinations without evidence are
 unsupported or explicitly unknown.
 
-Executable scenarios are `IUGU-PIX-001` through `IUGU-PIX-013` in
+Executable scenarios are `IUGU-PIX-001` through `IUGU-PIX-021` in
 `simulators/iugu/scenarios.md`.
 
 ## Native Use-Case Contract
@@ -74,6 +74,6 @@ becomes runnable.
 
 ## Out of Scope
 
-Expiration, cancellation, webhook delivery,
-refunds, cards, subscriptions, split, live Iugu calls, other providers, common
-adapters, OPP schemas, and conformance behavior.
+Webhook delivery ordering/retry behavior, refunds as state transitions, cards,
+subscriptions, split, live Iugu calls, other providers, common adapters, OPP
+schemas, and conformance behavior.
