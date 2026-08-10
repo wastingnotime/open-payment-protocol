@@ -7,7 +7,18 @@ from app.simulation.asaas_scenarios import BASE_REQUEST, run_all
 
 def test_asaas_scenarios_complete():
     results = run_all()
-    assert set(results) == {f"AS-PIX-{number:03d}" for number in range(1, 16)}
+    assert set(results) == {f"AS-PIX-{number:03d}" for number in range(1, 20)}
+
+
+def test_asaas_error_boundary_scenarios_preserve_documented_unknowns():
+    results = run_all()
+    rate_limit = results["AS-PIX-016"]["observations"][0]["payload"]
+    assert (rate_limit["status"], rate_limit["code"]) == (429, "rate_limit")
+    for scenario_id in ("AS-PIX-017", "AS-PIX-018"):
+        payload = results[scenario_id]["observations"][0]["payload"]
+        assert payload["result_certainty"] == "unknown"
+        assert payload["automatic_retry"] == "unsupported"
+        assert payload["evidence"] == "research/asaas/errors.md"
 
 
 def test_payment_and_separate_qr_retrieval_are_preserved():
