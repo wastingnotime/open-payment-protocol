@@ -31,13 +31,20 @@ flowchart LR
 The runtime graph currently exposes 43 nodes: 6 actors, 6 use cases, 11
 provider-native resources, 18 executable scenario nodes, and 2 deferred
 evidence-gap nodes. Its `snapshot()` method exposes those nodes and edges to
-local validation tools. Executable edges are defined in
-`src/app/simulation/native_graph.py` and every executable edge points to
-scenario IDs in the provider scenario registry. Deferred edges remain explicit
+local validation tools. Topology and lifecycle edges are defined in
+`src/app/simulation/native_graph.py`. Use-case edges connect actors to
+provider-native resources and executable scenario nodes; lifecycle edges then
+preserve observed transitions between scenario IDs. Deferred edges remain explicit
 so missing evidence is not converted into an invented common state transition.
 The MRL adapter passes `observatory_nodes` and `observatory_edges` into the
 runtime `Scenario`, so supervision uses this graph instead of the runtime's
 three-node actor/scheduler fallback.
+
+The adapter also emits one `graph_route` observation per declared edge. The
+observation source is the edge's declared `from` node and its name is the
+declared `to` node, matching the runtime observatory's route inference. These
+events are the animated beams; declared edges are the persistent structural
+beams. Deferred routes use the same visual path but retain `status: deferred`.
 
 The observatory uses distinct supported runtime kinds and numeric layers:
 actors, use cases, provider-native aggregates, scenario projections, and
