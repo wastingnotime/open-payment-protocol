@@ -206,3 +206,27 @@ def test_expiration_rejects_undocumented_outcome_values():
         assert exc.error.code == "invalid_expiration_outcome"
     else:
         raise AssertionError("expected expiration outcome rejection")
+
+
+def test_unpaid_cancellation_rejects_already_approved_payment():
+    provider = MercadoPagoPixProvider()
+    order = provider.create_order(deepcopy(BASE_REQUEST), idempotency_key="expiry-004")
+    provider.mark_pix_approved(order["id"])
+    try:
+        provider.cancel_unpaid_order(order["id"])
+    except MercadoPagoNativeError as exc:
+        assert exc.error.code == "invalid_status"
+    else:
+        raise AssertionError("expected cancellation status rejection")
+
+
+def test_expiration_rejects_already_canceled_payment():
+    provider = MercadoPagoPixProvider()
+    order = provider.create_order(deepcopy(BASE_REQUEST), idempotency_key="expiry-005")
+    provider.cancel_unpaid_order(order["id"])
+    try:
+        provider.resolve_unpaid_expiration(order["id"], outcome="expired")
+    except MercadoPagoNativeError as exc:
+        assert exc.error.code == "invalid_status"
+    else:
+        raise AssertionError("expected expiration status rejection")
