@@ -13,6 +13,8 @@ projection.
   Mercado Pago, and Pagar.me.
 - Decimal JSON number precision remains an explicit unknown.
 - No repetition or external-reference uniqueness behavior is invented.
+- The unknown-payment scenario preserves a native 404 boundary without
+  inventing lookup or reconciliation semantics.
 
 ## Remaining Questions
 
