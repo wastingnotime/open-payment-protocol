@@ -81,5 +81,7 @@ class PagarmePixProvider:
     def _validate(self, request: dict[str, Any]) -> None:
         if not request.get("items") or not request.get("payments"):
             raise PagarmeNativeError(PagarmeError(400, "required_parameter", "items and payments are required."))
+        if request.get("code") is not None and len(request["code"]) > 52:
+            raise PagarmeNativeError(PagarmeError(400, "invalid_parameter", "Order code must be at most 52 characters."))
         if request["payments"][0].get("payment_method") != "pix":
             raise PagarmeNativeError(PagarmeError(400, "invalid_parameter", "Pix payment is required."))
