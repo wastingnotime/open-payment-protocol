@@ -108,3 +108,8 @@ def test_mismatched_order_notification_signature_is_discarded():
 def test_mercado_pago_notification_report_does_not_expose_webhook_secret():
     result = run_all()["MP-PIX-011"]
     assert "WEBHOOK_SECRET_DOCUMENTATION" not in json.dumps(result, sort_keys=True)
+
+
+def test_signature_canonicalizes_data_id_to_lowercase():
+    token = MercadoPagoPixProvider.signature("secret", data_id="ORD_MixedCase", request_id="request", timestamp="1700000000")
+    assert MercadoPagoPixProvider.verify_signature("secret", data_id="ord_mixedcase", request_id="request", timestamp="1700000000", received=token)
