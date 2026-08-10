@@ -54,6 +54,17 @@ def test_observation_inventory_covers_every_provider_scenario():
         assert all(count > 0 for count in inventory[provider].values())
 
 
+def test_observation_inventory_preserves_source_provenance():
+    for provider, scenarios in run_all_providers().items():
+        sources = {
+            observation["source"]
+            for report in scenarios.values()
+            for observation in field(report, "observations")
+        }
+        assert sources <= allowed_sources(provider)
+        assert provider in sources
+
+
 def test_canonical_snapshot_ignores_registry_insertion_order():
     reports = {
         "second": {"name": "B", "observations": [], "events": [], "projection": {}},
