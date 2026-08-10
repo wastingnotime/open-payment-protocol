@@ -122,6 +122,14 @@ class PagarmePixProvider:
         self.store.events.append({"type": "webhook_resent", "payload": {"webhook_id": webhook_id, "status": delivery["status"], "attempts": delivery["attempts"], "response_status": response_status, "evidence": "research/pagarme/webhooks.md"}})
         return deepcopy(delivery)
 
+    def query_webhook(self, webhook_id: str) -> dict[str, Any]:
+        """Return the documented delivery record for inspection."""
+        delivery = self.store.webhooks.get(webhook_id)
+        if delivery is None:
+            raise PagarmeNativeError(PagarmeError(404, "webhook_not_found", "The webhook was not found.", "research/pagarme/webhooks.md"))
+        self.store.events.append({"type": "webhook_queried", "payload": {"webhook_id": webhook_id, "status": delivery["status"], "evidence": "research/pagarme/webhooks.md"}})
+        return deepcopy(delivery)
+
     def _validate(self, request: dict[str, Any]) -> None:
         if not request.get("items") or not request.get("payments"):
             raise PagarmeNativeError(PagarmeError(400, "required_parameter", "items and payments are required."))
