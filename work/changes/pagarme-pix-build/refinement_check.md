@@ -29,6 +29,8 @@ visible together without introducing a normalized status enum.
   a source link, not an inferred production behavior.
 - Unknown charge retrieval preserves the native 404 `charge_not_found` boundary
   and does not infer an order lookup fallback.
+- Pix outcome simulation applies the documented amount threshold once per
+  charge and keeps order, charge, and transaction statuses aligned.
 
 ## Remaining Questions
 
