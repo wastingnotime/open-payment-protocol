@@ -77,3 +77,17 @@ def test_beam_observations_preserve_deferred_status():
 
     assert set(routes) == deferred_targets
     assert all(item["payload"]["status"] == "deferred" for item in routes.values())
+
+
+def test_beam_observations_have_stable_sequence_and_edge_kind():
+    observations = GRAPH.beam_observations()
+
+    assert [item["payload"]["sequence"] for item in observations] == list(range(56))
+    assert {item["payload"]["edge_kind"] for item in observations} == {
+        "actor_flow",
+        "actor_use_case",
+        "use_case_resource",
+        "use_case_scenario",
+        "lifecycle",
+        "deferred",
+    }
