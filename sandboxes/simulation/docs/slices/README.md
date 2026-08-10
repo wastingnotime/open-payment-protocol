@@ -14,3 +14,6 @@ must state:
 Candidate slices are hypotheses. Refinement may split, merge, reorder, add, or
 remove them. After each build, record a lightweight refinement check and update
 the semantic model and slice map where observations disprove assumptions.
+
+Current lifecycle/event-delivery increments cover Pagar.me, Iugu, PagBank, and
+Mercado Pago; each retains provider-specific transport and authenticity rules.
