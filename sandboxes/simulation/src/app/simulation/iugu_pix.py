@@ -199,6 +199,27 @@ class IuguPixProvider:
         self.store.append("invoice_status_changed", {"invoice_id": invoice_id, "from": "canceled", "to": "paid"})
         return deepcopy(response)
 
+    def webhook_form_payload(self, invoice_id: str, *, event: str) -> dict[str, str]:
+        """Build the documented form-urlencoded invoice event fields."""
+        invoice = self.store.invoices.get(invoice_id)
+        if invoice is None:
+            raise IuguNativeError(NativeError(404, "invoice_not_found", "The invoice was not found.", self.evidence))
+        payload = {
+            "event": event,
+            "invoice_id": invoice["id"],
+            "account_id": "ACCOUNT_DOCUMENTATION",
+            "status": invoice["status"],
+            "source": "API",
+            "order_id": invoice.get("order_id") or "",
+            "external_reference": invoice.get("external_reference") or "",
+            "payment_method": invoice.get("payable_with") or "",
+        }
+        if invoice["status"] == "paid":
+            payload["paid_cents"] = str(invoice["total_paid_cents"])
+            payload["pix_end_to_end_id"] = invoice["pix"].get("end_to_end_id") or ""
+        self.store.append("webhook_payload_built", {"invoice_id": invoice_id, "event": event})
+        return payload
+
     def _validate(self, request: dict[str, Any]) -> None:
         required = ("email", "due_date", "items", "payable_with")
         missing = [key for key in required if not request.get(key)]

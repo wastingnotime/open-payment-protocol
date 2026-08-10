@@ -13,7 +13,7 @@ def test_all_selected_scenarios_complete_with_native_observations():
 
 
 def test_iugu_slice_scenario_inventory_is_complete():
-    assert set(SCENARIOS) == {f"IUGU-PIX-{number:03d}" for number in range(1, 14)}
+    assert set(SCENARIOS) == {f"IUGU-PIX-{number:03d}" for number in range(1, 15)}
 
 
 def test_create_and_retrieve_preserves_iugu_invoice_shape():
@@ -120,3 +120,12 @@ def test_unknown_caller_reference_is_native_not_found_boundary():
     error = next(item for item in result.observations if item["name"] == "native_error")
     assert error["payload"]["status"] == 404
     assert error["payload"]["code"] == "invoice_not_found"
+
+
+def test_paid_iugu_webhook_preserves_form_transport_and_native_fields():
+    result = SCENARIOS["IUGU-PIX-014"]()
+    event = next(item for item in result.observations if item["name"] == "native_webhook_event")
+    assert event["payload"]["transport"] == "application/x-www-form-urlencoded"
+    assert event["payload"]["event"] == "invoice.status_changed"
+    assert event["payload"]["fields"]["status"] == "paid"
+    assert event["payload"]["fields"]["pix_end_to_end_id"] == "E2E_WEBHOOK_FIXTURE"
