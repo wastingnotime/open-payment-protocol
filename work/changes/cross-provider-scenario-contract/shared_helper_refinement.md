@@ -9,3 +9,5 @@ It also owns the expected current scenario counts used by both validation
 paths.
 Per-report validation remains limited to the shared envelope, attribution, and
 prefix rules; provider payload semantics stay outside the helper.
+The helper remains an experimental internal simulation surface, not protocol
+authority.
