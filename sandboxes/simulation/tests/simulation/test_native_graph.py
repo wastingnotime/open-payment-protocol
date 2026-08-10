@@ -56,6 +56,15 @@ def test_every_executable_graph_scenario_has_a_provider_report():
         assert scenario_id in registries[provider]
 
 
+def test_refund_cancellation_graph_nodes_keep_provider_domains():
+    spec = GRAPH.observatory_spec()
+    nodes = {node["id"]: node for node in spec["nodes"]}
+    assert nodes["MP-PIX-013"]["domain"] == "provider-mercadopago"
+    assert nodes["MP-PIX-014"]["domain"] == "provider-mercadopago"
+    assert nodes["PB-PIX-016"]["domain"] == "provider-pagbank"
+    assert nodes["PB-PIX-017"]["domain"] == "provider-pagbank"
+
+
 def test_graph_observations_emit_every_node_and_edge():
     observations = GRAPH.observations()
     nodes = [item for item in observations if item["type"] == "graph_node"]
