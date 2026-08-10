@@ -183,6 +183,17 @@ def canceled_webhook_event() -> ScenarioResult:
     return _finish("IUGU-PIX-015", provider, log)
 
 
+def configured_webhook_trigger() -> ScenarioResult:
+    provider, log = IuguPixProvider(), []
+    configuration = provider.configure_webhook(
+        event="invoice.status_changed",
+        url="https://example.invalid/opp/webhooks/iugu",
+        authorization_configured=True,
+    )
+    _observation(log, "native_webhook_configuration", {"event": configuration["event"], "url": configuration["url"], "content_type": configuration["content_type"], "authorization_configured": configuration["authorization_configured"], "evidence": "research/iugu/webhooks.md"})
+    return _finish("IUGU-PIX-016", provider, log)
+
+
 def deterministic_replay() -> ScenarioResult:
     first = create_and_retrieve()
     second = create_and_retrieve()
@@ -209,6 +220,7 @@ SCENARIOS: dict[str, Callable[[], ScenarioResult]] = {
     "IUGU-PIX-013": unknown_caller_reference,
     "IUGU-PIX-014": successful_pix_webhook_event,
     "IUGU-PIX-015": canceled_webhook_event,
+    "IUGU-PIX-016": configured_webhook_trigger,
 }
 
 
