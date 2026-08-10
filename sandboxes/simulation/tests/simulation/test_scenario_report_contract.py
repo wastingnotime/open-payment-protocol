@@ -84,6 +84,12 @@ def test_observation_items_must_be_mappings():
         validate_report("asaas", "AS-001", report)
 
 
+def test_event_items_must_be_mappings():
+    report = {"name": "AS-001", "events": ["broken"], "projection": {}, "observations": []}
+    with pytest.raises(AssertionError, match="event items must be mappings"):
+        validate_report("asaas", "AS-001", report)
+
+
 def test_missing_report_field_has_named_contract_error():
     with pytest.raises(AssertionError, match="missing required field: name"):
         field({}, "name")
