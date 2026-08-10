@@ -38,7 +38,7 @@ def test_graph_snapshot_exposes_executable_and_deferred_nodes():
     )
     assert len(snapshot["nodes"]) == 45
     assert sum(node["kind"] == "deferred" for node in snapshot["nodes"]) == 2
-    assert len(snapshot["known_edges"]) == 13
+    assert len(snapshot["known_edges"]) == 15
     assert len(snapshot["deferred_edges"]) == 2
 
 
