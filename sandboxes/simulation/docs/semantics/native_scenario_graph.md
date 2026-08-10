@@ -28,8 +28,8 @@ flowchart LR
   MP4 -. finalization unknown .-> MPU[deferred]
 ```
 
-The runtime graph currently exposes 67 nodes: 6 actors, 6 use cases, 11
-provider-native resources, 42 executable scenario nodes, and 2 deferred
+The runtime graph currently exposes 70 nodes: 6 actors, 6 use cases, 11
+provider-native resources, 45 executable scenario nodes, and 2 deferred
 evidence-gap nodes. Its `snapshot()` method exposes those nodes and edges to
 local validation tools. Topology and lifecycle edges are defined in
 `src/app/simulation/native_graph.py`. Use-case edges connect actors to
@@ -52,6 +52,11 @@ The refund increment adds Mercado Pago partial/total refund scenarios and
 PagBank partial/full charge cancellation scenarios. Their native statuses and
 observation names remain distinct; the graph does not introduce a shared
 `refunded` state.
+
+The expiration increment adds Mercado Pago unpaid cancellation and both
+documented expiration outcomes (`expired` and `canceled`). Pagar.me expiration
+remains explicitly unknown until provider evidence establishes its event and
+status behavior.
 
 The observatory uses distinct supported runtime kinds and graph-derived numeric
 layers. Every linked target is placed in a later rank, including lifecycle
