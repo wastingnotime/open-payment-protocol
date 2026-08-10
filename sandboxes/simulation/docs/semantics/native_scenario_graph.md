@@ -7,6 +7,11 @@ provider-native lifecycle and resource boundaries.
 
 ```mermaid
 flowchart LR
+  AC[Simulation coordinator] --> AA[Asaas actor] --> AUC[Asaas use case] --> AR[Asaas payment]
+  AC --> AI[Iugu actor] --> IUC[Iugu use case] --> IR[Iugu invoice]
+  AC --> AM[Mercado Pago actor] --> MUC[Create/reconcile use case] --> MR[Order + payment]
+  AC --> AB[PagBank actor] --> BUC[Create/charge use case] --> BR[Order + QR + charge]
+  AC --> AP[Pagar.me actor] --> PUC[Create/outcome use case] --> PR[Order + charge + transaction]
   I1[Iugu create/retrieve] --> I7[paid]
   I1 --> I8[canceled] --> I10[recovered paid]
   I1 --> I9[expired]
