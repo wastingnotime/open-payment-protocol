@@ -7,3 +7,5 @@ The helper's public contract includes report field access, allowed sources,
 provider prefixes, and canonical snapshots.
 It also owns the expected current scenario counts used by both validation
 paths.
+Per-report validation remains limited to the shared envelope, attribution, and
+prefix rules; provider payload semantics stay outside the helper.
