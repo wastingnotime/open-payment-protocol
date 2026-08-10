@@ -1,7 +1,7 @@
 from copy import deepcopy
 import json
 
-from app.simulation.asaas import AsaasPixProvider
+from app.simulation.asaas import AsaasNativeError, AsaasPixProvider
 from app.simulation.asaas_scenarios import BASE_REQUEST, run_all
 
 
@@ -101,3 +101,26 @@ def test_asaas_notification_envelope_contains_complete_payment_object():
 def test_asaas_notification_report_does_not_expose_account_identity_secret():
     result = run_all()["AS-PIX-009"]
     assert "ACCOUNT_DOCUMENTATION" not in json.dumps(result, sort_keys=True)
+
+
+def test_asaas_authentication_accepts_sanitized_documentation_token():
+    assert AsaasPixProvider.authenticate("ACCESS_TOKEN_DOCUMENTATION")["status"] == "authenticated"
+
+
+def test_asaas_authentication_preserves_missing_token_code():
+    try:
+        AsaasPixProvider.authenticate(None)
+    except AsaasNativeError as exc:
+        assert exc.error.status == 401
+        assert exc.error.code == "access_token_not_found"
+    else:
+        raise AssertionError("expected missing token rejection")
+
+
+def test_asaas_authentication_preserves_invalid_environment_code():
+    try:
+        AsaasPixProvider.authenticate("ACCESS_TOKEN_DOCUMENTATION", environment="unknown")
+    except AsaasNativeError as exc:
+        assert exc.error.code == "invalid_environment"
+    else:
+        raise AssertionError("expected invalid environment rejection")

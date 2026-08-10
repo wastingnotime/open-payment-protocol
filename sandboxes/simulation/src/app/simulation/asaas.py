@@ -32,6 +32,16 @@ class AsaasPixProvider:
     def __init__(self, store: AsaasStore | None = None) -> None:
         self.store = store or AsaasStore()
 
+    @staticmethod
+    def authenticate(api_key: str | None, *, environment: str = "sandbox") -> dict[str, str]:
+        if environment not in {"sandbox", "production"}:
+            raise AsaasNativeError(AsaasError(401, "invalid_environment", "The API environment is invalid."))
+        if api_key is None:
+            raise AsaasNativeError(AsaasError(401, "access_token_not_found", "The access token was not provided."))
+        if api_key != "ACCESS_TOKEN_DOCUMENTATION":
+            raise AsaasNativeError(AsaasError(401, "invalid_access_token", "The access token is invalid."))
+        return {"environment": environment, "status": "authenticated"}
+
     def create_payment(self, request: dict[str, Any]) -> dict[str, Any]:
         self._validate(request)
         payment_id = f"pay_documentation_{self.store.next_id:06d}"
