@@ -40,3 +40,12 @@ def test_all_provider_scenario_registries_are_deterministically_replayable():
     first_run = [canonical_snapshot(runner()) for runner in runners]
     second_run = [canonical_snapshot(runner()) for runner in runners]
     assert first_run == second_run
+
+
+def test_canonical_snapshot_ignores_registry_insertion_order():
+    reports = {
+        "second": {"name": "B", "observations": [], "events": [], "projection": {}},
+        "first": {"name": "A", "observations": [], "events": [], "projection": {}},
+    }
+    reversed_reports = dict(reversed(list(reports.items())))
+    assert canonical_snapshot(reports) == canonical_snapshot(reversed_reports)

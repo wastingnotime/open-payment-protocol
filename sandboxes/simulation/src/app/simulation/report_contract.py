@@ -25,7 +25,7 @@ def allowed_sources(provider: str) -> set[str]:
 
 def canonical_snapshot(reports: Mapping[str, Any]) -> str:
     return json.dumps(
-        [{name: field(report, name) for name in REPORT_FIELDS} for report in reports.values()],
+        [{name: field(report, name) for name in REPORT_FIELDS} for report in sorted(reports.values(), key=lambda item: field(item, "name"))],
         sort_keys=True,
         separators=(",", ":"),
     )
