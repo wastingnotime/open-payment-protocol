@@ -20,7 +20,14 @@ def field(report, name):
 
 
 def main() -> int:
-    providers = {
+    runners = {
+        "asaas": run_asaas(),
+        "iugu": run_iugu(),
+        "mercadopago": run_mercado_pago(),
+        "pagarme": run_pagarme(),
+        "pagbank": run_pagbank(),
+    }
+    second_run = {
         "asaas": run_asaas(),
         "iugu": run_iugu(),
         "mercadopago": run_mercado_pago(),
@@ -29,7 +36,7 @@ def main() -> int:
     }
     total = 0
     serialized_reports = []
-    for provider, reports in providers.items():
+    for provider, reports in runners.items():
         for scenario_id, report in reports.items():
             observations = field(report, "observations")
             assert field(report, "name") == scenario_id
@@ -45,6 +52,16 @@ def main() -> int:
     serialized = json.dumps(serialized_reports).lower()
     for marker in ("pan", "cvv", "card_number"):
         assert marker not in serialized
+    def snapshot(reports):
+        return json.dumps(
+            [{name: field(report, name) for name in ("name", "observations", "events", "projection")}
+             for report in reports.values()],
+            sort_keys=True,
+            separators=(",", ":"),
+        )
+    assert {provider: snapshot(reports) for provider, reports in runners.items()} == {
+        provider: snapshot(reports) for provider, reports in second_run.items()
+    }
     print(f"validated {total} scenarios")
     return 0
 
