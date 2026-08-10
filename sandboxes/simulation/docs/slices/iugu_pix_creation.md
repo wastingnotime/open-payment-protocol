@@ -23,7 +23,7 @@ The conservative sanitized fixture is the valid baseline. Conflicting minimal
 payer requirements are not resolved in code; combinations without evidence are
 unsupported or explicitly unknown.
 
-Executable scenarios are `IUGU-PIX-001` through `IUGU-PIX-021` in
+Executable scenarios are `IUGU-PIX-001` through `IUGU-PIX-025` in
 `simulators/iugu/scenarios.md`.
 
 ## Native Use-Case Contract
