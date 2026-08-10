@@ -30,6 +30,8 @@ append-only event store for runtime inspection and later adapter pressure.
   payment shapes remain native property-value validation errors.
 - Order creation also requires the documented payer object; omitted required
   properties remain a native 400 validation boundary.
+- The transaction collection must contain exactly one Pix payment; multiple
+  payments remain a native property-value rejection.
 
 ## Remaining Questions
 
