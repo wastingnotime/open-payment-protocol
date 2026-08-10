@@ -19,3 +19,4 @@ Its order follows the repository comparison sequence: Asaas, Iugu, Mercado
 Pago, Pagar.me, and PagBank.
 That order will be exposed as a shared constant and checked by both
 validation paths.
+Provider-prefix and scenario-count mappings are read-only contract data.
