@@ -26,6 +26,7 @@ an incidental mapping lookup error.
 Immutable registry constants retain explicit mapping types for static tooling.
 Malformed observation payloads must produce the same contextual assertion style
 as other report-contract failures.
+Observation collections must be lists, matching the event-log contract.
 Validation consumers should import the shared helper surface without duplicate
 provider-specific aliases.
 Missing report fields should be reported as contract failures with the field
