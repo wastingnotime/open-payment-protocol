@@ -65,7 +65,16 @@ def charge_emerges_after_pix_payment() -> dict[str, Any]:
     return _result("PB-PIX-004", provider, observations)
 
 
-SCENARIOS = {"PB-PIX-001": create_and_retrieve, "PB-PIX-002": invalid_amount, "PB-PIX-003": idempotency_conflict, "PB-PIX-004": charge_emerges_after_pix_payment}
+def unknown_order_retrieval() -> dict[str, Any]:
+    provider, observations = PagBankPixProvider(), []
+    try:
+        provider.retrieve_order("ORDE_UNKNOWN_DOCUMENTATION")
+    except PagBankNativeError as exc:
+        observations.append({"type": "semantic_observation", "name": "native_error", "source": "pagbank", "payload": {"status": exc.error.status, "code": exc.error.code}})
+    return _result("PB-PIX-005", provider, observations)
+
+
+SCENARIOS = {"PB-PIX-001": create_and_retrieve, "PB-PIX-002": invalid_amount, "PB-PIX-003": idempotency_conflict, "PB-PIX-004": charge_emerges_after_pix_payment, "PB-PIX-005": unknown_order_retrieval}
 
 
 def run_all() -> dict[str, dict[str, Any]]:

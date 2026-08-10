@@ -6,7 +6,7 @@ from app.simulation.pagbank_scenarios import BASE_REQUEST, run_all
 
 def test_pagbank_scenarios_complete():
     results = run_all()
-    assert set(results) == {"PB-PIX-001", "PB-PIX-002", "PB-PIX-003", "PB-PIX-004"}
+    assert set(results) == {"PB-PIX-001", "PB-PIX-002", "PB-PIX-003", "PB-PIX-004", "PB-PIX-005"}
     assert results["PB-PIX-001"]["projection"]
 
 
@@ -36,3 +36,10 @@ def test_paid_pix_creates_charge_while_qr_remains_on_order():
     assert order["charges"][0]["status"] == "PAID"
     assert order["charges"][0]["payment_method"]["pix"]["end_to_end_id"]
     assert order["qr_codes"]
+
+
+def test_unknown_order_retrieval_is_native_not_found_boundary():
+    result = run_all()["PB-PIX-005"]
+    error = result["observations"][0]["payload"]
+    assert error["status"] == 404
+    assert error["code"] == "order_not_found"
