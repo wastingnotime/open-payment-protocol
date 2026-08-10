@@ -62,6 +62,11 @@ def test_malformed_observation_has_contextual_validation_error():
         validate_report("asaas", "AS-001", report)
 
 
+def test_missing_report_field_has_named_contract_error():
+    with pytest.raises(AssertionError, match="missing required field: name"):
+        field({}, "name")
+
+
 def test_repeated_provider_runs_return_independent_projections():
     first_run = run_all_providers()
     second_run = run_all_providers()

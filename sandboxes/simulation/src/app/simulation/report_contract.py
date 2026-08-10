@@ -19,7 +19,10 @@ SECURITY_MARKERS = ("pan", "cvv", "card_number", "api_key", "access_token", "sec
 
 
 def field(report: Any, name: str) -> Any:
-    return report[name] if isinstance(report, dict) else getattr(report, name)
+    try:
+        return report[name] if isinstance(report, Mapping) else getattr(report, name)
+    except (KeyError, AttributeError) as exc:
+        raise AssertionError(f"report is missing required field: {name}") from exc
 
 
 def allowed_sources(provider: str) -> frozenset[str]:
