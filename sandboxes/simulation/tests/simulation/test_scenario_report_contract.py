@@ -81,6 +81,17 @@ def test_authentication_reports_never_contain_credential_values():
     assert "ACCESS_TOKEN_INVALID_DOCUMENTATION" not in serialized
 
 
+def test_asaas_authentication_observations_preserve_401_evidence():
+    reports = run_all_providers()["asaas"]
+    observations = [
+        observation
+        for scenario_id in ("AS-PIX-013", "AS-PIX-014", "AS-PIX-015")
+        for observation in field(reports[scenario_id], "observations")
+    ]
+    assert all(observation["payload"]["status"] == 401 for observation in observations)
+    assert all(observation["payload"]["evidence"] == "research/asaas/errors.md" for observation in observations)
+
+
 def test_observation_inventory_covers_every_provider_scenario():
     registries = run_all_providers()
     inventory = observation_inventory(registries)
