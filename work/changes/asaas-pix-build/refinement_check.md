@@ -2,10 +2,10 @@
 
 ## Evidence
 
-Two deterministic scenarios pass. Creation preserves a `pay_` payment ID,
+Eight deterministic scenarios pass. Creation preserves a `pay_` payment ID,
 `PIX` billing type, decimal JSON value, and `PENDING` status. QR data is
-retrieved through a separate provider operation and is not added to the payment
-projection.
+retrieved through a separate provider operation and is not added to the
+payment projection.
 
 ## Model Pressure
 
@@ -24,6 +24,11 @@ projection.
 - The documented payment create shape requires customer, billing type, value,
   and due date; omitted fields remain native required-parameter failures.
 
+The focused test and scenario inventory are covered by the current build.
+
+## Discrepancies and Unknowns
+
+- Decimal JSON-number precision remains unknown.
 ## Remaining Questions
 
 Lifecycle, QR expiration, webhooks, repetition, external-reference lookup, and

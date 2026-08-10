@@ -9,6 +9,7 @@ Built scenarios:
 - `AS-PIX-005`: reject a non-Pix billing type with the native validation boundary.
 - `AS-PIX-006`: reject a non-positive payment value with the native invalid-value boundary.
 - `AS-PIX-007`: missing due date preserves the native required-parameter boundary.
+- `AS-PIX-008`: missing customer preserves the native required-parameter boundary.
 
 Deferred: payment lifecycle, QR expiration, webhook delivery, external-reference
 lookup, repetition behavior, and sandbox observation.
