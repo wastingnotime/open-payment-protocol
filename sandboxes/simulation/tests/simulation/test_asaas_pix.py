@@ -7,7 +7,7 @@ from app.simulation.asaas_scenarios import BASE_REQUEST, run_all
 
 def test_asaas_scenarios_complete():
     results = run_all()
-    assert set(results) == {f"AS-PIX-{number:03d}" for number in range(1, 13)}
+    assert set(results) == {f"AS-PIX-{number:03d}" for number in range(1, 16)}
 
 
 def test_payment_and_separate_qr_retrieval_are_preserved():
@@ -101,6 +101,13 @@ def test_asaas_notification_envelope_contains_complete_payment_object():
 def test_asaas_notification_report_does_not_expose_account_identity_secret():
     result = run_all()["AS-PIX-009"]
     assert "ACCOUNT_DOCUMENTATION" not in json.dumps(result, sort_keys=True)
+
+
+def test_asaas_authentication_scenarios_preserve_native_codes():
+    results = run_all()
+    assert results["AS-PIX-013"]["observations"][0]["payload"]["code"] == "access_token_not_found"
+    assert results["AS-PIX-014"]["observations"][0]["payload"]["code"] == "invalid_access_token"
+    assert results["AS-PIX-015"]["observations"][0]["payload"]["code"] == "invalid_environment"
 
 
 def test_asaas_authentication_accepts_sanitized_documentation_token():

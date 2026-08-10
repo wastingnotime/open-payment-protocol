@@ -62,6 +62,11 @@ def test_observation_inventory_exposes_expiration_alternatives_as_native_evidenc
     assert inventory["mercadopago"]["native_unpaid_cancellation"] == 1
 
 
+def test_observation_inventory_exposes_asaas_authentication_errors():
+    inventory = observation_inventory(run_all_providers())
+    assert inventory["asaas"]["native_authentication_error"] == 3
+
+
 def test_observation_inventory_covers_every_provider_scenario():
     registries = run_all_providers()
     inventory = observation_inventory(registries)

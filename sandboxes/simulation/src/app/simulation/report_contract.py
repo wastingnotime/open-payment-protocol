@@ -14,9 +14,9 @@ __all__ = ["REPORT_FIELDS", "PROVIDER_ORDER", "PROVIDER_PREFIXES", "PROVIDER_SCE
 REPORT_FIELDS = ("name", "observations", "events", "projection")
 PROVIDER_ORDER = ("asaas", "iugu", "mercadopago", "pagarme", "pagbank")
 PROVIDER_PREFIXES: Mapping[str, str] = MappingProxyType({"asaas": "AS-", "iugu": "IUGU-", "mercadopago": "MP-", "pagarme": "PG-", "pagbank": "PB-"})
-PROVIDER_SCENARIO_COUNTS: Mapping[str, int] = MappingProxyType({"asaas": 12, "iugu": 17, "mercadopago": 17, "pagarme": 14, "pagbank": 17})
+PROVIDER_SCENARIO_COUNTS: Mapping[str, int] = MappingProxyType({"asaas": 15, "iugu": 17, "mercadopago": 17, "pagarme": 14, "pagbank": 17})
 TOTAL_SCENARIO_COUNT = sum(PROVIDER_SCENARIO_COUNTS.values())
-SECURITY_MARKERS = ("pan", "cvv", "card_number", "api_key", "access_token", "secret_key")
+SECURITY_MARKERS = ("pan", "cvv", "card_number", "api_key_value", "access_token_value", "secret_key_value")
 
 
 def field(report: Any, name: str) -> Any:

@@ -135,7 +135,34 @@ def invalid_notification_envelope() -> dict[str, Any]:
     return _result("AS-PIX-012", provider, observations)
 
 
-SCENARIOS = {"AS-PIX-001": create_retrieve_and_qr, "AS-PIX-002": invalid_request, "AS-PIX-003": unknown_payment_retrieval, "AS-PIX-004": unknown_qr_retrieval, "AS-PIX-005": invalid_billing_type, "AS-PIX-006": non_positive_value, "AS-PIX-007": missing_due_date, "AS-PIX-008": missing_customer, "AS-PIX-009": received_payment_notification, "AS-PIX-010": redelivered_payment_notification, "AS-PIX-011": overdue_payment_notification, "AS-PIX-012": invalid_notification_envelope}
+def missing_access_token() -> dict[str, Any]:
+    provider, observations = AsaasPixProvider(), []
+    try:
+        provider.authenticate(None)
+    except AsaasNativeError as exc:
+        observations.append({"type": "semantic_observation", "name": "native_authentication_error", "source": "asaas", "payload": {"status": exc.error.status, "code": exc.error.code, "evidence": "research/asaas/errors.md"}})
+    return _result("AS-PIX-013", provider, observations)
+
+
+def invalid_access_token() -> dict[str, Any]:
+    provider, observations = AsaasPixProvider(), []
+    try:
+        provider.authenticate("ACCESS_TOKEN_INVALID_DOCUMENTATION")
+    except AsaasNativeError as exc:
+        observations.append({"type": "semantic_observation", "name": "native_authentication_error", "source": "asaas", "payload": {"status": exc.error.status, "code": exc.error.code, "evidence": "research/asaas/errors.md"}})
+    return _result("AS-PIX-014", provider, observations)
+
+
+def invalid_environment() -> dict[str, Any]:
+    provider, observations = AsaasPixProvider(), []
+    try:
+        provider.authenticate("ACCESS_TOKEN_DOCUMENTATION", environment="unknown")
+    except AsaasNativeError as exc:
+        observations.append({"type": "semantic_observation", "name": "native_authentication_error", "source": "asaas", "payload": {"status": exc.error.status, "code": exc.error.code, "evidence": "research/asaas/errors.md"}})
+    return _result("AS-PIX-015", provider, observations)
+
+
+SCENARIOS = {"AS-PIX-001": create_retrieve_and_qr, "AS-PIX-002": invalid_request, "AS-PIX-003": unknown_payment_retrieval, "AS-PIX-004": unknown_qr_retrieval, "AS-PIX-005": invalid_billing_type, "AS-PIX-006": non_positive_value, "AS-PIX-007": missing_due_date, "AS-PIX-008": missing_customer, "AS-PIX-009": received_payment_notification, "AS-PIX-010": redelivered_payment_notification, "AS-PIX-011": overdue_payment_notification, "AS-PIX-012": invalid_notification_envelope, "AS-PIX-013": missing_access_token, "AS-PIX-014": invalid_access_token, "AS-PIX-015": invalid_environment}
 
 
 def run_all() -> dict[str, dict[str, Any]]:
