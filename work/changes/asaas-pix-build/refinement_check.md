@@ -15,6 +15,8 @@ projection.
 - No repetition or external-reference uniqueness behavior is invented.
 - The unknown-payment scenario preserves a native 404 boundary without
   inventing lookup or reconciliation semantics.
+- The unknown QR scenario keeps the separate QR operation's 404 boundary
+  distinct from payment retrieval.
 
 ## Remaining Questions
 
