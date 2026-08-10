@@ -7,7 +7,7 @@ from app.simulation.mercadopago_scenarios import BASE_REQUEST, run_all
 
 def test_mercado_pago_scenarios_complete():
     results = run_all()
-    assert set(results) == {f"MP-PIX-{number:03d}" for number in range(1, 15)}
+    assert set(results) == {f"MP-PIX-{number:03d}" for number in range(1, 18)}
     assert results["MP-PIX-001"]["projection"]
 
 
@@ -189,3 +189,9 @@ def test_expiration_preserves_documented_status_alternative():
 
     assert expired["status"] == "expired"
     assert expired["status_detail"] == "expired"
+
+
+def test_expiration_scenarios_keep_both_documented_outcomes_visible():
+    results = run_all()
+    assert results["MP-PIX-016"]["observations"][0]["payload"]["status"] == "expired"
+    assert results["MP-PIX-017"]["observations"][0]["payload"]["status"] == "canceled"
