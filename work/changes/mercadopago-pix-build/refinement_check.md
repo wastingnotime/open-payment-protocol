@@ -21,6 +21,9 @@ append-only event store for runtime inspection and later adapter pressure.
   information; later reconciliation is explicitly through webhook or GET.
 - Runtime inspection confirms the `processing` result is correlated as
   `MP-PIX-004` without fabricating a payment transaction.
+- `MP-PIX-005` confirms GET reconciliation returns the same `processing` order
+  with no payment information, preserving the documented unknown-result
+  boundary.
 
 ## Remaining Questions
 
