@@ -1,6 +1,8 @@
 from app.simulation.scenario_registry import PROVIDER_RUNNERS, run_all_providers
+from app.simulation.report_contract import PROVIDER_PREFIXES, PROVIDER_SCENARIO_COUNTS
 from app.simulation.report_contract import PROVIDER_ORDER, REPORT_FIELDS, PROVIDER_SCENARIO_COUNTS, assert_sanitized, canonical_snapshot, field, validate_report
 import json
+import pytest
 
 
 def test_all_provider_scenarios_preserve_comparable_report_shape():
@@ -36,3 +38,12 @@ def test_canonical_snapshot_ignores_registry_insertion_order():
     }
     reversed_reports = dict(reversed(list(reports.items())))
     assert canonical_snapshot(reports) == canonical_snapshot(reversed_reports)
+
+
+def test_contract_mappings_are_immutable():
+    with pytest.raises(TypeError):
+        PROVIDER_PREFIXES["new"] = "NEW-"
+    with pytest.raises(TypeError):
+        PROVIDER_SCENARIO_COUNTS["new"] = 0
+    with pytest.raises(TypeError):
+        PROVIDER_RUNNERS["new"] = lambda: {}
