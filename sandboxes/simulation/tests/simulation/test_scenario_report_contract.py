@@ -75,6 +75,12 @@ def test_error_inventory_preserves_provider_native_codes():
     assert inventory["mercadopago"]["order_not_found"] == 1
 
 
+def test_authentication_reports_never_contain_credential_values():
+    serialized = canonical_snapshot(run_all_providers()["asaas"])
+    assert "ACCESS_TOKEN_DOCUMENTATION" not in serialized
+    assert "ACCESS_TOKEN_INVALID_DOCUMENTATION" not in serialized
+
+
 def test_observation_inventory_covers_every_provider_scenario():
     registries = run_all_providers()
     inventory = observation_inventory(registries)
