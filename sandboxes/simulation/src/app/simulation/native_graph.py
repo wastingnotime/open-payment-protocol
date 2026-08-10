@@ -81,7 +81,7 @@ class NativeScenarioGraph:
                 for node in self.nodes
             ],
             "edges": [
-                {"from_node": edge.source, "to_node": edge.target, "label": edge.relation, "kind": "deferred" if isinstance(edge, DeferredEdge) else "flow"}
+                {"from_node": edge.source, "to_node": edge.target, "label": edge.relation if isinstance(edge, GraphEdge) else edge.reason, "kind": "deferred" if isinstance(edge, DeferredEdge) else "flow"}
                 for edge in (*self.known_edges, *self.deferred_edges)
             ],
         }
