@@ -40,6 +40,14 @@ def create_simulation():
                 source=observation["source"],
                 payload=observation["payload"],
             )
+        for observation in GRAPH.beam_observations():
+            context.emit(
+                observation["type"],
+                observation["name"],
+                source=observation["source"],
+                correlation_id="provider-discovery-graph",
+                payload=observation["payload"],
+            )
         all_results = {**run_all(), **run_mercadopago(), **run_pagbank(), **run_pagarme(), **run_asaas()}
         for result in all_results.values():
             observations = result.observations if hasattr(result, "observations") else result["observations"]
@@ -52,8 +60,8 @@ def create_simulation():
                 )
 
     return Scenario(
-        name="opp-iugu-pix",
-        run_id="iugu-pix-first-slice",
+        name="opp-payment-provider-discovery",
+        run_id="payment-provider-discovery",
         seed=1,
         initial_time=initial_time,
         actors=[Actor("IuguScenarioActor")],
@@ -65,7 +73,7 @@ def create_simulation():
                 action=emit_slice_results,
                 name="RunIuguPixScenarios",
                 source="IuguScenarioActor",
-                correlation_id="iugu-pix-first-slice",
+                correlation_id="payment-provider-discovery",
             )
         ],
     )

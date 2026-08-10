@@ -50,3 +50,15 @@ def test_observatory_spec_contains_runtime_visible_nodes_and_edges():
     assert {node["kind"] for node in spec["nodes"]} == {"actor", "use_case", "aggregate", "projection", "external_provider"}
     assert {node["layer"] for node in spec["nodes"]} == {-8, 0, 4, 6, 10}
     assert {node["domain"] for node in spec["nodes"]} == {"payment-provider-discovery"}
+
+
+def test_beam_observations_route_between_declared_connected_nodes():
+    observations = GRAPH.beam_observations()
+    spec = GRAPH.observatory_spec()
+    declared_edges = {(edge["from_node"], edge["to_node"]) for edge in spec["edges"]}
+
+    assert len(observations) == 38
+    assert {(item["source"], item["name"]) for item in observations} == declared_edges
+    assert all(item["type"] == "graph_route" for item in observations)
+    assert all(item["source"] in GRAPH.node_ids for item in observations)
+    assert all(item["name"] in GRAPH.node_ids for item in observations)

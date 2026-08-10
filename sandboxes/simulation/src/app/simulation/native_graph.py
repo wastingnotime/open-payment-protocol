@@ -75,6 +75,22 @@ class NativeScenarioGraph:
         )
         return observations
 
+    def beam_observations(self) -> list[dict[str, object]]:
+        """Encode graph traversals in the observatory runtime's route contract."""
+        return [
+            {
+                "type": "graph_route",
+                "name": edge.target,
+                "source": edge.source,
+                "payload": {
+                    "relation": edge.relation if isinstance(edge, (GraphEdge, TopologyEdge)) else edge.reason,
+                    "provider": getattr(edge, "provider", "simulation"),
+                    "status": "deferred" if isinstance(edge, DeferredEdge) else "observed",
+                },
+            }
+            for edge in (*self.topology_edges, *self.known_edges, *self.deferred_edges)
+        ]
+
     def observatory_spec(self) -> dict[str, list[dict[str, object]]]:
         runtime_kind = {
             "actor": "actor",
