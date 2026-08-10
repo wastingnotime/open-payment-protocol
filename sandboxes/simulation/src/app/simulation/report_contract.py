@@ -52,7 +52,7 @@ def validate_report(provider: str, scenario_id: str, report: Any) -> None:
     assert isinstance(field(report, "events"), list), f"{context}: events must be a list"
     assert isinstance(field(report, "projection"), dict), f"{context}: projection must be a mapping"
     observations = field(report, "observations")
-    assert observations, f"{context}: observations must not be empty"
+    assert isinstance(observations, list) and observations, f"{context}: observations must be a non-empty list"
     for observation in observations:
         assert {"type", "name", "source", "payload"} <= observation.keys(), f"{context}: incomplete observation envelope"
         assert observation["source"] in allowed_sources(provider), f"{context}: invalid observation source"

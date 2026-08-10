@@ -72,6 +72,12 @@ def test_malformed_observation_has_contextual_validation_error():
         validate_report("asaas", "AS-001", report)
 
 
+def test_observations_must_be_a_list():
+    report = {"name": "AS-001", "events": [], "projection": {}, "observations": {}}
+    with pytest.raises(AssertionError, match="observations must be a non-empty list"):
+        validate_report("asaas", "AS-001", report)
+
+
 def test_missing_report_field_has_named_contract_error():
     with pytest.raises(AssertionError, match="missing required field: name"):
         field({}, "name")
