@@ -59,6 +59,12 @@ class AsaasPixProvider:
         self.store.events.append({"type": "pix_qr_retrieved", "payload": {"payment_id": payment_id}})
         return {"encodedImage": "BASE64_DOCUMENTATION_FIXTURE_REMOVED", "payload": "PIX_COPY_AND_PASTE_DOCUMENTATION_FIXTURE", "expirationDate": "2099-12-31 23:59:59", "description": "OPP documentation fixture"}
 
+    def notification_payload(self, payment_id: str, *, event_id: str, event: str) -> dict[str, Any]:
+        payment = self.store.payments.get(payment_id)
+        if payment is None:
+            raise AsaasNativeError(AsaasError(404, "payment_not_found", "The payment was not found."))
+        return {"id": event_id, "event": event, "dateCreated": "2030-01-01T12:00:00Z", "account": "ACCOUNT_DOCUMENTATION", "payment": deepcopy(payment)}
+
     def _validate(self, request: dict[str, Any]) -> None:
         required = ("customer", "billingType", "value", "dueDate")
         missing = [key for key in required if request.get(key) in (None, "")]

@@ -223,6 +223,7 @@ NODES = TOPOLOGY_NODES + (
     _scenario_node("pagarme", "PG-PIX-013", "webhook delivery queried"),
     _scenario_node("pagarme", "PG-PIX-014", "paid order webhook sent"),
     _scenario_node("asaas", "AS-PIX-001", "payment with separate QR"),
+    _scenario_node("asaas", "AS-PIX-009", "received payment webhook"),
     GraphNode("AS-PIX-DEFERRED-SUCCESS", "asaas", "deferred", "Pix success transition unknown"),
     GraphNode("MP-PIX-DEFERRED-FINALIZATION", "mercadopago", "deferred", "async finalization unknown"),
 )
@@ -285,6 +286,7 @@ TOPOLOGY_EDGES = (
     TopologyEdge("UC-PAGARME-CREATE-OUTCOME", "PG-PIX-013", "executes", "use_case_scenario"),
     TopologyEdge("UC-PAGARME-CREATE-OUTCOME", "PG-PIX-014", "executes", "use_case_scenario"),
     TopologyEdge("UC-ASAAS-CREATE-RETRIEVE", "AS-PIX-001", "executes", "use_case_scenario"),
+    TopologyEdge("UC-ASAAS-CREATE-RETRIEVE", "AS-PIX-009", "executes", "use_case_scenario"),
 )
 
 

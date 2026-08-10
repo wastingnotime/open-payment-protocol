@@ -6,7 +6,7 @@ from app.simulation.asaas_scenarios import BASE_REQUEST, run_all
 
 def test_asaas_scenarios_complete():
     results = run_all()
-    assert set(results) == {"AS-PIX-001", "AS-PIX-002", "AS-PIX-003", "AS-PIX-004", "AS-PIX-005", "AS-PIX-006", "AS-PIX-007", "AS-PIX-008"}
+    assert set(results) == {f"AS-PIX-{number:03d}" for number in range(1, 10)}
 
 
 def test_payment_and_separate_qr_retrieval_are_preserved():
@@ -58,3 +58,11 @@ def test_missing_customer_is_native_required_parameter_boundary():
     error = result["observations"][0]["payload"]
     assert error["status"] == 400
     assert error["code"] == "required_parameter"
+
+
+def test_received_payment_notification_preserves_event_identity_and_ack_boundary():
+    result = run_all()["AS-PIX-009"]
+    notification = result["observations"][0]["payload"]
+    assert notification["event"] == "PAYMENT_RECEIVED"
+    assert notification["event_id"] == "evt_DOCUMENTATION_RECEIVED"
+    assert notification["persist_before_ack"] is True
