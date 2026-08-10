@@ -6,6 +6,9 @@
   webhook delivery with native `sent` status.
 - `PG-PIX-011`: documented failed outcome followed by one
   `charge.payment_failed` delivery attempt with native `failed` status.
+- `PG-PIX-012`: failed delivery manually resent with incremented attempts.
+- `PG-PIX-013`: recorded delivery queried with native delivery fields.
+- `PG-PIX-014`: distinct `order.paid` delivery signal.
 - Webhook records preserve the documented `hook_...` identity shape,
   configured URL, event, attempts, response status, and delivery state.
 
