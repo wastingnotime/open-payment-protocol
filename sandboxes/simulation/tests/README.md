@@ -25,4 +25,5 @@ Provider scenario registries must also be replayable: identical deterministic
 inputs produce byte-equivalent report content across repeated runs.
 
 The current five-provider inventory contains 50 scenarios; changes to that
-total should update the relevant provider backlog and refinement receipt.
+total or to an individual provider count should update the relevant provider
+backlog and refinement receipt.
