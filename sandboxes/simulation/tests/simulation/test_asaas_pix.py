@@ -7,7 +7,7 @@ from app.simulation.asaas_scenarios import BASE_REQUEST, run_all
 
 def test_asaas_scenarios_complete():
     results = run_all()
-    assert set(results) == {f"AS-PIX-{number:03d}" for number in range(1, 12)}
+    assert set(results) == {f"AS-PIX-{number:03d}" for number in range(1, 13)}
 
 
 def test_payment_and_separate_qr_retrieval_are_preserved():
@@ -81,6 +81,13 @@ def test_overdue_notification_does_not_infer_response_status_transition():
     notification = result["observations"][0]["payload"]
     assert notification["event"] == "PAYMENT_OVERDUE"
     assert notification["status_relationship"] == "documented_event_sequence_only"
+
+
+def test_notification_envelope_requires_event_identity_fields():
+    result = run_all()["AS-PIX-012"]
+    error = result["observations"][0]["payload"]
+    assert error["status"] == 400
+    assert error["code"] == "required_parameter"
 
 
 def test_asaas_notification_report_does_not_expose_account_identity_secret():

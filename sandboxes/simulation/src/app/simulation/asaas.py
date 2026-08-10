@@ -60,6 +60,8 @@ class AsaasPixProvider:
         return {"encodedImage": "BASE64_DOCUMENTATION_FIXTURE_REMOVED", "payload": "PIX_COPY_AND_PASTE_DOCUMENTATION_FIXTURE", "expirationDate": "2099-12-31 23:59:59", "description": "OPP documentation fixture"}
 
     def notification_payload(self, payment_id: str, *, event_id: str, event: str) -> dict[str, Any]:
+        if not event_id or not event:
+            raise AsaasNativeError(AsaasError(400, "required_parameter", "Event ID and event are required."))
         payment = self.store.payments.get(payment_id)
         if payment is None:
             raise AsaasNativeError(AsaasError(404, "payment_not_found", "The payment was not found."))

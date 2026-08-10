@@ -125,7 +125,17 @@ def overdue_payment_notification() -> dict[str, Any]:
     return _result("AS-PIX-011", provider, observations)
 
 
-SCENARIOS = {"AS-PIX-001": create_retrieve_and_qr, "AS-PIX-002": invalid_request, "AS-PIX-003": unknown_payment_retrieval, "AS-PIX-004": unknown_qr_retrieval, "AS-PIX-005": invalid_billing_type, "AS-PIX-006": non_positive_value, "AS-PIX-007": missing_due_date, "AS-PIX-008": missing_customer, "AS-PIX-009": received_payment_notification, "AS-PIX-010": redelivered_payment_notification, "AS-PIX-011": overdue_payment_notification}
+def invalid_notification_envelope() -> dict[str, Any]:
+    provider, observations = AsaasPixProvider(), []
+    payment = provider.create_payment(deepcopy(BASE_REQUEST))
+    try:
+        provider.notification_payload(payment["id"], event_id="", event="")
+    except AsaasNativeError as exc:
+        observations.append({"type": "semantic_observation", "name": "native_error", "source": "asaas", "payload": {"status": exc.error.status, "code": exc.error.code}})
+    return _result("AS-PIX-012", provider, observations)
+
+
+SCENARIOS = {"AS-PIX-001": create_retrieve_and_qr, "AS-PIX-002": invalid_request, "AS-PIX-003": unknown_payment_retrieval, "AS-PIX-004": unknown_qr_retrieval, "AS-PIX-005": invalid_billing_type, "AS-PIX-006": non_positive_value, "AS-PIX-007": missing_due_date, "AS-PIX-008": missing_customer, "AS-PIX-009": received_payment_notification, "AS-PIX-010": redelivered_payment_notification, "AS-PIX-011": overdue_payment_notification, "AS-PIX-012": invalid_notification_envelope}
 
 
 def run_all() -> dict[str, dict[str, Any]]:
