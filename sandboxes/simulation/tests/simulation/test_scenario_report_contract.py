@@ -1,5 +1,5 @@
 from app.simulation.asaas_scenarios import run_all as run_asaas
-from app.simulation.iugu_pix import run_all as run_iugu
+from app.simulation.scenarios import run_all as run_iugu
 from app.simulation.mercadopago_scenarios import run_all as run_mercado_pago
 from app.simulation.pagarme_scenarios import run_all as run_pagarme
 from app.simulation.pagbank_scenarios import run_all as run_pagbank
