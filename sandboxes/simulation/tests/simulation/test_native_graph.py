@@ -84,6 +84,14 @@ def test_authentication_error_nodes_keep_asaas_domain_and_rank():
         assert nodes[scenario_id]["layer"] > nodes["UC-ASAAS-CREATE-RETRIEVE"]["layer"]
 
 
+def test_asaas_error_nodes_keep_provider_domain_and_later_rank():
+    spec = GRAPH.observatory_spec()
+    nodes = {node["id"]: node for node in spec["nodes"]}
+    for scenario_id in ("AS-PIX-016", "AS-PIX-017", "AS-PIX-018", "AS-PIX-019"):
+        assert nodes[scenario_id]["domain"] == "provider-asaas"
+        assert nodes[scenario_id]["layer"] > nodes["UC-ASAAS-CREATE-RETRIEVE"]["layer"]
+
+
 def test_iugu_event_nodes_keep_provider_domain_and_later_rank():
     spec = GRAPH.observatory_spec()
     nodes = {node["id"]: node for node in spec["nodes"]}
