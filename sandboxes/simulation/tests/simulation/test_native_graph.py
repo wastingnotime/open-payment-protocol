@@ -28,7 +28,7 @@ def test_deferred_graph_edges_remain_explicit_and_non_executable():
 def test_graph_snapshot_exposes_executable_and_deferred_nodes():
     snapshot = GRAPH.snapshot()
     assert GRAPH.validation_errors() == []
-    assert len(GRAPH.scenario_ids) == 32
+    assert len(GRAPH.scenario_ids) == 33
     assert all("-PIX-" in scenario_id for scenario_id in GRAPH.scenario_ids)
     assert GRAPH.actor_ids == (
         "ACTOR-SIMULATION-COORDINATOR",
