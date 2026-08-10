@@ -35,7 +35,7 @@ def main() -> int:
     print(f"native observations: {observation_inventory(runners)}")
     graph = GRAPH.snapshot()
     assert GRAPH.validation_errors() == []
-    assert len(GRAPH.scenario_ids) == 42
+    assert len(GRAPH.scenario_ids) == 45
     print(f"graph: {len(graph['nodes'])} nodes, {len(graph['topology_edges'])} topology edges, {len(graph['known_edges'])} known edges, {len(graph['deferred_edges'])} deferred edges")
     return 0
 
