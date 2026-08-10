@@ -9,5 +9,5 @@ Validate every current provider scenario report with:
 python3 sandboxes/simulation/tools/validate_scenarios.py
 ```
 
-The validator checks report shape, scenario attribution, and absence of raw
-PAN, CVV, and `card_number` markers.
+The validator checks report shape, observation envelopes, scenario attribution,
+and absence of raw PAN, CVV, and `card_number` markers.
