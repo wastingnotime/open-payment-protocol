@@ -9,7 +9,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from app.simulation.scenario_registry import run_all_providers
-from app.simulation.report_contract import REPORT_FIELDS, PROVIDER_SCENARIO_COUNTS, SECURITY_MARKERS, canonical_snapshot, field, validate_report
+from app.simulation.report_contract import REPORT_FIELDS, PROVIDER_SCENARIO_COUNTS, assert_sanitized, canonical_snapshot, field, validate_report
 
 
 def main() -> int:
@@ -24,9 +24,7 @@ def main() -> int:
             serialized_reports.append({name: field(report, name) for name in REPORT_FIELDS})
             total += 1
         print(f"{provider}: {len(reports)} scenarios validated")
-    serialized = json.dumps(serialized_reports).lower()
-    for marker in SECURITY_MARKERS:
-        assert marker not in serialized
+    assert_sanitized(json.dumps(serialized_reports))
     assert total == 50
     assert {provider: canonical_snapshot(reports) for provider, reports in runners.items()} == {
         provider: canonical_snapshot(reports) for provider, reports in second_run.items()

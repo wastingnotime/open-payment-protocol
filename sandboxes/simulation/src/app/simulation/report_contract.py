@@ -7,7 +7,7 @@ from collections.abc import Mapping
 from typing import Any
 
 
-__all__ = ["REPORT_FIELDS", "PROVIDER_PREFIXES", "PROVIDER_SCENARIO_COUNTS", "SECURITY_MARKERS", "allowed_sources", "canonical_snapshot", "field", "validate_report"]
+__all__ = ["REPORT_FIELDS", "PROVIDER_PREFIXES", "PROVIDER_SCENARIO_COUNTS", "SECURITY_MARKERS", "allowed_sources", "assert_sanitized", "canonical_snapshot", "field", "validate_report"]
 
 
 REPORT_FIELDS = ("name", "observations", "events", "projection")
@@ -22,6 +22,12 @@ def field(report: Any, name: str) -> Any:
 
 def allowed_sources(provider: str) -> set[str]:
     return {provider, "simulation"} if provider == "iugu" else {provider}
+
+
+def assert_sanitized(serialized: str) -> None:
+    lowered = serialized.lower()
+    for marker in SECURITY_MARKERS:
+        assert marker not in lowered, f"serialized report contains prohibited marker: {marker}"
 
 
 def canonical_snapshot(reports: Mapping[str, Any]) -> str:

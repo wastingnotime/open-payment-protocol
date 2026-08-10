@@ -1,5 +1,5 @@
 from app.simulation.scenario_registry import PROVIDER_RUNNERS, run_all_providers
-from app.simulation.report_contract import REPORT_FIELDS, PROVIDER_SCENARIO_COUNTS, SECURITY_MARKERS, canonical_snapshot, field, validate_report
+from app.simulation.report_contract import REPORT_FIELDS, PROVIDER_SCENARIO_COUNTS, assert_sanitized, canonical_snapshot, field, validate_report
 import json
 
 
@@ -20,9 +20,7 @@ def test_all_provider_scenario_reports_exclude_cardholder_data_markers():
     for scenarios in registries:
         for report in scenarios.values():
             reports.append({name: field(report, name) for name in REPORT_FIELDS})
-    serialized = json.dumps(reports).lower()
-    for marker in SECURITY_MARKERS:
-        assert marker not in serialized
+    assert_sanitized(json.dumps(reports))
 
 
 def test_all_provider_scenario_registries_are_deterministically_replayable():
