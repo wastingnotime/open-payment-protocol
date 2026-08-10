@@ -139,7 +139,18 @@ def paid_notification_with_authenticity() -> dict[str, Any]:
     return _result("PB-PIX-011", provider, observations)
 
 
-SCENARIOS = {"PB-PIX-001": create_and_retrieve, "PB-PIX-002": invalid_amount, "PB-PIX-003": idempotency_conflict, "PB-PIX-004": charge_emerges_after_pix_payment, "PB-PIX-005": unknown_order_retrieval, "PB-PIX-006": duplicate_pix_payment, "PB-PIX-007": multiple_qr_codes, "PB-PIX-008": missing_qr_codes, "PB-PIX-009": missing_reference_id, "PB-PIX-010": missing_idempotency_key, "PB-PIX-011": paid_notification_with_authenticity}
+def mismatched_notification_authenticity() -> dict[str, Any]:
+    provider, observations = PagBankPixProvider(), []
+    order = provider.create_order(deepcopy(BASE_REQUEST), idempotency_key="pagbank-scenario-012")
+    paid = provider.mark_pix_paid(order["id"], end_to_end_id="E2E_NOTIFICATION_MISMATCH")
+    payload = provider.notification_payload(paid["id"])
+    raw_payload = json.dumps(payload, sort_keys=True, separators=(",", ":"))
+    token = provider.authenticity_token("ACCOUNT_TOKEN_DOCUMENTATION", raw_payload)
+    observations.append({"type": "semantic_observation", "name": "native_webhook_rejected", "source": "pagbank", "payload": {"transport": "https_post", "order_id": paid["id"], "authenticity_verified": provider.verify_authenticity("ACCOUNT_TOKEN_DOCUMENTATION", raw_payload + " ", token), "action": "discard", "evidence": "research/pagbank/webhooks.md"}})
+    return _result("PB-PIX-012", provider, observations)
+
+
+SCENARIOS = {"PB-PIX-001": create_and_retrieve, "PB-PIX-002": invalid_amount, "PB-PIX-003": idempotency_conflict, "PB-PIX-004": charge_emerges_after_pix_payment, "PB-PIX-005": unknown_order_retrieval, "PB-PIX-006": duplicate_pix_payment, "PB-PIX-007": multiple_qr_codes, "PB-PIX-008": missing_qr_codes, "PB-PIX-009": missing_reference_id, "PB-PIX-010": missing_idempotency_key, "PB-PIX-011": paid_notification_with_authenticity, "PB-PIX-012": mismatched_notification_authenticity}
 
 
 def run_all() -> dict[str, dict[str, Any]]:

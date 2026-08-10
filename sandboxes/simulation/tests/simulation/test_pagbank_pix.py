@@ -6,7 +6,7 @@ from app.simulation.pagbank_scenarios import BASE_REQUEST, run_all
 
 def test_pagbank_scenarios_complete():
     results = run_all()
-    assert set(results) == {f"PB-PIX-{number:03d}" for number in range(1, 12)}
+    assert set(results) == {f"PB-PIX-{number:03d}" for number in range(1, 13)}
     assert results["PB-PIX-001"]["projection"]
 
 
@@ -87,3 +87,10 @@ def test_paid_notification_preserves_full_order_and_authenticity_boundary():
     assert notification["charge_status"] == "PAID"
     assert notification["has_qr_code"] is True
     assert notification["authenticity_verified"] is True
+
+
+def test_mismatched_notification_authenticity_is_discarded():
+    result = run_all()["PB-PIX-012"]
+    notification = result["observations"][0]["payload"]
+    assert notification["authenticity_verified"] is False
+    assert notification["action"] == "discard"
