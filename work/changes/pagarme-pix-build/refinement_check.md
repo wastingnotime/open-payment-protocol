@@ -27,6 +27,8 @@ visible together without introducing a normalized status enum.
 - Simulator thresholds are sandbox rules, not production lifecycle guarantees.
 - The success/failure threshold is now an explicit provider simulator rule with
   a source link, not an inferred production behavior.
+- Unknown charge retrieval preserves the native 404 `charge_not_found` boundary
+  and does not infer an order lookup fallback.
 
 ## Remaining Questions
 
