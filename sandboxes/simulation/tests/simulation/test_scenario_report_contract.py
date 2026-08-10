@@ -47,4 +47,6 @@ def test_all_provider_scenario_registries_are_deterministically_replayable():
             separators=(",", ":"),
         )
 
-    assert [snapshot(runner) for runner in runners] == [snapshot(runner) for runner in runners]
+    first_run = [snapshot(runner) for runner in runners]
+    second_run = [snapshot(runner) for runner in runners]
+    assert first_run == second_run
