@@ -62,3 +62,17 @@ def test_beam_observations_route_between_declared_connected_nodes():
     assert all(item["type"] == "graph_route" for item in observations)
     assert all(item["source"] in GRAPH.node_ids for item in observations)
     assert all(item["name"] in GRAPH.node_ids for item in observations)
+
+
+def test_beam_observations_preserve_deferred_status():
+    deferred_targets = {
+        edge.target for edge in GRAPH.deferred_edges
+    }
+    routes = {
+        item["name"]: item
+        for item in GRAPH.beam_observations()
+        if item["name"] in deferred_targets
+    }
+
+    assert set(routes) == deferred_targets
+    assert all(item["payload"]["status"] == "deferred" for item in routes.values())
