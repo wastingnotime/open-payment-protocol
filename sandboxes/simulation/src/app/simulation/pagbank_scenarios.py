@@ -168,7 +168,18 @@ def multiple_notification_urls_rejected() -> dict[str, Any]:
     return _result("PB-PIX-014", provider, observations)
 
 
-SCENARIOS = {"PB-PIX-001": create_and_retrieve, "PB-PIX-002": invalid_amount, "PB-PIX-003": idempotency_conflict, "PB-PIX-004": charge_emerges_after_pix_payment, "PB-PIX-005": unknown_order_retrieval, "PB-PIX-006": duplicate_pix_payment, "PB-PIX-007": multiple_qr_codes, "PB-PIX-008": missing_qr_codes, "PB-PIX-009": missing_reference_id, "PB-PIX-010": missing_idempotency_key, "PB-PIX-011": paid_notification_with_authenticity, "PB-PIX-012": mismatched_notification_authenticity, "PB-PIX-013": notification_url_is_preserved, "PB-PIX-014": multiple_notification_urls_rejected}
+def insecure_notification_url_rejected() -> dict[str, Any]:
+    provider, observations = PagBankPixProvider(), []
+    request = deepcopy(BASE_REQUEST)
+    request["notification_urls"] = ["http://example.invalid/webhooks/pagbank"]
+    try:
+        provider.create_order(request, idempotency_key="pagbank-scenario-015")
+    except PagBankNativeError as exc:
+        observations.append({"type": "semantic_observation", "name": "native_error", "source": "pagbank", "payload": {"status": exc.error.status, "code": exc.error.code}})
+    return _result("PB-PIX-015", provider, observations)
+
+
+SCENARIOS = {"PB-PIX-001": create_and_retrieve, "PB-PIX-002": invalid_amount, "PB-PIX-003": idempotency_conflict, "PB-PIX-004": charge_emerges_after_pix_payment, "PB-PIX-005": unknown_order_retrieval, "PB-PIX-006": duplicate_pix_payment, "PB-PIX-007": multiple_qr_codes, "PB-PIX-008": missing_qr_codes, "PB-PIX-009": missing_reference_id, "PB-PIX-010": missing_idempotency_key, "PB-PIX-011": paid_notification_with_authenticity, "PB-PIX-012": mismatched_notification_authenticity, "PB-PIX-013": notification_url_is_preserved, "PB-PIX-014": multiple_notification_urls_rejected, "PB-PIX-015": insecure_notification_url_rejected}
 
 
 def run_all() -> dict[str, dict[str, Any]]:

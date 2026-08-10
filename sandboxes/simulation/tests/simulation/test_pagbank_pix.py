@@ -6,7 +6,7 @@ from app.simulation.pagbank_scenarios import BASE_REQUEST, run_all
 
 def test_pagbank_scenarios_complete():
     results = run_all()
-    assert set(results) == {f"PB-PIX-{number:03d}" for number in range(1, 15)}
+    assert set(results) == {f"PB-PIX-{number:03d}" for number in range(1, 16)}
     assert results["PB-PIX-001"]["projection"]
 
 
@@ -112,6 +112,13 @@ def test_notification_url_is_preserved_on_native_order_projection():
 
 def test_multiple_notification_urls_are_native_invalid_parameter_boundary():
     result = run_all()["PB-PIX-014"]
+    error = result["observations"][0]["payload"]
+    assert error["status"] == 400
+    assert error["code"] == "invalid_parameter"
+
+
+def test_insecure_notification_url_is_native_invalid_parameter_boundary():
+    result = run_all()["PB-PIX-015"]
     error = result["observations"][0]["payload"]
     assert error["status"] == 400
     assert error["code"] == "invalid_parameter"
