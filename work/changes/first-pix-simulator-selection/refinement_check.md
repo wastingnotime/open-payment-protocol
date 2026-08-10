@@ -41,6 +41,8 @@ references, and the documented 409 idempotency conflict.
   paid Pix state, and explicit recovery marker together.
 - `IUGU-PIX-011` preserves the native `422 invalid_transition` response when a
   paid invoice is canceled; the simulator does not imply an illegal reversal.
+- The lifecycle matrix also rejects payment after expiration with the same
+  native invalid-transition boundary; expired state is not silently reopened.
 - Iugu's conflicting payer requirements remain unsupported/unknown combinations.
 - Exact provider error bodies, idempotency retention, expiry, refunds, and
   webhook delivery remain deferred as documented in the slice plan.
