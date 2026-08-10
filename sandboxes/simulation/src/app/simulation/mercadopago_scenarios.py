@@ -146,7 +146,26 @@ def rejected_order_notification_signature() -> dict[str, Any]:
     return _result("MP-PIX-012", provider, observations)
 
 
-SCENARIOS = {"MP-PIX-001": create_and_retrieve, "MP-PIX-002": invalid_total, "MP-PIX-003": idempotency_conflict, "MP-PIX-004": asynchronous_processing_variant, "MP-PIX-005": asynchronous_reconciliation_get, "MP-PIX-006": unknown_order_retrieval, "MP-PIX-007": non_pix_payment_method, "MP-PIX-008": missing_payer, "MP-PIX-009": multiple_payments, "MP-PIX-010": missing_idempotency_key, "MP-PIX-011": processing_order_notification, "MP-PIX-012": rejected_order_notification_signature}
+def partial_refund() -> dict[str, Any]:
+    provider, observations = MercadoPagoPixProvider(), []
+    order = provider.create_order(deepcopy(BASE_REQUEST), idempotency_key="mp-scenario-013")
+    approved = provider.mark_pix_approved(order["id"])
+    observations.append({"type": "semantic_observation", "name": "native_payment_approved", "source": "mercadopago", "payload": {"order_id": order["id"], "payment_id": approved["transactions"]["payments"][0]["id"], "status": approved["status"]}})
+    refunded = provider.refund_order(order["id"], amount="20.00")
+    observations.append({"type": "semantic_observation", "name": "native_partial_refund", "source": "mercadopago", "payload": {"order_id": refunded["id"], "amount": "20.00", "status": refunded["status"], "funds_returned_to": "payer_account", "refund_window_days": 180, "evidence": "research/mercadopago/contract.md"}})
+    return _result("MP-PIX-013", provider, observations)
+
+
+def total_refund() -> dict[str, Any]:
+    provider, observations = MercadoPagoPixProvider(), []
+    order = provider.create_order(deepcopy(BASE_REQUEST), idempotency_key="mp-scenario-014")
+    provider.mark_pix_approved(order["id"])
+    refunded = provider.refund_order(order["id"])
+    observations.append({"type": "semantic_observation", "name": "native_total_refund", "source": "mercadopago", "payload": {"order_id": refunded["id"], "amount": "50.00", "status": refunded["status"], "funds_returned_to": "payer_account", "refund_window_days": 180, "evidence": "research/mercadopago/contract.md"}})
+    return _result("MP-PIX-014", provider, observations)
+
+
+SCENARIOS = {"MP-PIX-001": create_and_retrieve, "MP-PIX-002": invalid_total, "MP-PIX-003": idempotency_conflict, "MP-PIX-004": asynchronous_processing_variant, "MP-PIX-005": asynchronous_reconciliation_get, "MP-PIX-006": unknown_order_retrieval, "MP-PIX-007": non_pix_payment_method, "MP-PIX-008": missing_payer, "MP-PIX-009": multiple_payments, "MP-PIX-010": missing_idempotency_key, "MP-PIX-011": processing_order_notification, "MP-PIX-012": rejected_order_notification_signature, "MP-PIX-013": partial_refund, "MP-PIX-014": total_refund}
 
 
 def run_all() -> dict[str, dict[str, Any]]:

@@ -7,7 +7,7 @@ from app.simulation.mercadopago_scenarios import BASE_REQUEST, run_all
 
 def test_mercado_pago_scenarios_complete():
     results = run_all()
-    assert set(results) == {f"MP-PIX-{number:03d}" for number in range(1, 13)}
+    assert set(results) == {f"MP-PIX-{number:03d}" for number in range(1, 15)}
     assert results["MP-PIX-001"]["projection"]
 
 
@@ -120,6 +120,19 @@ def test_order_notification_points_to_authoritative_order_id():
     notification = result["observations"][0]["payload"]
     assert notification["authoritative_reconciliation"] == "get"
     assert notification["order_id"].startswith("ORD_ASYNC_DOCUMENTATION_")
+
+
+def test_partial_refund_scenario_preserves_provider_native_return_boundary():
+    result = run_all()["MP-PIX-013"]
+    refund = result["observations"][-1]["payload"]
+    assert refund["status"] == "partially_refunded"
+    assert refund["funds_returned_to"] == "payer_account"
+
+
+def test_total_refund_scenario_preserves_provider_native_status():
+    result = run_all()["MP-PIX-014"]
+    refund = result["observations"][0]["payload"]
+    assert refund["status"] == "refunded"
 
 
 def test_refund_preserves_decimal_amounts_and_partial_status():
