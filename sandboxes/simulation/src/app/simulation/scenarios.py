@@ -174,6 +174,15 @@ def successful_pix_webhook_event() -> ScenarioResult:
     return _finish("IUGU-PIX-014", provider, log)
 
 
+def canceled_webhook_event() -> ScenarioResult:
+    provider, log = IuguPixProvider(), []
+    created = provider.create_invoice(deepcopy(BASE_REQUEST))
+    canceled = provider.cancel_invoice(created["id"])
+    payload = provider.webhook_form_payload(canceled["id"], event="invoice.status_changed")
+    _observation(log, "native_webhook_event", {"transport": "application/x-www-form-urlencoded", "event": payload["event"], "fields": payload, "evidence": "research/iugu/webhooks.md"})
+    return _finish("IUGU-PIX-015", provider, log)
+
+
 def deterministic_replay() -> ScenarioResult:
     first = create_and_retrieve()
     second = create_and_retrieve()
@@ -199,6 +208,7 @@ SCENARIOS: dict[str, Callable[[], ScenarioResult]] = {
     "IUGU-PIX-012": invalid_expired_payment,
     "IUGU-PIX-013": unknown_caller_reference,
     "IUGU-PIX-014": successful_pix_webhook_event,
+    "IUGU-PIX-015": canceled_webhook_event,
 }
 
 
