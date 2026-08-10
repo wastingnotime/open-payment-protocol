@@ -29,6 +29,8 @@ as other report-contract failures.
 Observation collections must be lists, matching the event-log contract.
 Each observation item must be a mapping before envelope fields are inspected.
 Event-log collections must contain mapping items as well.
+Non-mapping report objects should use the same named field-access diagnostic as
+missing fields.
 Validation consumers should import the shared helper surface without duplicate
 provider-specific aliases.
 Missing report fields should be reported as contract failures with the field
