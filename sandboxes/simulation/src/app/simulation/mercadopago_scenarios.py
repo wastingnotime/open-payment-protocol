@@ -65,7 +65,15 @@ def asynchronous_processing_variant() -> dict[str, Any]:
     return _result("MP-PIX-004", provider, observations)
 
 
-SCENARIOS = {"MP-PIX-001": create_and_retrieve, "MP-PIX-002": invalid_total, "MP-PIX-003": idempotency_conflict, "MP-PIX-004": asynchronous_processing_variant}
+def asynchronous_reconciliation_get() -> dict[str, Any]:
+    provider, observations = MercadoPagoPixProvider(), []
+    created = provider.create_async_order_variant(deepcopy(BASE_REQUEST))
+    retrieved = provider.retrieve_order(created["id"])
+    observations.append({"type": "semantic_observation", "name": "native_reconciliation_query", "source": "mercadopago", "payload": {"order_id": retrieved["id"], "status": retrieved["status"], "payments_present": bool(retrieved["transactions"]["payments"]), "reconciliation": "get"}})
+    return _result("MP-PIX-005", provider, observations)
+
+
+SCENARIOS = {"MP-PIX-001": create_and_retrieve, "MP-PIX-002": invalid_total, "MP-PIX-003": idempotency_conflict, "MP-PIX-004": asynchronous_processing_variant, "MP-PIX-005": asynchronous_reconciliation_get}
 
 
 def run_all() -> dict[str, dict[str, Any]]:

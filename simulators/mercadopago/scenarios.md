@@ -7,6 +7,7 @@ Built scenarios:
 - `MP-PIX-003`: return documented `409 idempotency_key_already_used`.
 - `MP-PIX-004`: represent documented asynchronous order creation with
   `processing` and no payment information.
+- `MP-PIX-005`: reconcile that asynchronous order through GET.
 
 Deferred: asynchronous finalization, successful transfer, expiration, webhooks,
 refunds, and legacy Payments API compatibility.

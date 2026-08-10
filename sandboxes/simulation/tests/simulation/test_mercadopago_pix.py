@@ -43,3 +43,11 @@ def test_documented_async_variant_preserves_processing_without_payments():
     observation = next(item for item in result["observations"] if item["name"] == "native_async_result")
     assert observation["payload"]["status"] == "processing"
     assert observation["payload"]["payments_present"] is False
+
+
+def test_async_reconciliation_get_preserves_processing_boundary():
+    result = run_all()["MP-PIX-005"]
+    query = result["observations"][0]["payload"]
+    assert query["reconciliation"] == "get"
+    assert query["status"] == "processing"
+    assert query["payments_present"] is False
