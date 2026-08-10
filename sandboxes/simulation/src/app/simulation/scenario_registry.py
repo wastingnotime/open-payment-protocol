@@ -15,7 +15,7 @@ from .scenarios import run_all as run_iugu
 __all__ = ["PROVIDER_RUNNERS", "run_all_providers"]
 
 
-PROVIDER_RUNNERS = MappingProxyType({
+PROVIDER_RUNNERS: Mapping[str, Callable[[], dict[str, Any]]] = MappingProxyType({
     "asaas": run_asaas,
     "iugu": run_iugu,
     "mercadopago": run_mercado_pago,
