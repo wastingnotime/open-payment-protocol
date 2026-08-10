@@ -19,6 +19,8 @@ projection.
   distinct from payment retrieval.
 - QR retrieval is only valid for an existing payment and does not create or
   infer a payment when the billing type is unsupported.
+- Payment creation requires a strictly positive value; zero and negative
+  values remain provider-native validation errors.
 
 ## Remaining Questions
 
