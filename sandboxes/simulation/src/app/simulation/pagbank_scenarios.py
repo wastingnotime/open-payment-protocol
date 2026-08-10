@@ -150,7 +150,14 @@ def mismatched_notification_authenticity() -> dict[str, Any]:
     return _result("PB-PIX-012", provider, observations)
 
 
-SCENARIOS = {"PB-PIX-001": create_and_retrieve, "PB-PIX-002": invalid_amount, "PB-PIX-003": idempotency_conflict, "PB-PIX-004": charge_emerges_after_pix_payment, "PB-PIX-005": unknown_order_retrieval, "PB-PIX-006": duplicate_pix_payment, "PB-PIX-007": multiple_qr_codes, "PB-PIX-008": missing_qr_codes, "PB-PIX-009": missing_reference_id, "PB-PIX-010": missing_idempotency_key, "PB-PIX-011": paid_notification_with_authenticity, "PB-PIX-012": mismatched_notification_authenticity}
+def notification_url_is_preserved() -> dict[str, Any]:
+    provider, observations = PagBankPixProvider(), []
+    order = provider.create_order(deepcopy(BASE_REQUEST), idempotency_key="pagbank-scenario-013")
+    observations.append({"type": "semantic_observation", "name": "native_notification_configuration", "source": "pagbank", "payload": {"order_id": order["id"], "notification_urls": order["notification_urls"], "transport": "https_post", "evidence": "research/pagbank/webhooks.md"}})
+    return _result("PB-PIX-013", provider, observations)
+
+
+SCENARIOS = {"PB-PIX-001": create_and_retrieve, "PB-PIX-002": invalid_amount, "PB-PIX-003": idempotency_conflict, "PB-PIX-004": charge_emerges_after_pix_payment, "PB-PIX-005": unknown_order_retrieval, "PB-PIX-006": duplicate_pix_payment, "PB-PIX-007": multiple_qr_codes, "PB-PIX-008": missing_qr_codes, "PB-PIX-009": missing_reference_id, "PB-PIX-010": missing_idempotency_key, "PB-PIX-011": paid_notification_with_authenticity, "PB-PIX-012": mismatched_notification_authenticity, "PB-PIX-013": notification_url_is_preserved}
 
 
 def run_all() -> dict[str, dict[str, Any]]:

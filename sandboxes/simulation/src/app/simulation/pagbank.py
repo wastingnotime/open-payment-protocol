@@ -54,6 +54,7 @@ class PagBankPixProvider:
             "id": order_id,
             "reference_id": request["reference_id"],
             "items": deepcopy(request["items"]),
+            "notification_urls": deepcopy(request.get("notification_urls", [])),
             "qr_codes": [{
                 "id": qr_id,
                 "expiration_date": request["qr_codes"][0].get("expiration_date"),

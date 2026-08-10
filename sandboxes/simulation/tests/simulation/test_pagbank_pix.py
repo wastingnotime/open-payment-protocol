@@ -6,7 +6,7 @@ from app.simulation.pagbank_scenarios import BASE_REQUEST, run_all
 
 def test_pagbank_scenarios_complete():
     results = run_all()
-    assert set(results) == {f"PB-PIX-{number:03d}" for number in range(1, 13)}
+    assert set(results) == {f"PB-PIX-{number:03d}" for number in range(1, 14)}
     assert results["PB-PIX-001"]["projection"]
 
 
@@ -94,3 +94,10 @@ def test_mismatched_notification_authenticity_is_discarded():
     notification = result["observations"][0]["payload"]
     assert notification["authenticity_verified"] is False
     assert notification["action"] == "discard"
+
+
+def test_notification_url_is_preserved_on_native_order_projection():
+    result = run_all()["PB-PIX-013"]
+    configuration = result["observations"][0]["payload"]
+    assert configuration["notification_urls"] == ["https://example.invalid/webhooks/pagbank"]
+    assert configuration["transport"] == "https_post"
