@@ -13,3 +13,5 @@ The helper remains an experimental internal simulation surface, not protocol
 authority.
 Provider runner registration is kept in a neighboring simulation registry so
 tools do not maintain separate provider lists.
+Its order follows the repository comparison sequence: Asaas, Iugu, Mercado
+Pago, Pagar.me, and PagBank.
