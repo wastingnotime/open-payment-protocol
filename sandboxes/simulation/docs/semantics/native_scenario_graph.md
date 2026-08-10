@@ -23,9 +23,10 @@ flowchart LR
   MP4 -. finalization unknown .-> MPU[deferred]
 ```
 
-The runtime graph currently exposes 20 nodes: 18 executable scenario nodes and
-2 deferred evidence-gap nodes. Its `snapshot()` method exposes those nodes and
-edges to local validation tools. Executable edges are defined in
+The runtime graph currently exposes 43 nodes: 6 actors, 6 use cases, 11
+provider-native resources, 18 executable scenario nodes, and 2 deferred
+evidence-gap nodes. Its `snapshot()` method exposes those nodes and edges to
+local validation tools. Executable edges are defined in
 `src/app/simulation/native_graph.py` and every executable edge points to
 scenario IDs in the provider scenario registry. Deferred edges remain explicit
 so missing evidence is not converted into an invented common state transition.

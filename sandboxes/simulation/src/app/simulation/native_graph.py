@@ -38,8 +38,17 @@ class DeferredEdge:
 
 
 @dataclass(frozen=True)
+class TopologyEdge:
+    source: str
+    target: str
+    relation: str
+    kind: str
+
+
+@dataclass(frozen=True)
 class NativeScenarioGraph:
     nodes: tuple[GraphNode, ...]
+    topology_edges: tuple[TopologyEdge, ...]
     known_edges: tuple[GraphEdge, ...]
     deferred_edges: tuple[DeferredEdge, ...]
 
@@ -50,6 +59,7 @@ class NativeScenarioGraph:
     def snapshot(self) -> dict[str, object]:
         return {
             "nodes": [node.__dict__.copy() for node in self.nodes],
+            "topology_edges": [edge.__dict__.copy() for edge in self.topology_edges],
             "known_edges": [edge.__dict__.copy() for edge in self.known_edges],
             "deferred_edges": [edge.__dict__.copy() for edge in self.deferred_edges],
         }
@@ -61,7 +71,7 @@ class NativeScenarioGraph:
         ]
         observations.extend(
             {"type": "graph_edge", "name": "simulation_graph_edge", "source": "simulation", "payload": edge.__dict__.copy()}
-            for edge in (*self.known_edges, *self.deferred_edges)
+            for edge in (*self.topology_edges, *self.known_edges, *self.deferred_edges)
         )
         return observations
 
@@ -81,8 +91,8 @@ class NativeScenarioGraph:
                 for node in self.nodes
             ],
             "edges": [
-                {"from_node": edge.source, "to_node": edge.target, "label": edge.relation if isinstance(edge, GraphEdge) else edge.reason, "kind": "deferred" if isinstance(edge, DeferredEdge) else "flow"}
-                for edge in (*self.known_edges, *self.deferred_edges)
+                {"from_node": edge.source, "to_node": edge.target, "label": edge.relation if isinstance(edge, (GraphEdge, TopologyEdge)) else edge.reason, "kind": edge.kind if isinstance(edge, TopologyEdge) else ("deferred" if isinstance(edge, DeferredEdge) else "flow")}
+                for edge in (*self.topology_edges, *self.known_edges, *self.deferred_edges)
             ],
         }
 
@@ -91,7 +101,33 @@ def _scenario_node(provider: str, scenario_id: str, label: str) -> GraphNode:
     return GraphNode(scenario_id, provider, "scenario", label, scenario_id)
 
 
-NODES = (
+TOPOLOGY_NODES = (
+    GraphNode("ACTOR-SIMULATION-COORDINATOR", "simulation", "actor", "Simulation coordinator"),
+    GraphNode("ACTOR-ASAAS", "asaas", "actor", "Asaas scenario actor"),
+    GraphNode("ACTOR-IUGU", "iugu", "actor", "Iugu scenario actor"),
+    GraphNode("ACTOR-MERCADOPAGO", "mercadopago", "actor", "Mercado Pago scenario actor"),
+    GraphNode("ACTOR-PAGBANK", "pagbank", "actor", "PagBank scenario actor"),
+    GraphNode("ACTOR-PAGARME", "pagarme", "actor", "Pagar.me scenario actor"),
+    GraphNode("UC-ASAAS-CREATE-RETRIEVE", "asaas", "use_case", "Create, retrieve, and inspect Pix QR"),
+    GraphNode("UC-IUGU-CREATE-RETRIEVE", "iugu", "use_case", "Create, retrieve, and reconcile invoice"),
+    GraphNode("UC-IUGU-LIFECYCLE", "iugu", "use_case", "Advance invoice lifecycle"),
+    GraphNode("UC-MERCADOPAGO-CREATE-RECONCILE", "mercadopago", "use_case", "Create and reconcile order"),
+    GraphNode("UC-PAGBANK-CREATE-CHARGE", "pagbank", "use_case", "Create QR order and observe charge"),
+    GraphNode("UC-PAGARME-CREATE-OUTCOME", "pagarme", "use_case", "Create order and simulate Pix outcome"),
+    GraphNode("RESOURCE-ASAAS-PAYMENT", "asaas", "resource", "Asaas payment"),
+    GraphNode("RESOURCE-IUGU-INVOICE", "iugu", "resource", "Iugu invoice"),
+    GraphNode("RESOURCE-IUGU-PIX", "iugu", "resource", "Iugu embedded Pix"),
+    GraphNode("RESOURCE-MERCADOPAGO-ORDER", "mercadopago", "resource", "Mercado Pago order"),
+    GraphNode("RESOURCE-MERCADOPAGO-PAYMENT", "mercadopago", "resource", "Mercado Pago payment"),
+    GraphNode("RESOURCE-PAGBANK-ORDER", "pagbank", "resource", "PagBank order"),
+    GraphNode("RESOURCE-PAGBANK-QR", "pagbank", "resource", "PagBank QR Code"),
+    GraphNode("RESOURCE-PAGBANK-CHARGE", "pagbank", "resource", "PagBank charge"),
+    GraphNode("RESOURCE-PAGARME-ORDER", "pagarme", "resource", "Pagar.me order"),
+    GraphNode("RESOURCE-PAGARME-CHARGE", "pagarme", "resource", "Pagar.me charge"),
+    GraphNode("RESOURCE-PAGARME-TRANSACTION", "pagarme", "resource", "Pagar.me Pix transaction"),
+)
+
+NODES = TOPOLOGY_NODES + (
     _scenario_node("iugu", "IUGU-PIX-001", "create/retrieve pending invoice"),
     _scenario_node("iugu", "IUGU-PIX-007", "paid invoice"),
     _scenario_node("iugu", "IUGU-PIX-008", "canceled invoice"),
@@ -112,6 +148,32 @@ NODES = (
     _scenario_node("asaas", "AS-PIX-001", "payment with separate QR"),
     GraphNode("AS-PIX-DEFERRED-SUCCESS", "asaas", "deferred", "Pix success transition unknown"),
     GraphNode("MP-PIX-DEFERRED-FINALIZATION", "mercadopago", "deferred", "async finalization unknown"),
+)
+
+TOPOLOGY_EDGES = (
+    TopologyEdge("ACTOR-SIMULATION-COORDINATOR", "ACTOR-ASAAS", "coordinates", "actor_flow"),
+    TopologyEdge("ACTOR-SIMULATION-COORDINATOR", "ACTOR-IUGU", "coordinates", "actor_flow"),
+    TopologyEdge("ACTOR-SIMULATION-COORDINATOR", "ACTOR-MERCADOPAGO", "coordinates", "actor_flow"),
+    TopologyEdge("ACTOR-SIMULATION-COORDINATOR", "ACTOR-PAGBANK", "coordinates", "actor_flow"),
+    TopologyEdge("ACTOR-SIMULATION-COORDINATOR", "ACTOR-PAGARME", "coordinates", "actor_flow"),
+    TopologyEdge("ACTOR-ASAAS", "UC-ASAAS-CREATE-RETRIEVE", "drives", "actor_use_case"),
+    TopologyEdge("ACTOR-IUGU", "UC-IUGU-CREATE-RETRIEVE", "drives", "actor_use_case"),
+    TopologyEdge("ACTOR-IUGU", "UC-IUGU-LIFECYCLE", "drives", "actor_use_case"),
+    TopologyEdge("ACTOR-MERCADOPAGO", "UC-MERCADOPAGO-CREATE-RECONCILE", "drives", "actor_use_case"),
+    TopologyEdge("ACTOR-PAGBANK", "UC-PAGBANK-CREATE-CHARGE", "drives", "actor_use_case"),
+    TopologyEdge("ACTOR-PAGARME", "UC-PAGARME-CREATE-OUTCOME", "drives", "actor_use_case"),
+    TopologyEdge("UC-ASAAS-CREATE-RETRIEVE", "RESOURCE-ASAAS-PAYMENT", "operates_on", "use_case_resource"),
+    TopologyEdge("UC-IUGU-CREATE-RETRIEVE", "RESOURCE-IUGU-INVOICE", "operates_on", "use_case_resource"),
+    TopologyEdge("UC-IUGU-CREATE-RETRIEVE", "RESOURCE-IUGU-PIX", "observes", "use_case_resource"),
+    TopologyEdge("UC-IUGU-LIFECYCLE", "RESOURCE-IUGU-INVOICE", "transitions", "use_case_resource"),
+    TopologyEdge("UC-MERCADOPAGO-CREATE-RECONCILE", "RESOURCE-MERCADOPAGO-ORDER", "operates_on", "use_case_resource"),
+    TopologyEdge("UC-MERCADOPAGO-CREATE-RECONCILE", "RESOURCE-MERCADOPAGO-PAYMENT", "observes", "use_case_resource"),
+    TopologyEdge("UC-PAGBANK-CREATE-CHARGE", "RESOURCE-PAGBANK-ORDER", "operates_on", "use_case_resource"),
+    TopologyEdge("UC-PAGBANK-CREATE-CHARGE", "RESOURCE-PAGBANK-QR", "observes", "use_case_resource"),
+    TopologyEdge("UC-PAGBANK-CREATE-CHARGE", "RESOURCE-PAGBANK-CHARGE", "observes", "use_case_resource"),
+    TopologyEdge("UC-PAGARME-CREATE-OUTCOME", "RESOURCE-PAGARME-ORDER", "operates_on", "use_case_resource"),
+    TopologyEdge("UC-PAGARME-CREATE-OUTCOME", "RESOURCE-PAGARME-CHARGE", "observes", "use_case_resource"),
+    TopologyEdge("UC-PAGARME-CREATE-OUTCOME", "RESOURCE-PAGARME-TRANSACTION", "observes", "use_case_resource"),
 )
 
 
@@ -136,4 +198,4 @@ DEFERRED_EDGES = (
     DeferredEdge("mercadopago", "MP-PIX-004", "MP-PIX-DEFERRED-FINALIZATION", "async finalization is not established", "research/mercadopago/lifecycle.md"),
 )
 
-GRAPH = NativeScenarioGraph(NODES, KNOWN_EDGES, DEFERRED_EDGES)
+GRAPH = NativeScenarioGraph(NODES, TOPOLOGY_EDGES, KNOWN_EDGES, DEFERRED_EDGES)

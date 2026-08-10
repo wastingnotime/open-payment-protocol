@@ -27,7 +27,7 @@ def test_deferred_graph_edges_remain_explicit_and_non_executable():
 
 def test_graph_snapshot_exposes_executable_and_deferred_nodes():
     snapshot = GRAPH.snapshot()
-    assert len(snapshot["nodes"]) == 20
+    assert len(snapshot["nodes"]) == 43
     assert sum(node["kind"] == "deferred" for node in snapshot["nodes"]) == 2
     assert len(snapshot["known_edges"]) == 13
     assert len(snapshot["deferred_edges"]) == 2
@@ -37,14 +37,14 @@ def test_graph_observations_emit_every_node_and_edge():
     observations = GRAPH.observations()
     nodes = [item for item in observations if item["type"] == "graph_node"]
     edges = [item for item in observations if item["type"] == "graph_edge"]
-    assert len(nodes) == 20
-    assert len(edges) == 15
+    assert len(nodes) == 43
+    assert len(edges) == 38
     assert {item["payload"]["id"] for item in nodes} == GRAPH.node_ids
 
 
 def test_observatory_spec_contains_runtime_visible_nodes_and_edges():
     spec = GRAPH.observatory_spec()
-    assert len(spec["nodes"]) == 20
-    assert len(spec["edges"]) == 15
+    assert len(spec["nodes"]) == 43
+    assert len(spec["edges"]) == 38
     assert {node["id"] for node in spec["nodes"]} == GRAPH.node_ids
     assert all(node["layer"] == "provider-native-simulation" for node in spec["nodes"])
