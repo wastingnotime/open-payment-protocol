@@ -28,8 +28,8 @@ flowchart LR
   MP4 -. finalization unknown .-> MPU[deferred]
 ```
 
-The runtime graph currently exposes 57 nodes: 6 actors, 6 use cases, 11
-provider-native resources, 32 executable scenario nodes, and 2 deferred
+The runtime graph currently exposes 59 nodes: 6 actors, 6 use cases, 11
+provider-native resources, 34 executable scenario nodes, and 2 deferred
 evidence-gap nodes. Its `snapshot()` method exposes those nodes and edges to
 local validation tools. Topology and lifecycle edges are defined in
 `src/app/simulation/native_graph.py`. Use-case edges connect actors to

@@ -1,6 +1,7 @@
 # Mercado Pago Pix Order Creation and Retrieval
 
-Status: creation, asynchronous variant, and documented validation boundaries
+Status: creation, asynchronous variant, notification authenticity, and
+documented validation boundaries
 built; refinement check recorded in
 `work/changes/mercadopago-pix-build/refinement_check.md`.
 
@@ -12,5 +13,10 @@ validation error. It does not reuse the Iugu invoice aggregate.
 Executable scenarios are `MP-PIX-001` through `MP-PIX-010` in
 `simulators/mercadopago/scenarios.md`.
 
-Out of scope: asynchronous omission, payment success, expiration, webhooks,
-refunds, legacy Payments API, and any normalized OPP model.
+The lifecycle/event increment adds `MP-PIX-011` for an `order` JSON
+notification with GET reconciliation and `MP-PIX-012` for mismatched signature
+discard. Timestamp tolerance, retries, acknowledgements, ordering, and
+duplicate guarantees remain unknown.
+
+Out of scope: asynchronous omission, payment success, expiration, refunds,
+legacy Payments API, and any normalized OPP model.
