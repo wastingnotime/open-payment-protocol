@@ -34,3 +34,17 @@ def test_all_provider_scenario_reports_exclude_cardholder_data_markers():
     assert "pan" not in serialized
     assert "cvv" not in serialized
     assert "card_number" not in serialized
+
+
+def test_all_provider_scenario_registries_are_deterministically_replayable():
+    runners = (run_asaas, run_iugu, run_mercado_pago, run_pagarme, run_pagbank)
+
+    def snapshot(runner):
+        return json.dumps(
+            [{name: _field(report, name) for name in ("name", "observations", "events", "projection")}
+             for report in runner().values()],
+            sort_keys=True,
+            separators=(",", ":"),
+        )
+
+    assert [snapshot(runner) for runner in runners] == [snapshot(runner) for runner in runners]
