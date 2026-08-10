@@ -4,7 +4,7 @@ import math
 import pytest
 
 from app.simulation.scenario_registry import PROVIDER_RUNNERS, run_all_providers
-from app.simulation.report_contract import PROVIDER_ORDER, PROVIDER_PREFIXES, PROVIDER_SCENARIO_COUNTS, REPORT_FIELDS, TOTAL_SCENARIO_COUNT, allowed_sources, assert_sanitized, canonical_snapshot, error_inventory, field, observation_inventory, validate_report
+from app.simulation.report_contract import PROVIDER_NATIVE_WEBHOOK_EVENTS, PROVIDER_ORDER, PROVIDER_PREFIXES, PROVIDER_SCENARIO_COUNTS, REPORT_FIELDS, TOTAL_SCENARIO_COUNT, allowed_sources, assert_sanitized, canonical_snapshot, error_inventory, field, observation_inventory, validate_report
 
 
 def test_all_provider_scenarios_preserve_comparable_report_shape():
@@ -95,6 +95,12 @@ def test_asaas_authentication_observations_preserve_401_evidence():
 def test_observation_inventory_preserves_iugu_documented_event_names():
     inventory = observation_inventory(run_all_providers())
     assert inventory["iugu"]["native_webhook_event"] == 6
+
+
+def test_iugu_webhook_event_contract_is_immutable_and_provider_native():
+    assert PROVIDER_NATIVE_WEBHOOK_EVENTS["iugu"][-3:] == ("invoice.payment_failed", "invoice.refund", "invoice.rejected")
+    with pytest.raises(TypeError):
+        PROVIDER_NATIVE_WEBHOOK_EVENTS["iugu"] = ()
 
 
 def test_observation_inventory_covers_every_provider_scenario():

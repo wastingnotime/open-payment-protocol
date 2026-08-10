@@ -8,7 +8,7 @@ from typing import Any
 from types import MappingProxyType
 
 
-__all__ = ["REPORT_FIELDS", "PROVIDER_ORDER", "PROVIDER_PREFIXES", "PROVIDER_SCENARIO_COUNTS", "TOTAL_SCENARIO_COUNT", "SECURITY_MARKERS", "ERROR_OBSERVATION_NAMES", "allowed_sources", "assert_sanitized", "canonical_snapshot", "error_inventory", "field", "observation_inventory", "validate_report"]
+__all__ = ["REPORT_FIELDS", "PROVIDER_ORDER", "PROVIDER_PREFIXES", "PROVIDER_SCENARIO_COUNTS", "TOTAL_SCENARIO_COUNT", "SECURITY_MARKERS", "ERROR_OBSERVATION_NAMES", "PROVIDER_NATIVE_WEBHOOK_EVENTS", "allowed_sources", "assert_sanitized", "canonical_snapshot", "error_inventory", "field", "observation_inventory", "validate_report"]
 
 
 REPORT_FIELDS = ("name", "observations", "events", "projection")
@@ -18,6 +18,9 @@ PROVIDER_SCENARIO_COUNTS: Mapping[str, int] = MappingProxyType({"asaas": 15, "iu
 TOTAL_SCENARIO_COUNT = sum(PROVIDER_SCENARIO_COUNTS.values())
 SECURITY_MARKERS = ("pan", "cvv", "card_number", "api_key_value", "access_token_value", "secret_key_value")
 ERROR_OBSERVATION_NAMES = frozenset(("native_error", "native_authentication_error"))
+PROVIDER_NATIVE_WEBHOOK_EVENTS: Mapping[str, tuple[str, ...]] = MappingProxyType({
+    "iugu": ("invoice.status_changed", "invoice.due", "invoice.payment_failed", "invoice.refund", "invoice.rejected"),
+})
 
 
 def field(report: Any, name: str) -> Any:
