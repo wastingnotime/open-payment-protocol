@@ -1,7 +1,8 @@
 # Iugu Pix Invoice Creation and Retrieval
 
-Status: creation, documented lifecycle, and caller-reference boundaries built;
-refinement check recorded in
+Status: creation, documented lifecycle, caller-reference, and bounded webhook
+event/configuration boundaries built;
+refinement checks recorded in
 `work/changes/iugu-pix-research/refinement.md`.
 
 ## Selected Shape
