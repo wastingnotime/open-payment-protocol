@@ -30,3 +30,6 @@ total or to an individual provider count should update the relevant provider
 backlog and refinement receipt.
 Scenario identifiers also retain the native provider prefix used by the
 corresponding backlog.
+
+Shared report-field, source, prefix, and canonical-snapshot rules live in the
+simulation package so pytest and the standalone validator use one contract.
