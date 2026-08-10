@@ -6,7 +6,7 @@ from app.simulation.pagbank_scenarios import BASE_REQUEST, run_all
 
 def test_pagbank_scenarios_complete():
     results = run_all()
-    assert set(results) == {"PB-PIX-001", "PB-PIX-002", "PB-PIX-003", "PB-PIX-004", "PB-PIX-005"}
+    assert set(results) == {"PB-PIX-001", "PB-PIX-002", "PB-PIX-003", "PB-PIX-004", "PB-PIX-005", "PB-PIX-006"}
     assert results["PB-PIX-001"]["projection"]
 
 
@@ -43,3 +43,10 @@ def test_unknown_order_retrieval_is_native_not_found_boundary():
     error = result["observations"][0]["payload"]
     assert error["status"] == 404
     assert error["code"] == "order_not_found"
+
+
+def test_duplicate_pix_payment_is_native_invalid_status_boundary():
+    result = run_all()["PB-PIX-006"]
+    error = result["observations"][0]["payload"]
+    assert error["status"] == 400
+    assert error["code"] == "invalid_status"

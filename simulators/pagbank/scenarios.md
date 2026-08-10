@@ -7,6 +7,7 @@ Built scenarios:
 - `PB-PIX-003`: return documented `409 idempotency_key_in_use`.
 - `PB-PIX-004`: documented paid Pix charge emerges after QR payment.
 - `PB-PIX-005`: unknown order retrieval preserves the native not-found boundary.
+- `PB-PIX-006`: duplicate Pix payment preserves the native invalid-status boundary.
 
 Deferred: QR expiration, Pix refund, webhook delivery,
 and exact idempotency header/retention behavior.
