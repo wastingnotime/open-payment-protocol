@@ -49,6 +49,13 @@ def test_graph_exposes_provider_resource_nodes_separately_from_scenarios():
     assert not set(GRAPH.resource_ids) & set(GRAPH.scenario_ids)
 
 
+def test_every_executable_graph_scenario_has_a_provider_report():
+    registries = run_all_providers()
+    for scenario_id in GRAPH.scenario_ids:
+        provider = next(node.provider for node in GRAPH.nodes if node.id == scenario_id)
+        assert scenario_id in registries[provider]
+
+
 def test_graph_observations_emit_every_node_and_edge():
     observations = GRAPH.observations()
     nodes = [item for item in observations if item["type"] == "graph_node"]
