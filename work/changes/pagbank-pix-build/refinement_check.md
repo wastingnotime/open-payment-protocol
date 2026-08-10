@@ -36,6 +36,8 @@ post-payment resource shape.
   collections remain a native required-parameter error.
 - `reference_id` is also required at creation and is not synthesized when the
   caller omits it.
+- The simulator now covers the required idempotency-key boundary without
+  assuming undocumented replay or retention behavior.
 
 ## Remaining Questions
 
