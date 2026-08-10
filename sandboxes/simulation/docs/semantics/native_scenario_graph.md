@@ -48,9 +48,11 @@ beams. Deferred routes use the same visual path but retain `status: deferred`.
 For a local inspection of the exact ordered stream, run
 `python3 sandboxes/simulation/tools/show_native_graph.py --beams`.
 
-The observatory uses distinct supported runtime kinds and numeric layers:
-actors, use cases, provider-native aggregates, scenario projections, and
-deferred external-provider nodes. Observatory domains are split into one
+The observatory uses distinct supported runtime kinds and graph-derived numeric
+layers. Every linked target is placed in a later rank, including lifecycle
+scenario chains; unlinked nodes may share a rank. The kinds remain actors, use
+cases, provider-native aggregates, scenario projections, and deferred
+external-provider nodes. Observatory domains are split into one
 `simulation-coordination` domain and one domain per provider, such as
 `provider-asaas` and `provider-iugu`. Pix is the current method slice, not the
 name of the whole simulation domain.

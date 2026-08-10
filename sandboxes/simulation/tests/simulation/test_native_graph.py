@@ -71,7 +71,8 @@ def test_observatory_spec_contains_runtime_visible_nodes_and_edges():
     assert len(spec["edges"]) == 95
     assert {node["id"] for node in spec["nodes"]} == GRAPH.node_ids
     assert {node["kind"] for node in spec["nodes"]} == {"actor", "use_case", "aggregate", "projection", "external_provider"}
-    assert {node["layer"] for node in spec["nodes"]} == {-8, 0, 4, 6, 10}
+    assert min(node["layer"] for node in spec["nodes"]) == -8
+    assert all(node["layer"] % 4 == 0 for node in spec["nodes"])
     assert {node["domain"] for node in spec["nodes"]} == {
         "simulation-coordination",
         "provider-asaas",
@@ -99,6 +100,12 @@ def test_beam_observations_route_between_declared_connected_nodes():
     assert all(item["type"] == "graph_route" for item in observations)
     assert all(item["source"] in GRAPH.node_ids for item in observations)
     assert all(item["name"] in GRAPH.node_ids for item in observations)
+
+
+def test_observatory_layers_move_linked_nodes_to_a_later_rank():
+    spec = GRAPH.observatory_spec()
+    layers = {node["id"]: node["layer"] for node in spec["nodes"]}
+    assert all(layers[edge["to_node"]] > layers[edge["from_node"]] for edge in spec["edges"])
 
 
 def test_beam_observations_preserve_deferred_status():

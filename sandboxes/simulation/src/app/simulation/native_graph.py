@@ -144,14 +144,15 @@ class NativeScenarioGraph:
             "scenario": "projection",
             "deferred": "external_provider",
         }
-        runtime_layer = {"actor": -8, "use_case": 0, "resource": 4, "scenario": 6, "deferred": 10}
+        edges = (*self.topology_edges, *self.known_edges, *self.deferred_edges)
+        layers = self._observatory_layers(edges)
         return {
             "nodes": [
                 {
                     "id": node.id,
                     "label": node.label,
                     "kind": runtime_kind[node.kind],
-                    "layer": runtime_layer[node.kind],
+                    "layer": layers[node.id],
                     "realm": node.provider,
                     "domain": "simulation-coordination" if node.provider == "simulation" else f"provider-{node.provider}",
                     "description": f"{node.provider} provider-native {node.kind} in the Pix discovery slice",
@@ -161,9 +162,32 @@ class NativeScenarioGraph:
             ],
             "edges": [
                 {"from_node": edge.source, "to_node": edge.target, "label": edge.relation if isinstance(edge, (GraphEdge, TopologyEdge)) else edge.reason, "kind": edge.kind if isinstance(edge, TopologyEdge) else ("deferred" if isinstance(edge, DeferredEdge) else "flow")}
-                for edge in (*self.topology_edges, *self.known_edges, *self.deferred_edges)
+                for edge in edges
             ],
         }
+
+    def _observatory_layers(self, edges: tuple[TopologyEdge | GraphEdge | DeferredEdge, ...]) -> dict[str, int]:
+        """Place every edge target in a strictly later observatory rank."""
+        incoming = {node.id: 0 for node in self.nodes}
+        outgoing = {node.id: [] for node in self.nodes}
+        for edge in edges:
+            incoming[edge.target] += 1
+            outgoing[edge.source].append(edge.target)
+
+        queue = [node_id for node_id, count in incoming.items() if count == 0]
+        ranks = {node_id: 0 for node_id in queue}
+        visited = 0
+        while queue:
+            node_id = queue.pop(0)
+            visited += 1
+            for target in outgoing[node_id]:
+                ranks[target] = max(ranks.get(target, 0), ranks[node_id] + 1)
+                incoming[target] -= 1
+                if incoming[target] == 0:
+                    queue.append(target)
+        if visited != len(self.nodes):
+            raise ValueError("observatory graph contains a cycle")
+        return {node_id: -8 + rank * 4 for node_id, rank in ranks.items()}
 
 
 def _scenario_node(provider: str, scenario_id: str, label: str) -> GraphNode:
