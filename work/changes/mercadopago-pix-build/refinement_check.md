@@ -32,6 +32,8 @@ append-only event store for runtime inspection and later adapter pressure.
   properties remain a native 400 validation boundary.
 - The transaction collection must contain exactly one Pix payment; multiple
   payments remain a native property-value rejection.
+- The simulator now covers the documented required idempotency-key boundary;
+  key length and character constraints remain unknown in the selected evidence.
 
 ## Remaining Questions
 

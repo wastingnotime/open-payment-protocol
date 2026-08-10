@@ -12,6 +12,7 @@ Built scenarios:
 - `MP-PIX-007`: non-Pix payment method preserves the native property-value boundary.
 - `MP-PIX-008`: missing payer preserves the native required-properties boundary.
 - `MP-PIX-009`: multiple payments preserve the native property-value boundary.
+- `MP-PIX-010`: an empty idempotency key preserves the native required-property boundary.
 
 Deferred: asynchronous finalization, successful transfer, expiration, webhooks,
 refunds, and legacy Payments API compatibility.
