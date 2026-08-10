@@ -39,10 +39,12 @@ def main() -> int:
         "pagbank": run_pagbank(),
     }
     total = 0
+    prefixes = {"asaas": "AS-", "iugu": "IUGU-", "mercadopago": "MP-", "pagarme": "PG-", "pagbank": "PB-"}
     serialized_reports = []
     for provider, reports in runners.items():
         for scenario_id, report in reports.items():
             observations = field(report, "observations")
+            assert scenario_id.startswith(prefixes[provider])
             assert field(report, "name") == scenario_id
             assert isinstance(field(report, "events"), list)
             assert isinstance(field(report, "projection"), dict)
