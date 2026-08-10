@@ -78,7 +78,18 @@ def non_positive_value() -> dict[str, Any]:
     return _result("AS-PIX-006", provider, observations)
 
 
-SCENARIOS = {"AS-PIX-001": create_retrieve_and_qr, "AS-PIX-002": invalid_request, "AS-PIX-003": unknown_payment_retrieval, "AS-PIX-004": unknown_qr_retrieval, "AS-PIX-005": invalid_billing_type, "AS-PIX-006": non_positive_value}
+def missing_due_date() -> dict[str, Any]:
+    provider, observations = AsaasPixProvider(), []
+    request = deepcopy(BASE_REQUEST)
+    request.pop("dueDate")
+    try:
+        provider.create_payment(request)
+    except AsaasNativeError as exc:
+        observations.append({"type": "semantic_observation", "name": "native_error", "source": "asaas", "payload": {"status": exc.error.status, "code": exc.error.code}})
+    return _result("AS-PIX-007", provider, observations)
+
+
+SCENARIOS = {"AS-PIX-001": create_retrieve_and_qr, "AS-PIX-002": invalid_request, "AS-PIX-003": unknown_payment_retrieval, "AS-PIX-004": unknown_qr_retrieval, "AS-PIX-005": invalid_billing_type, "AS-PIX-006": non_positive_value, "AS-PIX-007": missing_due_date}
 
 
 def run_all() -> dict[str, dict[str, Any]]:
