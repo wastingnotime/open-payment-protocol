@@ -28,6 +28,8 @@ post-payment resource shape.
 - The charge and QR must remain independently observable after payment.
 - Unknown order retrieval remains a native 404 boundary and does not imply a
   QR or charge lookup fallback.
+- Charge emergence is single-use: a second payment attempt must preserve the
+  provider-native invalid-status boundary rather than create another charge.
 
 ## Remaining Questions
 
