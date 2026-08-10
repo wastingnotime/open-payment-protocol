@@ -6,7 +6,7 @@ from app.simulation.asaas_scenarios import BASE_REQUEST, run_all
 
 def test_asaas_scenarios_complete():
     results = run_all()
-    assert set(results) == {"AS-PIX-001", "AS-PIX-002", "AS-PIX-003", "AS-PIX-004"}
+    assert set(results) == {"AS-PIX-001", "AS-PIX-002", "AS-PIX-003", "AS-PIX-004", "AS-PIX-005"}
 
 
 def test_payment_and_separate_qr_retrieval_are_preserved():
@@ -30,3 +30,10 @@ def test_unknown_qr_retrieval_keeps_operation_boundary():
     error = result["observations"][0]["payload"]
     assert error["status"] == 404
     assert error["operation"] == "pix_qr_retrieval"
+
+
+def test_non_pix_billing_type_is_native_invalid_boundary():
+    result = run_all()["AS-PIX-005"]
+    error = result["observations"][0]["payload"]
+    assert error["status"] == 400
+    assert error["code"] == "invalid_billing_type"
