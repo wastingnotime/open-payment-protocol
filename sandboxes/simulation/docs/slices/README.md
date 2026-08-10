@@ -17,3 +17,6 @@ the semantic model and slice map where observations disprove assumptions.
 
 Current lifecycle/event-delivery increments cover Pagar.me, Iugu, PagBank, and
 Mercado Pago; each retains provider-specific transport and authenticity rules.
+The current expiration increment covers Mercado Pago unpaid cancellation and
+its two documented expiration outcomes; Pagar.me and PagBank expiration remain
+out of scope pending evidence.

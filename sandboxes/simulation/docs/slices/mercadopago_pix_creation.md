@@ -15,8 +15,11 @@ Executable scenarios are `MP-PIX-001` through `MP-PIX-010` in
 
 The lifecycle/event increment adds `MP-PIX-011` for an `order` JSON
 notification with GET reconciliation and `MP-PIX-012` for mismatched signature
-discard. Timestamp tolerance, retries, acknowledgements, ordering, and
-duplicate guarantees remain unknown.
+discard. The refund increment adds `MP-PIX-013` and `MP-PIX-014` for partial and
+total refunds. The expiration increment adds `MP-PIX-015` for unpaid
+cancellation and `MP-PIX-016`/`MP-PIX-017` for the documented `expired` and
+`canceled` alternatives. Timestamp tolerance, retries, acknowledgements,
+ordering, and duplicate guarantees remain unknown.
 
-Out of scope: asynchronous omission, payment success, expiration, refunds,
-legacy Payments API, and any normalized OPP model.
+Out of scope: legacy Payments API, Pagar.me/PagBank expiration behavior, and
+any normalized OPP model.
