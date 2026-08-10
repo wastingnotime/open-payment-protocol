@@ -34,6 +34,14 @@ def main() -> int:
     print(f"validated {total} scenarios")
     print(f"native observations: {observation_inventory(runners)}")
     print(f"native errors: {error_inventory(runners)}")
+    iugu_events = {
+        observation["payload"]["event"]
+        for report in runners["iugu"].values()
+        for observation in field(report, "observations")
+        if observation["name"] == "native_webhook_event"
+    }
+    assert {"invoice.due", "invoice.payment_failed", "invoice.refund", "invoice.rejected"} <= iugu_events
+    print(f"iugu webhook events: {sorted(iugu_events)}")
     graph = GRAPH.snapshot()
     assert GRAPH.validation_errors() == []
     assert len(GRAPH.scenario_ids) == 52
