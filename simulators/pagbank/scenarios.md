@@ -9,6 +9,7 @@ Built scenarios:
 - `PB-PIX-005`: unknown order retrieval preserves the native not-found boundary.
 - `PB-PIX-006`: duplicate Pix payment preserves the native invalid-status boundary.
 - `PB-PIX-007`: multiple QR codes preserve the native invalid-parameter boundary.
+- `PB-PIX-008`: missing QR codes preserve the native required-parameter boundary.
 
 Deferred: QR expiration, Pix refund, webhook delivery,
 and exact idempotency header/retention behavior.
