@@ -195,3 +195,14 @@ def test_expiration_scenarios_keep_both_documented_outcomes_visible():
     results = run_all()
     assert results["MP-PIX-016"]["observations"][0]["payload"]["status"] == "expired"
     assert results["MP-PIX-017"]["observations"][0]["payload"]["status"] == "canceled"
+
+
+def test_expiration_rejects_undocumented_outcome_values():
+    provider = MercadoPagoPixProvider()
+    order = provider.create_order(deepcopy(BASE_REQUEST), idempotency_key="expiry-003")
+    try:
+        provider.resolve_unpaid_expiration(order["id"], outcome="paid")
+    except MercadoPagoNativeError as exc:
+        assert exc.error.code == "invalid_expiration_outcome"
+    else:
+        raise AssertionError("expected expiration outcome rejection")
