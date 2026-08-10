@@ -117,3 +117,12 @@ def test_beam_observations_have_stable_sequence_and_edge_kind():
         "lifecycle",
         "deferred",
     }
+
+
+def test_beam_observations_expose_provider_and_status_for_runtime_filtering():
+    for observation in GRAPH.beam_observations():
+        payload = observation["payload"]
+        assert payload["provider"] in {node.provider for node in GRAPH.nodes}
+        assert payload["status"] in {"observed", "deferred"}
+        assert observation["source"] in GRAPH.node_ids
+        assert observation["name"] in GRAPH.node_ids
