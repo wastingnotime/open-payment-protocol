@@ -40,3 +40,11 @@ def test_graph_observations_emit_every_node_and_edge():
     assert len(nodes) == 20
     assert len(edges) == 15
     assert {item["payload"]["id"] for item in nodes} == GRAPH.node_ids
+
+
+def test_observatory_spec_contains_runtime_visible_nodes_and_edges():
+    spec = GRAPH.observatory_spec()
+    assert len(spec["nodes"]) == 20
+    assert len(spec["edges"]) == 15
+    assert {node["id"] for node in spec["nodes"]} == GRAPH.node_ids
+    assert all(node["layer"] == "provider-native-simulation" for node in spec["nodes"])

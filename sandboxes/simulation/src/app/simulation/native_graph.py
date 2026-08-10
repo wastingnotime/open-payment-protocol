@@ -65,6 +65,27 @@ class NativeScenarioGraph:
         )
         return observations
 
+    def observatory_spec(self) -> dict[str, list[dict[str, object]]]:
+        return {
+            "nodes": [
+                {
+                    "id": node.id,
+                    "label": node.label,
+                    "kind": node.kind,
+                    "layer": "provider-native-simulation",
+                    "realm": node.provider,
+                    "domain": "pix",
+                    "description": f"{node.provider} provider-native scenario node",
+                    "badge": "deferred" if node.kind == "deferred" else "executable",
+                }
+                for node in self.nodes
+            ],
+            "edges": [
+                {"from_node": edge.source, "to_node": edge.target, "label": edge.relation, "kind": "deferred" if isinstance(edge, DeferredEdge) else "flow"}
+                for edge in (*self.known_edges, *self.deferred_edges)
+            ],
+        }
+
 
 def _scenario_node(provider: str, scenario_id: str, label: str) -> GraphNode:
     return GraphNode(scenario_id, provider, "scenario", label, scenario_id)

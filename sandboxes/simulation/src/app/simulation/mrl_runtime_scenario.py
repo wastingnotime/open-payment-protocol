@@ -27,9 +27,10 @@ def create_simulation():
         ) from exc
 
     from mrl_simulation_runtime.actors import Actor
-    from mrl_simulation_runtime.scenario import InitialScheduledAction
+    from mrl_simulation_runtime.scenario import InitialScheduledAction, ObservatoryEdge, ObservatoryNode
 
     initial_time = datetime(2026, 8, 9, 12, 0, tzinfo=timezone.utc)
+    graph_spec = GRAPH.observatory_spec()
 
     def emit_slice_results(context) -> None:
         for observation in GRAPH.observations():
@@ -56,6 +57,8 @@ def create_simulation():
         seed=1,
         initial_time=initial_time,
         actors=[Actor("IuguScenarioActor")],
+        observatory_nodes=[ObservatoryNode(**node) for node in graph_spec["nodes"]],
+        observatory_edges=[ObservatoryEdge(**edge) for edge in graph_spec["edges"]],
         scheduled_actions=[
             InitialScheduledAction(
                 when=initial_time,
