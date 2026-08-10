@@ -19,7 +19,9 @@ def test_all_provider_scenarios_preserve_comparable_report_shape():
             assert isinstance(_field(report, "events"), list)
             assert isinstance(_field(report, "projection"), dict)
             assert _field(report, "observations")
-            assert all(item["payload"]["scenario"] == scenario_id for item in _field(report, "observations"))
+            for observation in _field(report, "observations"):
+                assert set(("type", "name", "source", "payload")) <= observation.keys()
+                assert observation["payload"]["scenario"] == scenario_id
 
 
 def test_all_provider_scenario_reports_exclude_cardholder_data_markers():
