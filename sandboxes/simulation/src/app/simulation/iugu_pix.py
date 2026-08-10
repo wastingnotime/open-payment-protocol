@@ -38,6 +38,7 @@ class IuguInvoiceStore:
     invoices: dict[str, dict[str, Any]] = field(default_factory=dict)
     events: list[Event] = field(default_factory=list)
     idempotency: dict[str, str] = field(default_factory=dict)
+    webhook_configurations: list[dict[str, Any]] = field(default_factory=list)
     next_id: int = 1
 
     def append(self, event_type: str, payload: dict[str, Any]) -> Event:
@@ -219,6 +220,24 @@ class IuguPixProvider:
             payload["pix_end_to_end_id"] = invoice["pix"].get("end_to_end_id") or ""
         self.store.append("webhook_payload_built", {"invoice_id": invoice_id, "event": event})
         return payload
+
+    def configure_webhook(
+        self,
+        *,
+        event: str,
+        url: str,
+        authorization_configured: bool = False,
+    ) -> dict[str, Any]:
+        """Record the documented Iugu trigger configuration boundary."""
+        configuration = {
+            "event": event,
+            "url": url,
+            "content_type": "application/x-www-form-urlencoded",
+            "authorization_configured": authorization_configured,
+        }
+        self.store.webhook_configurations.append(deepcopy(configuration))
+        self.store.append("webhook_configured", {"event": event, "url": url, "authorization_configured": authorization_configured})
+        return deepcopy(configuration)
 
     def _validate(self, request: dict[str, Any]) -> None:
         required = ("email", "due_date", "items", "payable_with")
