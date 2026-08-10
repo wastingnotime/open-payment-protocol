@@ -55,6 +55,12 @@ def test_unknown_provider_has_contextual_validation_error():
         validate_report("unknown", "XX-001", {})
 
 
+def test_malformed_observation_has_contextual_validation_error():
+    report = {"name": "AS-001", "events": [], "projection": {}, "observations": [{"type": "event", "name": "broken", "source": "asaas", "payload": None}]}
+    with pytest.raises(AssertionError, match="asaas/AS-001"):
+        validate_report("asaas", "AS-001", report)
+
+
 def test_repeated_provider_runs_return_independent_projections():
     first_run = run_all_providers()
     second_run = run_all_providers()

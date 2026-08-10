@@ -52,4 +52,6 @@ def validate_report(provider: str, scenario_id: str, report: Any) -> None:
     for observation in observations:
         assert {"type", "name", "source", "payload"} <= observation.keys(), f"{context}: incomplete observation envelope"
         assert observation["source"] in allowed_sources(provider), f"{context}: invalid observation source"
-        assert observation["payload"]["scenario"] == scenario_id, f"{context}: observation attribution mismatch"
+        payload = observation["payload"]
+        assert isinstance(payload, Mapping), f"{context}: observation payload must be a mapping"
+        assert payload.get("scenario") == scenario_id, f"{context}: observation attribution mismatch"
