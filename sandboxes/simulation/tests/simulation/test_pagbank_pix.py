@@ -6,7 +6,7 @@ from app.simulation.pagbank_scenarios import BASE_REQUEST, run_all
 
 def test_pagbank_scenarios_complete():
     results = run_all()
-    assert set(results) == {"PB-PIX-001", "PB-PIX-002", "PB-PIX-003", "PB-PIX-004", "PB-PIX-005", "PB-PIX-006", "PB-PIX-007", "PB-PIX-008", "PB-PIX-009", "PB-PIX-010"}
+    assert set(results) == {f"PB-PIX-{number:03d}" for number in range(1, 12)}
     assert results["PB-PIX-001"]["projection"]
 
 
@@ -78,3 +78,12 @@ def test_missing_idempotency_key_is_native_required_parameter_boundary():
     error = result["observations"][0]["payload"]
     assert error["status"] == 400
     assert error["code"] == "required_parameter"
+
+
+def test_paid_notification_preserves_full_order_and_authenticity_boundary():
+    result = run_all()["PB-PIX-011"]
+    notification = result["observations"][0]["payload"]
+    assert notification["transport"] == "https_post"
+    assert notification["charge_status"] == "PAID"
+    assert notification["has_qr_code"] is True
+    assert notification["authenticity_verified"] is True

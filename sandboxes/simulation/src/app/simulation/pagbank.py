@@ -4,6 +4,9 @@ from __future__ import annotations
 
 from copy import deepcopy
 from dataclasses import dataclass, field
+import hashlib
+import hmac
+import json
 from typing import Any
 
 
@@ -89,6 +92,26 @@ class PagBankPixProvider:
         order["charges"] = [deepcopy(charge)]
         self.store.events.append({"type": "charge_created", "payload": {"order_id": order_id, "charge_id": charge_id, "status": "PAID"}})
         return deepcopy(order)
+
+    def notification_payload(self, order_id: str) -> dict[str, Any]:
+        """Return the documented full-order paid notification payload."""
+        order = self.store.orders.get(order_id)
+        if order is None:
+            raise PagBankNativeError(PagBankError(404, "order_not_found", "The order was not found."))
+        self._event("notification_payload_built", {"order_id": order_id})
+        return deepcopy(order)
+
+    @staticmethod
+    def authenticity_token(account_token: str, raw_payload: str) -> str:
+        """Compute PagBank's SHA-256 token over account token plus raw bytes."""
+        return hashlib.sha256(f"{account_token}-{raw_payload}".encode()).hexdigest()
+
+    @classmethod
+    def verify_authenticity(
+        cls, account_token: str, raw_payload: str, received_token: str
+    ) -> bool:
+        expected = cls.authenticity_token(account_token, raw_payload)
+        return hmac.compare_digest(expected, received_token)
 
     def _validate(self, request: dict[str, Any]) -> None:
         required = ("reference_id", "items", "qr_codes")
