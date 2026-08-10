@@ -58,6 +58,10 @@ documented expiration outcomes (`expired` and `canceled`). Pagar.me expiration
 remains explicitly unknown until provider evidence establishes its event and
 status behavior.
 
+The authentication-error increment adds Asaas native 401 branches for missing
+credentials, invalid credentials, and invalid environment. Credential values
+remain sanitized; retryability and unknown-result semantics are not inferred.
+
 The observatory uses distinct supported runtime kinds and graph-derived numeric
 layers. Every linked target is placed in a later rank, including lifecycle
 scenario chains; unlinked nodes may share a rank. The kinds remain actors, use
