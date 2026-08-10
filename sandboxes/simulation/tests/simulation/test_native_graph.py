@@ -152,6 +152,11 @@ def test_observatory_layers_move_linked_nodes_to_a_later_rank():
     assert all(layers[edge["to_node"]] > layers[edge["from_node"]] for edge in spec["edges"])
 
 
+def test_all_error_and_event_scenarios_are_reachable_from_coordinator():
+    assert GRAPH.validation_errors() == []
+    assert set(("AS-PIX-016", "AS-PIX-017", "AS-PIX-018", "AS-PIX-019", "IUGU-PIX-022", "IUGU-PIX-023", "IUGU-PIX-024", "IUGU-PIX-025")) <= set(GRAPH.scenario_ids)
+
+
 def test_beam_observations_preserve_deferred_status():
     deferred_targets = {
         edge.target for edge in GRAPH.deferred_edges
