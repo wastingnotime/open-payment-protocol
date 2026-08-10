@@ -24,6 +24,8 @@ append-only event store for runtime inspection and later adapter pressure.
 - `MP-PIX-005` confirms GET reconciliation returns the same `processing` order
   with no payment information, preserving the documented unknown-result
   boundary.
+- Unknown order retrieval remains a native 404 boundary and is distinct from
+  asynchronous reconciliation of a known processing order.
 
 ## Remaining Questions
 
