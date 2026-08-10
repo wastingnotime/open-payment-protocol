@@ -33,6 +33,8 @@ visible together without introducing a normalized status enum.
   charge and keeps order, charge, and transaction statuses aligned.
 - Order creation requires both item and payment collections; missing either
   input remains the native required-parameter boundary.
+- The simulator threshold is inclusive at BRL 500, so an exact 50000-cent
+  charge remains a paid outcome rather than falling into the failure branch.
 
 ## Remaining Questions
 
