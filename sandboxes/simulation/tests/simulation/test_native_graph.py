@@ -65,6 +65,17 @@ def test_refund_cancellation_graph_nodes_keep_provider_domains():
     assert nodes["PB-PIX-017"]["domain"] == "provider-pagbank"
 
 
+def test_expiration_graph_nodes_keep_provider_domain_and_later_rank():
+    spec = GRAPH.observatory_spec()
+    nodes = {node["id"]: node for node in spec["nodes"]}
+    assert nodes["MP-PIX-015"]["domain"] == "provider-mercadopago"
+    assert nodes["MP-PIX-016"]["domain"] == "provider-mercadopago"
+    assert nodes["MP-PIX-017"]["domain"] == "provider-mercadopago"
+    assert nodes["MP-PIX-015"]["layer"] > nodes["MP-PIX-001"]["layer"]
+    assert nodes["MP-PIX-016"]["layer"] > nodes["MP-PIX-001"]["layer"]
+    assert nodes["MP-PIX-017"]["layer"] > nodes["MP-PIX-001"]["layer"]
+
+
 def test_graph_observations_emit_every_node_and_edge():
     observations = GRAPH.observations()
     nodes = [item for item in observations if item["type"] == "graph_node"]
