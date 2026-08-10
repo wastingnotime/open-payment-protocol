@@ -90,6 +90,14 @@ def test_notification_envelope_requires_event_identity_fields():
     assert error["code"] == "required_parameter"
 
 
+def test_asaas_notification_envelope_contains_complete_payment_object():
+    provider = AsaasPixProvider()
+    payment = provider.create_payment(deepcopy(BASE_REQUEST))
+    notification = provider.notification_payload(payment["id"], event_id="evt_COMPLETE", event="PAYMENT_RECEIVED")
+    assert notification["payment"]["id"] == payment["id"]
+    assert notification["payment"]["billingType"] == "PIX"
+
+
 def test_asaas_notification_report_does_not_expose_account_identity_secret():
     result = run_all()["AS-PIX-009"]
     assert "ACCOUNT_DOCUMENTATION" not in json.dumps(result, sort_keys=True)
