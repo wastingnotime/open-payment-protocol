@@ -8,7 +8,7 @@ from typing import Any
 from types import MappingProxyType
 
 
-__all__ = ["REPORT_FIELDS", "PROVIDER_ORDER", "PROVIDER_PREFIXES", "PROVIDER_SCENARIO_COUNTS", "TOTAL_SCENARIO_COUNT", "SECURITY_MARKERS", "ERROR_OBSERVATION_NAMES", "PROVIDER_NATIVE_WEBHOOK_EVENTS", "allowed_sources", "assert_sanitized", "canonical_snapshot", "error_inventory", "field", "observation_inventory", "validate_report"]
+__all__ = ["REPORT_FIELDS", "PROVIDER_ORDER", "PROVIDER_PREFIXES", "PROVIDER_SCENARIO_COUNTS", "TOTAL_SCENARIO_COUNT", "SECURITY_MARKERS", "ERROR_OBSERVATION_NAMES", "UNKNOWN_RESULT_OBSERVATION_NAMES", "PROVIDER_NATIVE_WEBHOOK_EVENTS", "allowed_sources", "assert_sanitized", "canonical_snapshot", "error_inventory", "unknown_result_inventory", "field", "observation_inventory", "validate_report"]
 
 
 REPORT_FIELDS = ("name", "observations", "events", "projection")
@@ -18,6 +18,7 @@ PROVIDER_SCENARIO_COUNTS: Mapping[str, int] = MappingProxyType({"asaas": 19, "iu
 TOTAL_SCENARIO_COUNT = sum(PROVIDER_SCENARIO_COUNTS.values())
 SECURITY_MARKERS = ("pan", "cvv", "card_number", "api_key_value", "access_token_value", "secret_key_value")
 ERROR_OBSERVATION_NAMES = frozenset(("native_error", "native_authentication_error"))
+UNKNOWN_RESULT_OBSERVATION_NAMES = frozenset(("native_unknown_result",))
 PROVIDER_NATIVE_WEBHOOK_EVENTS: Mapping[str, tuple[str, ...]] = MappingProxyType({
     "iugu": ("invoice.status_changed", "invoice.due", "invoice.payment_failed", "invoice.refund", "invoice.rejected", "invoice.partially_refunded", "invoice.refund_reverted", "invoice.created", "invoice.released"),
 })
@@ -88,6 +89,18 @@ def error_inventory(registries: Mapping[str, Mapping[str, Any]]) -> dict[str, di
                 and observation["payload"].get("code")
             })
         }
+        for provider, scenarios in registries.items()
+    }
+
+
+def unknown_result_inventory(registries: Mapping[str, Mapping[str, Any]]) -> dict[str, int]:
+    return {
+        provider: sum(
+            1
+            for report in scenarios.values()
+            for observation in field(report, "observations")
+            if observation["name"] in UNKNOWN_RESULT_OBSERVATION_NAMES
+        )
         for provider, scenarios in registries.items()
     }
 

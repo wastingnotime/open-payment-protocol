@@ -4,7 +4,7 @@ import math
 import pytest
 
 from app.simulation.scenario_registry import PROVIDER_RUNNERS, run_all_providers
-from app.simulation.report_contract import PROVIDER_NATIVE_WEBHOOK_EVENTS, PROVIDER_ORDER, PROVIDER_PREFIXES, PROVIDER_SCENARIO_COUNTS, REPORT_FIELDS, TOTAL_SCENARIO_COUNT, allowed_sources, assert_sanitized, canonical_snapshot, error_inventory, field, observation_inventory, validate_report
+from app.simulation.report_contract import PROVIDER_NATIVE_WEBHOOK_EVENTS, PROVIDER_ORDER, PROVIDER_PREFIXES, PROVIDER_SCENARIO_COUNTS, REPORT_FIELDS, TOTAL_SCENARIO_COUNT, allowed_sources, assert_sanitized, canonical_snapshot, error_inventory, field, observation_inventory, unknown_result_inventory, validate_report
 
 
 def test_all_provider_scenarios_preserve_comparable_report_shape():
@@ -73,6 +73,10 @@ def test_error_inventory_preserves_provider_native_codes():
     assert inventory["asaas"]["invalid_access_token"] == 1
     assert inventory["asaas"]["invalid_environment"] == 1
     assert inventory["mercadopago"]["order_not_found"] == 1
+
+
+def test_unknown_result_inventory_keeps_asaas_boundary_explicit():
+    assert unknown_result_inventory(run_all_providers()) == {"asaas": 2, "iugu": 0, "mercadopago": 0, "pagarme": 0, "pagbank": 0}
 
 
 def test_authentication_reports_never_contain_credential_values():
