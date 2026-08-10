@@ -9,6 +9,10 @@ event log, and provider-native projection. Observation payloads are tagged with
 the scenario ID so runtime reports remain attributable when several providers
 are compared.
 
+Each observation also retains its event `type`, semantic `name`, provider
+`source`, and structured `payload`; only the payload's provider-specific fields
+remain intentionally unconstrained.
+
 Run the full deterministic suite with `pytest -q sandboxes/simulation/tests`.
 
 Cross-provider checks also ensure scenario reports do not introduce raw PAN,
