@@ -32,6 +32,8 @@ post-payment resource shape.
   provider-native invalid-status boundary rather than create another charge.
 - PagBank creation accepts exactly one QR Code; multiple QR definitions remain
   a native validation error instead of being silently collapsed.
+- QR creation requires the complete order shape, including `qr_codes`; missing
+  collections remain a native required-parameter error.
 
 ## Remaining Questions
 
