@@ -10,7 +10,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from app.simulation.scenario_registry import run_all_providers
 from app.simulation.native_graph import GRAPH
-from app.simulation.report_contract import PROVIDER_ORDER, REPORT_FIELDS, PROVIDER_SCENARIO_COUNTS, assert_sanitized, canonical_snapshot, field, validate_report
+from app.simulation.report_contract import PROVIDER_ORDER, REPORT_FIELDS, PROVIDER_SCENARIO_COUNTS, assert_sanitized, canonical_snapshot, field, observation_inventory, validate_report
 
 
 def main() -> int:
@@ -32,6 +32,7 @@ def main() -> int:
         provider: canonical_snapshot(reports) for provider, reports in second_run.items()
     }
     print(f"validated {total} scenarios")
+    print(f"native observations: {observation_inventory(runners)}")
     graph = GRAPH.snapshot()
     assert GRAPH.validation_errors() == []
     assert len(GRAPH.scenario_ids) == 38
