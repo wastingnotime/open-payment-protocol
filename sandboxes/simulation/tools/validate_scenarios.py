@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import sys
+import json
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
@@ -27,6 +28,7 @@ def main() -> int:
         "pagbank": run_pagbank(),
     }
     total = 0
+    serialized_reports = []
     for provider, reports in providers.items():
         for scenario_id, report in reports.items():
             observations = field(report, "observations")
@@ -34,8 +36,12 @@ def main() -> int:
             assert isinstance(field(report, "events"), list)
             assert isinstance(field(report, "projection"), dict)
             assert observations and all(item["payload"]["scenario"] == scenario_id for item in observations)
+            serialized_reports.append({name: field(report, name) for name in ("name", "observations", "events", "projection")})
             total += 1
         print(f"{provider}: {len(reports)} scenarios validated")
+    serialized = json.dumps(serialized_reports).lower()
+    for marker in ("pan", "cvv", "card_number"):
+        assert marker not in serialized
     print(f"validated {total} scenarios")
     return 0
 
