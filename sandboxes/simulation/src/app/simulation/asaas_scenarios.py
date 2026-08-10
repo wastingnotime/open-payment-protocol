@@ -47,7 +47,16 @@ def unknown_payment_retrieval() -> dict[str, Any]:
     return _result("AS-PIX-003", provider, observations)
 
 
-SCENARIOS = {"AS-PIX-001": create_retrieve_and_qr, "AS-PIX-002": invalid_request, "AS-PIX-003": unknown_payment_retrieval}
+def unknown_qr_retrieval() -> dict[str, Any]:
+    provider, observations = AsaasPixProvider(), []
+    try:
+        provider.retrieve_pix_qr("pay_unknown_documentation")
+    except AsaasNativeError as exc:
+        observations.append({"type": "semantic_observation", "name": "native_error", "source": "asaas", "payload": {"status": exc.error.status, "code": exc.error.code, "operation": "pix_qr_retrieval"}})
+    return _result("AS-PIX-004", provider, observations)
+
+
+SCENARIOS = {"AS-PIX-001": create_retrieve_and_qr, "AS-PIX-002": invalid_request, "AS-PIX-003": unknown_payment_retrieval, "AS-PIX-004": unknown_qr_retrieval}
 
 
 def run_all() -> dict[str, dict[str, Any]]:
