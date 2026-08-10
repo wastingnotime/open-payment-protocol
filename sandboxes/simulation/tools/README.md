@@ -10,7 +10,8 @@ python3 sandboxes/simulation/tools/validate_scenarios.py
 ```
 
 The validator checks report shape, observation envelopes, scenario attribution,
-and absence of raw PAN, CVV, and `card_number` markers.
+and absence of raw PAN, CVV, `card_number`, `api_key`, `access_token`, and
+`secret_key` markers.
 It also replays each provider registry and compares the serialized report
 snapshot.
 The only framework-level source exception is Iugu's `simulation` replay

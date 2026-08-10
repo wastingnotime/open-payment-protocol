@@ -19,7 +19,8 @@ observation. Framework-level Iugu replay observations may use `simulation`.
 Run the full deterministic suite with `pytest -q sandboxes/simulation/tests`.
 
 Cross-provider checks also ensure scenario reports do not introduce raw PAN,
-CVV, or equivalent cardholder-data field markers.
+CVV, equivalent cardholder-data field markers, or provider credential markers
+such as API keys and access tokens.
 
 Provider scenario registries must also be replayable: identical deterministic
 inputs produce byte-equivalent report content across repeated runs.
