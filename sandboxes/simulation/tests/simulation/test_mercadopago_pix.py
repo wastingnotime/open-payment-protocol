@@ -113,3 +113,10 @@ def test_mercado_pago_notification_report_does_not_expose_webhook_secret():
 def test_signature_canonicalizes_data_id_to_lowercase():
     token = MercadoPagoPixProvider.signature("secret", data_id="ORD_MixedCase", request_id="request", timestamp="1700000000")
     assert MercadoPagoPixProvider.verify_signature("secret", data_id="ord_mixedcase", request_id="request", timestamp="1700000000", received=token)
+
+
+def test_order_notification_points_to_authoritative_order_id():
+    result = run_all()["MP-PIX-011"]
+    notification = result["observations"][0]["payload"]
+    assert notification["authoritative_reconciliation"] == "get"
+    assert notification["order_id"].startswith("ORD_ASYNC_DOCUMENTATION_")
