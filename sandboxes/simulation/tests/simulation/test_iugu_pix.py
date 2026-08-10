@@ -166,3 +166,11 @@ def test_documented_iugu_event_envelopes_preserve_native_event_names():
     assert results["IUGU-PIX-019"].observations[0]["payload"]["event"] == "invoice.payment_failed"
     assert results["IUGU-PIX-020"].observations[0]["payload"]["event"] == "invoice.refund"
     assert results["IUGU-PIX-021"].observations[0]["payload"]["event"] == "invoice.rejected"
+
+
+def test_documented_iugu_event_envelopes_preserve_event_only_boundary():
+    for scenario_id in ("IUGU-PIX-018", "IUGU-PIX-019", "IUGU-PIX-020", "IUGU-PIX-021"):
+        event = run_all()[scenario_id].observations[0]["payload"]
+        assert event["transport"] == "application/x-www-form-urlencoded"
+        assert event["state_transition"] == "event_only"
+        assert all(isinstance(value, str) for value in event["fields"].values())
