@@ -64,6 +64,32 @@ class NativeScenarioGraph:
             "deferred_edges": [edge.__dict__.copy() for edge in self.deferred_edges],
         }
 
+    def validation_errors(self) -> list[str]:
+        """Return structural graph defects without normalizing provider facts."""
+        errors: list[str] = []
+        if len(self.node_ids) != len(self.nodes):
+            errors.append("duplicate graph node IDs")
+        edges = (*self.topology_edges, *self.known_edges, *self.deferred_edges)
+        for edge in edges:
+            if edge.source not in self.node_ids:
+                errors.append(f"edge source is undeclared: {edge.source}")
+            if edge.target not in self.node_ids:
+                errors.append(f"edge target is undeclared: {edge.target}")
+        reachable = {"ACTOR-SIMULATION-COORDINATOR"}
+        while True:
+            expanded = reachable | {
+                edge.target for edge in edges if edge.source in reachable
+            }
+            if expanded == reachable:
+                break
+            reachable = expanded
+        errors.extend(
+            f"node is unreachable from coordinator: {node.id}"
+            for node in self.nodes
+            if node.id not in reachable
+        )
+        return errors
+
     def observations(self) -> list[dict[str, object]]:
         observations = [
             {"type": "graph_node", "name": "simulation_graph_node", "source": "simulation", "payload": node.__dict__.copy()}

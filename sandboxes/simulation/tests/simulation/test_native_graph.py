@@ -27,6 +27,7 @@ def test_deferred_graph_edges_remain_explicit_and_non_executable():
 
 def test_graph_snapshot_exposes_executable_and_deferred_nodes():
     snapshot = GRAPH.snapshot()
+    assert GRAPH.validation_errors() == []
     assert len(snapshot["nodes"]) == 43
     assert sum(node["kind"] == "deferred" for node in snapshot["nodes"]) == 2
     assert len(snapshot["known_edges"]) == 13
