@@ -25,11 +25,11 @@ flowchart LR
   PG1 --> PG4[failed threshold]
   PG1 --> PG8[exact threshold paid]
   AS1[Asaas create] -. transition unknown .-> ASU[deferred]
-  MP4 -. finalization unknown .-> MPU[deferred]
+  MP4 --> MP18[processed/accredited]
 ```
 
 The runtime graph currently exposes 85 nodes: 6 actors, 6 use cases, 11
-provider-native resources, 60 executable scenario nodes, and 2 deferred
+provider-native resources, 61 executable scenario nodes, 40 known edges, and 1 deferred
 evidence-gap nodes. Its `snapshot()` method exposes those nodes and edges to
 local validation tools. Topology and lifecycle edges are defined in
 `src/app/simulation/native_graph.py`. Use-case edges connect actors to
@@ -47,6 +47,10 @@ events are the animated beams; declared edges are the persistent structural
 beams. Deferred routes use the same visual path but retain `status: deferred`.
 For a local inspection of the exact ordered stream, run
 `python3 sandboxes/simulation/tools/show_native_graph.py --beams`.
+
+The Mercado Pago async increment now preserves the documented
+`processed/accredited` order and payment pair after processing. The exact
+notification timing and duplicate behavior remain unknown.
 
 The refund increment adds Mercado Pago partial/total refund scenarios and
 PagBank partial/full charge cancellation scenarios. Their native statuses and

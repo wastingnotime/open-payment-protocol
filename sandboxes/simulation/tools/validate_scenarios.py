@@ -45,7 +45,7 @@ def main() -> int:
     print(f"iugu webhook events: {sorted(iugu_events)}")
     graph = GRAPH.snapshot()
     assert GRAPH.validation_errors() == []
-    assert len(GRAPH.scenario_ids) == 60
+    assert len(GRAPH.scenario_ids) == 61
     expiration_scenarios = {"MP-PIX-015", "MP-PIX-016", "MP-PIX-017"}
     assert expiration_scenarios <= set(GRAPH.scenario_ids)
     print(f"expiration slice: {sorted(expiration_scenarios)}")

@@ -250,6 +250,7 @@ NODES = TOPOLOGY_NODES + (
     _scenario_node("mercadopago", "MP-PIX-015", "unpaid order cancellation"),
     _scenario_node("mercadopago", "MP-PIX-016", "order expiration to expired"),
     _scenario_node("mercadopago", "MP-PIX-017", "order expiration to canceled"),
+    _scenario_node("mercadopago", "MP-PIX-018", "async order finalization to processed"),
     _scenario_node("pagbank", "PB-PIX-001", "QR order without charge"),
     _scenario_node("pagbank", "PB-PIX-004", "paid charge emerges"),
     _scenario_node("pagbank", "PB-PIX-006", "duplicate payment rejected"),
@@ -282,7 +283,6 @@ NODES = TOPOLOGY_NODES + (
     _scenario_node("asaas", "AS-PIX-018", "create result unknown after transport timeout"),
     _scenario_node("asaas", "AS-PIX-019", "forbidden request error"),
     GraphNode("AS-PIX-DEFERRED-SUCCESS", "asaas", "deferred", "Pix success transition unknown"),
-    GraphNode("MP-PIX-DEFERRED-FINALIZATION", "mercadopago", "deferred", "async finalization unknown"),
 )
 
 TOPOLOGY_EDGES = (
@@ -338,6 +338,7 @@ TOPOLOGY_EDGES = (
     TopologyEdge("UC-MERCADOPAGO-CREATE-RECONCILE", "MP-PIX-015", "executes", "use_case_scenario"),
     TopologyEdge("UC-MERCADOPAGO-CREATE-RECONCILE", "MP-PIX-016", "executes", "use_case_scenario"),
     TopologyEdge("UC-MERCADOPAGO-CREATE-RECONCILE", "MP-PIX-017", "executes", "use_case_scenario"),
+    TopologyEdge("UC-MERCADOPAGO-CREATE-RECONCILE", "MP-PIX-018", "executes", "use_case_scenario"),
     TopologyEdge("UC-PAGBANK-CREATE-CHARGE", "PB-PIX-001", "executes", "use_case_scenario"),
     TopologyEdge("UC-PAGBANK-CREATE-CHARGE", "PB-PIX-004", "executes", "use_case_scenario"),
     TopologyEdge("UC-PAGBANK-CREATE-CHARGE", "PB-PIX-006", "executes", "use_case_scenario"),
@@ -395,6 +396,7 @@ KNOWN_EDGES = (
     GraphEdge("mercadopago", "MP-PIX-001", "MP-PIX-015", "unpaid_cancellation", "research/mercadopago/lifecycle.md"),
     GraphEdge("mercadopago", "MP-PIX-001", "MP-PIX-016", "expiration_to_expired", "research/mercadopago/lifecycle.md"),
     GraphEdge("mercadopago", "MP-PIX-001", "MP-PIX-017", "expiration_to_canceled", "research/mercadopago/lifecycle.md"),
+    GraphEdge("mercadopago", "MP-PIX-004", "MP-PIX-018", "async_finalization", "research/mercadopago/lifecycle.md"),
     GraphEdge("pagbank", "PB-PIX-001", "PB-PIX-004", "charge_emerges_after_pix", "research/pagbank/lifecycle.md"),
     GraphEdge("pagbank", "PB-PIX-004", "PB-PIX-006", "duplicate_payment_rejected", "research/pagbank/lifecycle.md"),
     GraphEdge("pagbank", "PB-PIX-004", "PB-PIX-011", "paid_order_webhook", "research/pagbank/webhooks.md"),
@@ -416,7 +418,6 @@ KNOWN_EDGES = (
 
 DEFERRED_EDGES = (
     DeferredEdge("asaas", "AS-PIX-001", "AS-PIX-DEFERRED-SUCCESS", "initial Pix transition is unknown", "research/asaas/lifecycle.md"),
-    DeferredEdge("mercadopago", "MP-PIX-004", "MP-PIX-DEFERRED-FINALIZATION", "async finalization is not established", "research/mercadopago/lifecycle.md"),
 )
 
 GRAPH = NativeScenarioGraph(NODES, TOPOLOGY_EDGES, KNOWN_EDGES, DEFERRED_EDGES)

@@ -28,7 +28,7 @@ def test_deferred_graph_edges_remain_explicit_and_non_executable():
 def test_graph_snapshot_exposes_executable_and_deferred_nodes():
     snapshot = GRAPH.snapshot()
     assert GRAPH.validation_errors() == []
-    assert len(GRAPH.scenario_ids) == 60
+    assert len(GRAPH.scenario_ids) == 61
     assert all("-PIX-" in scenario_id for scenario_id in GRAPH.scenario_ids)
     assert GRAPH.actor_ids == (
         "ACTOR-SIMULATION-COORDINATOR",
@@ -39,9 +39,9 @@ def test_graph_snapshot_exposes_executable_and_deferred_nodes():
         "ACTOR-PAGARME",
     )
     assert len(snapshot["nodes"]) == 85
-    assert sum(node["kind"] == "deferred" for node in snapshot["nodes"]) == 2
-    assert len(snapshot["known_edges"]) == 39
-    assert len(snapshot["deferred_edges"]) == 2
+    assert sum(node["kind"] == "deferred" for node in snapshot["nodes"]) == 1
+    assert len(snapshot["known_edges"]) == 40
+    assert len(snapshot["deferred_edges"]) == 1
 
 
 def test_graph_exposes_provider_resource_nodes_separately_from_scenarios():
@@ -105,14 +105,14 @@ def test_graph_observations_emit_every_node_and_edge():
     nodes = [item for item in observations if item["type"] == "graph_node"]
     edges = [item for item in observations if item["type"] == "graph_edge"]
     assert len(nodes) == 85
-    assert len(edges) == 124
+    assert len(edges) == 125
     assert {item["payload"]["id"] for item in nodes} == GRAPH.node_ids
 
 
 def test_observatory_spec_contains_runtime_visible_nodes_and_edges():
     spec = GRAPH.observatory_spec()
     assert len(spec["nodes"]) == 85
-    assert len(spec["edges"]) == 124
+    assert len(spec["edges"]) == 125
     assert {node["id"] for node in spec["nodes"]} == GRAPH.node_ids
     assert {node["kind"] for node in spec["nodes"]} == {"actor", "use_case", "aggregate", "projection", "external_provider"}
     assert min(node["layer"] for node in spec["nodes"]) == -8
@@ -131,7 +131,7 @@ def test_observatory_spec_contains_runtime_visible_nodes_and_edges():
 
 
 def test_observatory_summary_matches_runtime_graph_contract():
-    assert GRAPH.observatory_summary() == {"nodes": 85, "edges": 124, "actors": 6, "scenarios": 60, "resources": 11}
+    assert GRAPH.observatory_summary() == {"nodes": 85, "edges": 125, "actors": 6, "scenarios": 61, "resources": 11}
 
 
 def test_beam_observations_route_between_declared_connected_nodes():
@@ -139,7 +139,7 @@ def test_beam_observations_route_between_declared_connected_nodes():
     spec = GRAPH.observatory_spec()
     declared_edges = {(edge["from_node"], edge["to_node"]) for edge in spec["edges"]}
 
-    assert len(observations) == 124
+    assert len(observations) == 125
     assert {(item["source"], item["name"]) for item in observations} == declared_edges
     assert all(item["type"] == "graph_route" for item in observations)
     assert all(item["source"] in GRAPH.node_ids for item in observations)
@@ -174,7 +174,7 @@ def test_beam_observations_preserve_deferred_status():
 def test_beam_observations_have_stable_sequence_and_edge_kind():
     observations = GRAPH.beam_observations()
 
-    assert [item["payload"]["sequence"] for item in observations] == list(range(124))
+    assert [item["payload"]["sequence"] for item in observations] == list(range(125))
     assert {item["payload"]["edge_kind"] for item in observations} == {
         "actor_flow",
         "actor_use_case",

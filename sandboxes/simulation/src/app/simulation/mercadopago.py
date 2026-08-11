@@ -155,6 +155,30 @@ class MercadoPagoPixProvider:
         self._event("order_processing", {"order_id": order_id})
         return deepcopy(order)
 
+    def finalize_async_order(self, order_id: str) -> dict[str, Any]:
+        """Apply the documented Orders API processed/accredited outcome."""
+        order = self.store.orders.get(order_id)
+        if order is None:
+            raise MercadoPagoNativeError(MercadoPagoError(404, "order_not_found", "The order was not found."))
+        if order["status"] != "processing":
+            raise MercadoPagoNativeError(MercadoPagoError(400, "invalid_status", "Only processing orders can be finalized."))
+        payment_id = f"PAY_ASYNC_DOCUMENTATION_{self.store.next_id:06d}"
+        self.store.next_id += 1
+        payment = {
+            "id": payment_id,
+            "reference_id": f"reference_async_{self.store.next_id - 1:06d}",
+            "status": "processed",
+            "status_detail": "accredited",
+            "amount": order["total_amount"],
+            "paid_amount": order["total_amount"],
+            "payment_method": {"id": "pix", "type": "bank_transfer"},
+        }
+        order["status"] = "processed"
+        order["status_detail"] = "accredited"
+        order["transactions"] = {"payments": [payment]}
+        self._event("order_processed", {"order_id": order_id, "payment_id": payment_id, "status": order["status"], "status_detail": order["status_detail"]})
+        return deepcopy(order)
+
     def notification_payload(self, order_id: str, *, action: str = "updated") -> dict[str, Any]:
         if order_id not in self.store.orders:
             raise MercadoPagoNativeError(MercadoPagoError(404, "order_not_found", "The order was not found."))

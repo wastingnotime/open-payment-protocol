@@ -1,6 +1,6 @@
 # Mercado Pago Pix Order Creation and Retrieval
 
-Status: creation, asynchronous variant, notification authenticity, and
+Status: creation, asynchronous variant and finalization, notification authenticity, and
 documented validation boundaries
 built; refinement check recorded in
 `work/changes/mercadopago-pix-build/refinement_check.md`.
@@ -20,6 +20,9 @@ total refunds. The expiration increment adds `MP-PIX-015` for unpaid
 cancellation and `MP-PIX-016`/`MP-PIX-017` for the documented `expired` and
 `canceled` alternatives. Timestamp tolerance, retries, acknowledgements,
 ordering, and duplicate guarantees remain unknown.
+
+The finalization increment adds `MP-PIX-018`, preserving the documented
+`processed/accredited` order and payment pair after asynchronous processing.
 
 Out of scope: legacy Payments API, Pagar.me/PagBank expiration behavior, and
 any normalized OPP model.

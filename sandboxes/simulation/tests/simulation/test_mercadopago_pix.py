@@ -7,7 +7,7 @@ from app.simulation.mercadopago_scenarios import BASE_REQUEST, run_all
 
 def test_mercado_pago_scenarios_complete():
     results = run_all()
-    assert set(results) == {f"MP-PIX-{number:03d}" for number in range(1, 18)}
+    assert set(results) == {f"MP-PIX-{number:03d}" for number in range(1, 19)}
     assert results["MP-PIX-001"]["projection"]
 
 
@@ -52,6 +52,15 @@ def test_async_reconciliation_get_preserves_processing_boundary():
     assert query["reconciliation"] == "get"
     assert query["status"] == "processing"
     assert query["payments_present"] is False
+
+
+def test_async_finalization_preserves_orders_api_processed_accredited_pair():
+    result = run_all()["MP-PIX-018"]
+    finalized = result["observations"][0]["payload"]
+    assert finalized["order_status"] == "processed"
+    assert finalized["order_status_detail"] == "accredited"
+    assert finalized["payment_status"] == "processed"
+    assert finalized["payment_status_detail"] == "accredited"
 
 
 def test_unknown_order_retrieval_is_native_not_found_boundary():

@@ -189,7 +189,16 @@ def expiration_to_canceled() -> dict[str, Any]:
     return _result("MP-PIX-017", provider, observations)
 
 
-SCENARIOS = {"MP-PIX-001": create_and_retrieve, "MP-PIX-002": invalid_total, "MP-PIX-003": idempotency_conflict, "MP-PIX-004": asynchronous_processing_variant, "MP-PIX-005": asynchronous_reconciliation_get, "MP-PIX-006": unknown_order_retrieval, "MP-PIX-007": non_pix_payment_method, "MP-PIX-008": missing_payer, "MP-PIX-009": multiple_payments, "MP-PIX-010": missing_idempotency_key, "MP-PIX-011": processing_order_notification, "MP-PIX-012": rejected_order_notification_signature, "MP-PIX-013": partial_refund, "MP-PIX-014": total_refund, "MP-PIX-015": unpaid_cancellation, "MP-PIX-016": expiration_to_expired, "MP-PIX-017": expiration_to_canceled}
+def asynchronous_finalization() -> dict[str, Any]:
+    provider, observations = MercadoPagoPixProvider(), []
+    created = provider.create_async_order_variant(deepcopy(BASE_REQUEST))
+    finalized = provider.finalize_async_order(created["id"])
+    payment = finalized["transactions"]["payments"][0]
+    observations.append({"type": "semantic_observation", "name": "native_async_finalization", "source": "mercadopago", "payload": {"order_id": finalized["id"], "payment_id": payment["id"], "order_status": finalized["status"], "order_status_detail": finalized["status_detail"], "payment_status": payment["status"], "payment_status_detail": payment["status_detail"], "evidence": "research/mercadopago/lifecycle.md"}})
+    return _result("MP-PIX-018", provider, observations)
+
+
+SCENARIOS = {"MP-PIX-001": create_and_retrieve, "MP-PIX-002": invalid_total, "MP-PIX-003": idempotency_conflict, "MP-PIX-004": asynchronous_processing_variant, "MP-PIX-005": asynchronous_reconciliation_get, "MP-PIX-006": unknown_order_retrieval, "MP-PIX-007": non_pix_payment_method, "MP-PIX-008": missing_payer, "MP-PIX-009": multiple_payments, "MP-PIX-010": missing_idempotency_key, "MP-PIX-011": processing_order_notification, "MP-PIX-012": rejected_order_notification_signature, "MP-PIX-013": partial_refund, "MP-PIX-014": total_refund, "MP-PIX-015": unpaid_cancellation, "MP-PIX-016": expiration_to_expired, "MP-PIX-017": expiration_to_canceled, "MP-PIX-018": asynchronous_finalization}
 
 
 def run_all() -> dict[str, dict[str, Any]]:
