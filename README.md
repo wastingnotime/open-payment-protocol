@@ -9,7 +9,15 @@ provider-neutral contract between applications and payment providers.
 OPP is not a processor, gateway, or orchestration platform. It is the narrow
 waist between payment consumers and provider implementations.
 
-## Status
+## Retirement
+
+Retired at the owner's request on 2026-10-13 and preserved as an archived
+reference. Research and simulators remain available under their existing
+licenses; development and protocol extraction have stopped. No stable OPP
+release or compatibility claim was established. See the
+[retirement record](https://github.com/wastingnotime/open-payment-protocol/blob/main/contracts/decommission.md).
+
+## Historical Status
 
 OPP is in discovery, before v0.1. There is no stable protocol or compatibility
 claim yet.
