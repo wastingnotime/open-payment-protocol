@@ -1,6 +1,7 @@
 # Exported Contract Map
 
-OPP is pre-v0.1. Nothing is stable yet.
+OPP is retired and archived at pre-v0.1. No surface became stable.
+See [the retirement record](https://github.com/wastingnotime/open-payment-protocol/blob/main/contracts/decommission.md).
 
 | Surface | Status | Intended role |
 | --- | --- | --- |
